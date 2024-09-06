@@ -22,23 +22,25 @@ function JokeComponent() {
 
   return (
     <div className="p-8 bg-blue-100 rounded-lg shadow-lg max-w-md mx-auto mt-10">
-      <h1 
-        className="text-2xl font-bold mb-4 text-center cursor-pointer"
+      <div
+        className="text-2xl font-bold mb-4 text-center cursor-pointer p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
         onClick={fetchJoke}
       >
         Random Joke
-      </h1>
-      <div className="setup mb-4">
-        <div className="border border-amber-300 p-2 rounded-md bg-white">
-          <div className="font-semibold text-amber-300">Setup</div>
-        </div>
-        <div className="border border-amber-300 p-2 rounded-md bg-white mt-2">{joke.setup}</div>
       </div>
-      <div className="punchline">
-        <div className="border border-amber-300 p-2 rounded-md bg-white">
-          <div className="font-semibold text-amber-300">Punchline</div>
+      <div className="setup mb-4">
+        <div className="p-4 rounded-md bg-gray-100 shadow-md">
+          <div className="font-semibold text-gray-700 text-lg">Setup</div>
+          <hr className="my-2 border-gray-300" />
+          <div className="mt-2 text-gray-600">{joke.setup}</div>
         </div>
-        <div className="border border-amber-300 p-2 rounded-md bg-white mt-2">{joke.punchline}</div>
+      </div>
+      <div className="punchline mb-4">
+        <div className="p-4 rounded-md bg-gray-100 shadow-md">
+          <div className="font-semibold text-gray-700 text-lg">Punchline</div>
+          <hr className="my-2 border-gray-300" />
+          <div className="mt-2 text-gray-600">{joke.punchline}</div>
+        </div>
       </div>
     </div>
   );
