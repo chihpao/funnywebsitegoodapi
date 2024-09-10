@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles */
+.responsive-text {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl;
+}
+  
+.responsive-bg {
+    @apply bg-gray-200 sm:bg-red-200 md:bg-yellow-200 lg:bg-green-200 xl:bg-blue-200 2xl:bg-purple-200;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    gap: 1rem; /* 間距 */
+}
+
+@media (min-width: 640px) {
+    .button-container {
+        flex-direction: row;
+        gap: 1rem; /* 間距 */
+    }
+}
+
+/* 針對不同螢幕尺寸的額外間距設置 */
+@media (min-width: 768px) {
+    .button-container {
+        gap: 1.5rem; /* 中等螢幕間距 */
+    }
+}
+
+@media (min-width: 1024px) {
+    .button-container {
+        gap: 2rem; /* 大螢幕間距 */
+    }
+}
+
+@media (min-width: 1280px) {
+    .button-container {
+        gap: 2.5rem; /* 超大螢幕間距 */
+    }
+}
+
+@media (min-width: 1536px) {
+    .button-container {
+        gap: 3rem; /* 超超大螢幕間距 */
+    }
+}
