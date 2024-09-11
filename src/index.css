@@ -8,7 +8,7 @@
 }
   
 .responsive-bg {
-    @apply bg-gray-200 sm:bg-red-200 md:bg-yellow-200 lg:bg-green-200 xl:bg-blue-200 2xl:bg-purple-200;
+    background-color: white; /* 固定背景顏色 */
 }
 
 .button-container {
