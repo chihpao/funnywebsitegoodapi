@@ -29,10 +29,6 @@ function MemeComponent() {
     fetchMeme();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>Error loading meme: {error.message}</div>;
   }
@@ -43,11 +39,10 @@ function MemeComponent() {
 
   // 檢查數據的存在性
   const { title, src, author, pageview, total_like_count, created_at, hashtag, contest } = meme;
-  console.log('Meme data:', { title, src, author, pageview, total_like_count, created_at, hashtag, contest }); // 添加日誌
-
   const authorName = author ? author.name : 'Unknown';
   const createdAt = created_at ? created_at.date_time_string : 'Unknown';
   const contestName = contest ? contest.name : 'Unknown';
+  console.log('Meme data:', { title, src, author, pageview, total_like_count, created_at, hashtag, contest }); // 添加日誌
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg shadow-md max-w-md mx-auto mt-10">
@@ -57,6 +52,20 @@ function MemeComponent() {
       >
         Get Another Meme
       </button>
+      <div className="relative w-full h-64 flex justify-center items-center">
+        {loading ? (
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+        ) : (
+          <img src={src} alt={title} className="w-full h-full object-contain rounded-md" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default MemeComponent;
+
+{/* 
       <h2 className="text-xl font-bold mb-4">{title}</h2>
       <img src={src} alt={title} className="w-full rounded-md" />
       <p className="text-gray-700 mt-2">By: {authorName}</p>
@@ -65,8 +74,4 @@ function MemeComponent() {
       <p className="text-gray-700">Created at: {createdAt}</p>
       <p className="text-gray-700">Hashtag: {hashtag}</p>
       <p className="text-gray-700">Category: {contestName}</p>
-    </div>
-  );
-}
-
-export default MemeComponent;
+*/}
