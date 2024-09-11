@@ -34,7 +34,13 @@ function MemeComponent() {
   }
 
   if (!meme) {
-    return <div>No meme found</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-center text-white bg-black bg-opacity-50 p-4 rounded-lg">
+          Wait For meme
+        </div>
+      </div>
+    );
   }
 
   // 檢查數據的存在性

@@ -5,7 +5,7 @@ function NavBar() {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-2xl text-white">My Funny Website</Link>
+        <Link to="/" className="text-2xl text-white">Stupid Cat</Link>
         {/* 其他導航項目 */}
       </div>
     </nav>
