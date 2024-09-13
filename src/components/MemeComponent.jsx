@@ -72,18 +72,18 @@ function MemeComponent() {
     <div className="p-4 bg-gray-100 rounded-lg shadow-md max-w-md mx-auto mt-10">
       <div className="flex mb-4">
         <button
-          onClick={getAnotherMeme}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          disabled={loading}
-        >
-          Get Another Meme
-        </button>
-        <button
           onClick={getPreviousMeme}
-          className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors ml-2"
+          className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
           disabled={currentMemeIndex <= 0}
         >
           Previous Meme
+        </button>
+        <button
+          onClick={getAnotherMeme}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors ml-2"
+          disabled={loading}
+        >
+          Get Another Meme
         </button>
         <button
           onClick={getNextMeme}

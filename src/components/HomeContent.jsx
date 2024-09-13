@@ -8,7 +8,7 @@ function HomeContent() {
         <img
           src="/tata02.jpg"
           alt="Funny"
-          className="w-full h-full object-cover"
+          className="absolute top-0 left-0 w-full h-full object-cover"
         />
       </div>
     </div>
