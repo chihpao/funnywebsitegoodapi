@@ -78,7 +78,7 @@ function MemeComponent() {
         ) : meme ? (
           <img src={meme.src} alt={meme.title} className="w-full h-full object-contain rounded-md" />
         ) : (
-          <div className="text-center text-gray-700">點上面的藍色按鈕開始</div>
+          <div className="text-center text-gray-700">點藍色按鈕開始</div>
         )}
       </div>
       <div className="flex justify-between items-center mb-4">
