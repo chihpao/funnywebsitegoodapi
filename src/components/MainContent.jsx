@@ -6,7 +6,7 @@ import MemeComponent from './MemeComponent';
 
 function MainContent() {
   return (
-    <main className="p-4">
+    <main className="p-0">
       <Routes>
         <Route path="/" element={<HomeContent />} />
         <Route path="/joke" element={<JokeComponent />} />

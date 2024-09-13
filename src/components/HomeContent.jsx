@@ -3,12 +3,12 @@ import ButtonLink from './ButtonLink';
 
 function HomeContent() {
   return (
-    <div className="w-full min-h-screen flex flex-col">
-      <div className="relative flex-grow">
+    <div className="w-full flex flex-col" style={{ height: 'calc(100vh - 64px)' }}>
+      <div className="flex-grow relative">
         <img
           src="/tata02.jpg"
           alt="Funny"
-          className="absolute top-0 left-0 w-full h-full object-cover"
+          className="w-full h-full object-cover"
         />
       </div>
     </div>
