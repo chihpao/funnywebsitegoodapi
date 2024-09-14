@@ -9,6 +9,7 @@ function NavBar() {
         <div className="flex space-x-4">
           <Link to="/joke" className="text-white hover:text-gray-400">View Random Joke</Link>
           <Link to="/meme" className="text-white hover:text-gray-400">View Random Meme</Link>
+          <Link to="/interactive" className="text-white hover:text-gray-400">Interactive Component</Link>
         </div>
       </div>
     </nav>

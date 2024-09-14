@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import NumberInput from './NumberInput';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function MemeComponent() {
@@ -82,28 +81,30 @@ function MemeComponent() {
         )}
       </div>
       <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={getPreviousMeme}
-          className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
-          disabled={currentMemeIndex <= 0}
-        >
-          <i className="fas fa-arrow-left"></i> Previous
-        </button>
-        <button
-          onClick={getAnotherMeme}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          disabled={loading}
-        >
-          <i className="fas fa-random"></i> Random
-        </button>
-        <button
-          onClick={getNextMeme}
-          className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors"
-          disabled={currentMemeIndex >= displayedMemes.length - 1}
-        >
-          Next <i className="fas fa-arrow-right"></i>
-        </button>
-      </div>
+  <button
+    onClick={getPreviousMeme}
+    className="flex-1 mx-2 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+    disabled={currentMemeIndex <= 0}
+  >
+    <i className="fas fa-arrow-left"></i>
+  </button>
+  <button
+    onClick={getAnotherMeme}
+    className="flex-1 mx-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+    disabled={loading}
+  >
+    <i className="fas fa-random"></i>
+  </button>
+  <button
+    onClick={getNextMeme}
+    className="flex-1 mx-2 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors"
+    disabled={currentMemeIndex >= displayedMemes.length - 1}
+  >
+    <i className="fas fa-arrow-right"></i>
+  </button>
+</div>
+      {
+      /*先把NumberInput元件註解掉
       <div className="flex items-center justify-center text-gray-700 mb-4">
         <span>目前是第</span>
         <NumberInput
@@ -114,6 +115,8 @@ function MemeComponent() {
         />
         <span>個梗圖，共 {displayedMemes.length} 個梗圖</span>
       </div>
+      */
+      }
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import ButtonLink from './ButtonLink';
 
 function HomeContent() {
   return (
