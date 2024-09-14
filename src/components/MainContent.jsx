@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomeContent from './HomeContent';
 import JokeComponent from './JokeComponent';
-import MemeComponent from './Memecomponent';
+import MemeComponent from './MemeComponent';
 import InteractiveComponent from './InteractiveComponent';
 
 function MainContent() {
