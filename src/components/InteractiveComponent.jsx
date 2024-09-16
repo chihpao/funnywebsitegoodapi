@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import io from 'socket.io-client';
+import { FaEraser } from 'react-icons/fa'; // 引入橡皮擦圖示
+import { confirmAlert } from 'react-confirm-alert'; // 引入 react-confirm-alert
+import 'react-confirm-alert/src/react-confirm-alert.css'; // 引入 react-confirm-alert 的樣式
 
 const socket = io('http://localhost:3000'); // 使用本地 WebSocket 伺服器地址
 
@@ -9,6 +12,8 @@ function InteractiveComponent() {
   const [color, setColor] = useState('#ffcc00');
   const [brushSize, setBrushSize] = useState(10);
   const [isErasing, setIsErasing] = useState(false);
+  const [isMouseInCanvas, setIsMouseInCanvas] = useState(false);
+  const p5Instance = useRef(null);
 
   useEffect(() => {
     const sketch = (p) => {
@@ -46,25 +51,61 @@ function InteractiveComponent() {
 
       p.windowResized = () => {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
-        p.background(255);
+        // 不要在這裡重設背景，這樣可以避免畫布被清空
       };
     };
 
-    const myP5 = new p5(sketch, sketchRef.current);
+    p5Instance.current = new p5(sketch, sketchRef.current);
 
     return () => {
-      myP5.remove();
+      p5Instance.current.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    if (p5Instance.current) {
+      p5Instance.current.draw = () => {
+        if (p5Instance.current.mouseIsPressed) {
+          const data = {
+            x: p5Instance.current.mouseX,
+            y: p5Instance.current.mouseY,
+            px: p5Instance.current.pmouseX,
+            py: p5Instance.current.pmouseY,
+            color: isErasing ? '#ffffff' : color,
+            brushSize: brushSize,
+          };
+          socket.emit('draw', data);
+          p5Instance.current.stroke(data.color);
+          p5Instance.current.strokeWeight(data.brushSize);
+          p5Instance.current.line(data.x, data.y, data.px, data.py);
+        }
+      };
+    }
   }, [color, brushSize, isErasing]);
 
   const clearCanvas = () => {
-    socket.emit('clear');
+    confirmAlert({
+      title: '',
+      message: '要清空畫布內容？',
+      buttons: [
+        {
+          label: '是',
+          onClick: () => {
+            socket.emit('clear');
+            p5Instance.current.background(255); // 本地清空畫布
+          }
+        },
+        {
+          label: '否',
+          onClick: () => {}
+        }
+      ]
+    });
   };
 
   return (
-    <div className="relative w-full h-screen bg-gray-900">
-      <div ref={sketchRef} className="absolute top-0 left-0 w-full h-full z-0"></div>
-      <div className="absolute top-0 left-0 w-full p-4 z-10 flex justify-between items-center bg-white bg-opacity-80 shadow-lg">
+    <div className="flex flex-col w-full h-screen bg-gray-900">
+      <div className="w-full p-4 z-10 flex justify-between items-center bg-white bg-opacity-80 shadow-lg">
         <div className="flex items-center space-x-4">
           <div>
             <label className="block text-gray-800 mb-2">Brush Color</label>
@@ -93,7 +134,7 @@ function InteractiveComponent() {
               onClick={() => setIsErasing(!isErasing)}
               className={`px-4 py-2 font-semibold rounded-md shadow-md transition-all ${isErasing ? 'bg-red-500 text-white' : 'bg-white text-red-500'}`}
             >
-              {isErasing ? 'Eraser On' : 'Eraser Off'}
+              <FaEraser />
             </button>
           </div>
         </div>
@@ -104,6 +145,15 @@ function InteractiveComponent() {
           Clear Canvas
         </button>
       </div>
+      <div
+        ref={sketchRef}
+        onMouseEnter={() => setIsMouseInCanvas(true)}
+        onMouseLeave={() => setIsMouseInCanvas(false)}
+        style={{
+          cursor: isErasing && isMouseInCanvas ? 'cell' : 'default'
+        }}
+        className="flex-grow relative z-0 overflow-hidden"
+      ></div>
     </div>
   );
 }
