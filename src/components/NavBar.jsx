@@ -7,8 +7,7 @@ function NavBar() {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-2xl text-white">Stupid Cat</Link>
         <div className="flex space-x-4">
-          <Link to="/joke" className="text-white hover:text-gray-400">View Random Joke</Link>
-          <Link to="/meme" className="text-white hover:text-gray-400">View Random Meme</Link>
+          <Link to="/fun" className="text-white hover:text-gray-400">View Random Fun</Link>
           <Link to="/interactive" className="text-white hover:text-gray-400">Interactive Component</Link>
         </div>
       </div>
