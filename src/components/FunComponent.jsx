@@ -91,8 +91,8 @@ function FunComponent() {
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg shadow-md max-w-4xl mx-auto mt-10">
-      <div className="flex flex-col space-y-8 md:space-y-0 md:flex-row md:space-x-8">
-        <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
+      <div className="flex flex-col space-y-8">
+        <div className="p-4 bg-white rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">隨機笑話</h2>
           {jokeLoading ? (
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900 mx-auto"></div>
@@ -102,14 +102,17 @@ function FunComponent() {
               <p className="text-lg font-bold mt-2">{joke.punchline}</p>
             </div>
           )}
-          <button
-            onClick={fetchJoke}
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-          >
-            再來一個笑話
-          </button>
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={fetchJoke}
+              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+            >
+              再來一個笑話
+            </button>
+          </div>
         </div>
-        <div className="flex-1 p-4 bg-gray-100 rounded-lg shadow-md">
+        
+        <div className="p-4 bg-white rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">隨機梗圖</h2>
           <div className="relative w-full h-64 flex justify-center items-center mb-4">
             {memeLoading ? (
@@ -120,17 +123,17 @@ function FunComponent() {
               <div className="text-center text-gray-700">點藍色按鈕開始</div>
             )}
           </div>
-          <div className="flex justify-between items-center mt-4 space-x-2">
+          <div className="flex justify-center space-x-2 mt-4">
             <button
               onClick={getPreviousMeme}
-              className="flex-1 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+              className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
               disabled={currentMemeIndex <= 0}
             >
               <i className="fas fa-arrow-left"></i>
             </button>
             <button
               onClick={getAnotherMeme}
-              className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
               disabled={memeLoading || isGenerating}
             >
               {isGenerating ? (
@@ -141,7 +144,7 @@ function FunComponent() {
             </button>
             <button
               onClick={getNextMeme}
-              className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors"
+              className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors"
               disabled={currentMemeIndex >= displayedMemes.length - 1}
             >
               <i className="fas fa-arrow-right"></i>

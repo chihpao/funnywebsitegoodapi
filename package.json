@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:server": "node server.cjs",
+    "start:dev": "npm run dev",
+    "start": "start /B node server.cjs & npm run dev"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",

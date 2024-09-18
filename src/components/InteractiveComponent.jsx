@@ -2,10 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import io from 'socket.io-client';
 import { FaEraser } from 'react-icons/fa'; // 引入橡皮擦圖示
-import { confirmAlert } from 'react-confirm-alert'; // 引入 react-confirm-alert
-import 'react-confirm-alert/src/react-confirm-alert.css'; // 引入 react-confirm-alert 的樣式
 
-const socket = io('http://localhost:3000'); // 使用本地 WebSocket 伺服器地址
+const socket = io('http://localhost:3050'); // 使用本地 WebSocket 伺服器地址
 
 function InteractiveComponent() {
   const sketchRef = useRef();
@@ -14,6 +12,7 @@ function InteractiveComponent() {
   const [isErasing, setIsErasing] = useState(false);
   const [isMouseInCanvas, setIsMouseInCanvas] = useState(false);
   const p5Instance = useRef(null);
+  const canvasContent = useRef(null);
 
   useEffect(() => {
     const sketch = (p) => {
@@ -33,7 +32,7 @@ function InteractiveComponent() {
       };
 
       p.draw = () => {
-        if (p.mouseIsPressed) {
+        if (p.mouseIsPressed || p.touchIsDown) {
           const data = {
             x: p.mouseX,
             y: p.mouseY,
@@ -50,8 +49,24 @@ function InteractiveComponent() {
       };
 
       p.windowResized = () => {
+        if (canvasContent.current) {
+          // 保存畫布內容
+          canvasContent.current = p.get();
+        }
         p.resizeCanvas(p.windowWidth, p.windowHeight);
-        // 不要在這裡重設背景，這樣可以避免畫布被清空
+        if (canvasContent.current) {
+          // 重繪畫布內容
+          p.background(255); // 確保背景為白色
+          p.image(canvasContent.current, 0, 0);
+        }
+      };
+
+      p.touchStarted = (event) => {
+        event.preventDefault(); // 防止畫布在手機上滾動
+      };
+
+      p.touchMoved = (event) => {
+        event.preventDefault(); // 防止畫布在手機上滾動
       };
     };
 
@@ -65,7 +80,7 @@ function InteractiveComponent() {
   useEffect(() => {
     if (p5Instance.current) {
       p5Instance.current.draw = () => {
-        if (p5Instance.current.mouseIsPressed) {
+        if (p5Instance.current.mouseIsPressed || p5Instance.current.touchIsDown) {
           const data = {
             x: p5Instance.current.mouseX,
             y: p5Instance.current.mouseY,
@@ -84,23 +99,10 @@ function InteractiveComponent() {
   }, [color, brushSize, isErasing]);
 
   const clearCanvas = () => {
-    confirmAlert({
-      title: '',
-      message: '要清空畫布內容？',
-      buttons: [
-        {
-          label: '是',
-          onClick: () => {
-            socket.emit('clear');
-            p5Instance.current.background(255); // 本地清空畫布
-          }
-        },
-        {
-          label: '否',
-          onClick: () => {}
-        }
-      ]
-    });
+    if (window.confirm('要清空畫布內容？')) {
+      socket.emit('clear');
+      p5Instance.current.background(255); // 本地清空畫布
+    }
   };
 
   return (
@@ -123,7 +125,7 @@ function InteractiveComponent() {
               min="1"
               max="50"
               value={brushSize}
-              onChange={(e) => setBrushSize(e.target.value)}
+              onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
               className="w-32"
             />
             <p className="mt-2 text-gray-800 text-lg">Size: {brushSize}</p>
