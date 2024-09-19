@@ -3,7 +3,8 @@ import p5 from 'p5';
 import io from 'socket.io-client';
 import { FaEraser } from 'react-icons/fa'; // 引入橡皮擦圖示
 
-const socket = io('http://localhost:3050'); // 使用本地 WebSocket 伺服器地址
+// 使用 Replit 提供的 WebSocket 伺服器地址
+const socket = io('https://dc48aeec-0c57-4758-89a0-c1af5e43bd25-00-l1hgfej7r67k.sisko.replit.dev:8080');
 
 function InteractiveComponent() {
   const sketchRef = useRef();
