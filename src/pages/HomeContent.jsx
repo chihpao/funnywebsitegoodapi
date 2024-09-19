@@ -2,13 +2,17 @@ import React from 'react';
 
 function HomeContent() {
   return (
-    <div className="w-full flex flex-col" style={{ height: 'calc(100vh - 64px)' }}>
-      <div className="flex-grow relative">
-        <img
-          src="/tata02.jpg"
-          alt="Funny"
-          className="w-full h-full object-cover"
-        />
+    <div className="w-full flex flex-col">
+      <div
+        className="relative"
+        style={{
+          height: '100vh',
+          backgroundImage: 'url(/tata02.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
       </div>
     </div>
   );

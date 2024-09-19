@@ -29,29 +29,32 @@ export default function NavBar() {
                     <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
+                {/* 貓咪圖和 Stupid Cat 文字 */}
+                <Link to="/" className="flex items-center ml-2">
+                  <img src="/NavBarCat01.png" alt="NavBarCat01" className="h-10 w-auto" />
+                  <span className="text-2xl text-black ml-2">Stupid Cat</span>
+                </Link>
               </div>
-              <div className="flex flex-1 items-center justify-between">
-                <div className="flex items-center">
-                  <Link to="/" className="flex items-center">
-                    <img src="/NavBarCat01.png" alt="NavBarCat01" className="h-16 w-auto mr-2" />
-                    <span className="text-2xl text-black">Stupid Cat</span>
+              <div className="flex flex-1 items-center justify-center sm:justify-start">
+                <Link to="/" className="flex items-center">
+                  <img src="/NavBarCat01.png" alt="NavBarCat01" className="h-16 w-auto mr-2 hidden sm:block" />
+                  <span className="text-2xl text-black hidden sm:block">Stupid Cat</span>
+                </Link>
+              </div>
+              <div className="hidden sm:flex sm:space-x-4">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={classNames(
+                      item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
+                      'rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
                   </Link>
-                </div>
-                <div className="hidden sm:flex sm:space-x-4">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
-                        'rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
+                ))}
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
