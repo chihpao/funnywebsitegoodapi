@@ -9,8 +9,9 @@ function HomeContent() {
           height: '100vh',
           backgroundImage: 'url(/tata02.jpg)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundPosition: 'center top', // 調整背景位置
+          backgroundRepeat: 'no-repeat',
+          zIndex: -1 // 確保背景圖在 NavBar 之下
         }}
       >
       </div>
