@@ -1,9 +1,10 @@
 import React from 'react';
+import '../styles/index.css'; // 引入 CSS 檔案
 
 function HomeContent() {
   return (
     <div className="w-full flex flex-col">
-      <div
+      <div>
         className="relative"
         style={{
           height: '100vh',
@@ -12,7 +13,6 @@ function HomeContent() {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
-      >
       </div>
     </div>
   );

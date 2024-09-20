@@ -12,6 +12,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+const NavBarLink = ({ className, imgClassName, spanClassName }) => (
+  <Link to="/" className={`flex items-center ${className}`}>
+    <img src="/NavBarCat01.png" alt="NavBarCat01" className={`w-auto ${imgClassName}`} />
+    <span className={`text-2xl text-black ${spanClassName}`}>Stupid Cat</span>
+  </Link>
+);
+
 export default function NavBar() {
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200">
@@ -30,16 +37,10 @@ export default function NavBar() {
                   )}
                 </Disclosure.Button>
                 {/* 貓咪圖和 Stupid Cat 文字 */}
-                <Link to="/" className="flex items-center ml-2">
-                  <img src="/NavBarCat01.png" alt="NavBarCat01" className="h-10 w-auto" />
-                  <span className="text-2xl text-black ml-2">Stupid Cat</span>
-                </Link>
+                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" />
               </div>
               <div className="flex flex-1 items-center justify-center sm:justify-start">
-                <Link to="/" className="flex items-center">
-                  <img src="/NavBarCat01.png" alt="NavBarCat01" className="h-16 w-auto mr-2 hidden sm:block" />
-                  <span className="text-2xl text-black hidden sm:block">Stupid Cat</span>
-                </Link>
+                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" />
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 {navigation.map((item) => (

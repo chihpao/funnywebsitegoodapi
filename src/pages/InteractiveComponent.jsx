@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
 import io from 'socket.io-client';
 import { FaEraser } from 'react-icons/fa'; // 引入橡皮擦圖示
+import { confirmAlert } from 'react-confirm-alert'; // 引入 confirmAlert 函式
+import 'react-confirm-alert/src/react-confirm-alert.css'; // 引入 confirmAlert 的樣式
 
 // 使用 Replit 提供的 WebSocket 伺服器地址
 const socket = io('https://dc48aeec-0c57-4758-89a0-c1af5e43bd25-00-l1hgfej7r67k.sisko.replit.dev:8080');
@@ -100,10 +102,23 @@ function InteractiveComponent() {
   }, [color, brushSize, isErasing]);
 
   const clearCanvas = () => {
-    if (window.confirm('要清空畫布內容？')) {
-      socket.emit('clear');
-      p5Instance.current.background(255); // 本地清空畫布
-    }
+    confirmAlert({
+      title: '',
+      message: '要清空畫布內容？',
+      buttons: [
+        {
+          label: '是',
+          onClick: () => {
+            socket.emit('clear');
+            p5Instance.current.background(255); // 本地清空畫布
+          }
+        },
+        {
+          label: '否',
+          onClick: () => {}
+        }
+      ]
+    });
   };
 
   return (
