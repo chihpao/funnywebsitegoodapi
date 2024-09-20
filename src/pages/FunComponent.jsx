@@ -87,6 +87,26 @@ const MemeSection = ({
   </div>
 );
 
+const CatSection = ({ catImages, catLoading, loadCatImages }) => (
+  <div className="p-6 bg-white rounded-lg shadow-lg">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-3xl font-bold text-gray-800">隨機貓咪圖片</h2>
+      <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-600">
+        再來一些貓咪圖片
+      </Button>
+    </div>
+    {catLoading ? (
+      <LoadingSpinner />
+    ) : (
+      <div className="grid grid-cols-2 gap-4">
+        {catImages.map((cat, index) => (
+          <img key={index} src={cat.url} alt="Cat" className="w-full h-full object-cover rounded-md" />
+        ))}
+      </div>
+    )}
+  </div>
+);
+
 function FunComponent() {
   const {
     joke,
@@ -101,6 +121,9 @@ function FunComponent() {
     getNextMeme,
     currentMemeIndex,
     displayedMemes,
+    catImages,
+    catLoading,
+    loadCatImages,
   } = useFunLogic();
 
   if (error) {
@@ -121,6 +144,7 @@ function FunComponent() {
           currentMemeIndex={currentMemeIndex}
           displayedMemes={displayedMemes}
         />
+        <CatSection catImages={catImages} catLoading={catLoading} loadCatImages={loadCatImages} />
       </div>
     </div>
   );

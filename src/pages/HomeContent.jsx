@@ -7,7 +7,7 @@ function HomeContent() {
         className="relative"
         style={{
           height: '100vh',
-          backgroundImage: 'url(/tata02.jpg)',
+          backgroundImage: 'url(/tata04.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

@@ -1,5 +1,6 @@
 import useJoke from './useJoke';
 import useMemes from './useMemes';
+import useCats from './useCats';
 
 export const useFunLogic = () => {
   const { joke, jokeLoading, loadJoke } = useJoke();
@@ -14,6 +15,7 @@ export const useFunLogic = () => {
     getPreviousMeme,
     getNextMeme,
   } = useMemes();
+  const { catImages, loading: catLoading, loadCatImages } = useCats();
 
   const meme = currentMemeIndex >= 0 ? memes[displayedMemes[currentMemeIndex]] : null;
 
@@ -30,5 +32,8 @@ export const useFunLogic = () => {
     getNextMeme,
     currentMemeIndex,
     displayedMemes,
+    catImages,
+    catLoading,
+    loadCatImages,
   };
 };
