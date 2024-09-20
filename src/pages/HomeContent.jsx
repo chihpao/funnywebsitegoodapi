@@ -9,5 +9,4 @@ function HomeContent() {
     </div>
   );
 }
-
 export default HomeContent;
