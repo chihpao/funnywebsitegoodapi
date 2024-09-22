@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaRedo, FaPlay, FaPause } from 'react-icons/fa';
+import Particles from 'react-tsparticles'; // 使用 react-tsparticles 庫
+import { loadFull } from 'tsparticles';
 
 function getRandomPosition(maxWidth, maxHeight) {
   const x = Math.floor(Math.random() * maxWidth);
@@ -111,6 +113,10 @@ function InteractiveComponent() {
     setIsPlaying((prevIsPlaying) => !prevIsPlaying);
   };
 
+  const particlesInit = async (main) => {
+    await loadFull(main);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen bg-white text-black">
       <div className="flex flex-col md:flex-row items-center justify-between w-full px-4 py-2 bg-gray-200 shadow-md space-y-2 md:space-y-0 md:space-x-4">
@@ -155,7 +161,7 @@ function InteractiveComponent() {
                 cursor: 'pointer',
                 transition: 'all 0.2s ease-in-out',
               }}
-              className="transform hover:scale-110"
+              className={`transform ${isPlaying ? 'hover:scale-110 animate-ping' : ''}`}
             ></div>
           ))
         ) : (
@@ -169,6 +175,31 @@ function InteractiveComponent() {
               重新開始
             </button>
           </div>
+        )}
+        {isPlaying && (
+          <Particles
+            id="tsparticles"
+            init={particlesInit}
+            options={{
+              particles: {
+                number: {
+                  value: 50,
+                },
+                size: {
+                  value: 3,
+                },
+              },
+              interactivity: {
+                events: {
+                  onhover: {
+                    enable: true,
+                    mode: 'repulse',
+                  },
+                },
+              },
+            }}
+            className="absolute inset-0 pointer-events-none"
+          />
         )}
       </div>
     </div>

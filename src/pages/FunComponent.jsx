@@ -17,25 +17,6 @@ const Button = ({ onClick, disabled, children, className }) => (
   </button>
 );
 
-const JokeSection = ({ joke, jokeLoading, loadJoke }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg">
-    <h2 className="text-3xl font-bold mb-4 text-center text-gray-800">隨機笑話</h2>
-    {jokeLoading ? (
-      <LoadingSpinner />
-    ) : (
-      <div className="text-center">
-        <p className="text-xl text-gray-700">{joke.setup}</p>
-        <p className="text-xl font-bold mt-2 text-gray-900">{joke.punchline}</p>
-      </div>
-    )}
-    <div className="flex justify-center mt-6">
-      <Button onClick={loadJoke} className="bg-green-500 hover:bg-green-600">
-        再來一個笑話
-      </Button>
-    </div>
-  </div>
-);
-
 const MemeSection = ({
   meme,
   memeLoading,
@@ -47,8 +28,37 @@ const MemeSection = ({
   displayedMemes,
 }) => (
   <div className="p-6 bg-white rounded-lg shadow-lg">
-    <h2 className="text-3xl font-bold mb-4 text-center text-gray-800">隨機梗圖</h2>
-    <div className="relative w-full h-64 flex justify-center items-center mb-4">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-3xl font-bold text-gray-800">找梗圖</h2>
+      <div className="flex space-x-4">
+        <Button
+          onClick={getPreviousMeme}
+          className="bg-purple-500 hover:bg-purple-700"
+          disabled={currentMemeIndex <= 0}
+        >
+          <i className="fas fa-arrow-left"></i>
+        </Button>
+        <Button
+          onClick={getAnotherMeme}
+          className="bg-blue-500 hover:bg-blue-700"
+          disabled={memeLoading || isGenerating}
+        >
+          {isGenerating ? (
+            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mx-auto"></div>
+          ) : (
+            <i className="fas fa-random"></i>
+          )}
+        </Button>
+        <Button
+          onClick={getNextMeme}
+          className="bg-orange-500 hover:bg-orange-700"
+          disabled={currentMemeIndex >= displayedMemes.length - 1}
+        >
+          <i className="fas fa-arrow-right"></i>
+        </Button>
+      </div>
+    </div>
+      <div className="relative w-full h-64 flex justify-center items-center mb-4">
       {memeLoading ? (
         <LoadingSpinner />
       ) : meme ? (
@@ -57,41 +67,14 @@ const MemeSection = ({
         <div className="text-center text-gray-700">點藍色按鈕開始</div>
       )}
     </div>
-    <div className="flex justify-center space-x-4 mt-6">
-      <Button
-        onClick={getPreviousMeme}
-        className="bg-purple-500 hover:bg-purple-600"
-        disabled={currentMemeIndex <= 0}
-      >
-        <i className="fas fa-arrow-left"></i>
-      </Button>
-      <Button
-        onClick={getAnotherMeme}
-        className="bg-blue-500 hover:bg-blue-600"
-        disabled={memeLoading || isGenerating}
-      >
-        {isGenerating ? (
-          <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mx-auto"></div>
-        ) : (
-          <i className="fas fa-random"></i>
-        )}
-      </Button>
-      <Button
-        onClick={getNextMeme}
-        className="bg-orange-500 hover:bg-orange-600"
-        disabled={currentMemeIndex >= displayedMemes.length - 1}
-      >
-        <i className="fas fa-arrow-right"></i>
-      </Button>
-    </div>
   </div>
 );
 
 const CatSection = ({ catImages, catLoading, loadCatImages }) => (
   <div className="p-6 bg-white rounded-lg shadow-lg">
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">隨機貓咪圖片</h2>
-      <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-600">
+      <h2 className="text-3xl font-bold text-gray-800">找貓咪</h2>
+      <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-700">
         再來一些貓咪圖片
       </Button>
     </div>
@@ -101,6 +84,26 @@ const CatSection = ({ catImages, catLoading, loadCatImages }) => (
       <div className="grid grid-cols-2 gap-4">
         {catImages.map((cat, index) => (
           <img key={index} src={cat.url} alt="Cat" className="w-full h-full object-cover rounded-md" />
+        ))}
+      </div>
+    )}
+  </div>
+);
+
+const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
+  <div className="p-6 bg-white rounded-lg shadow-lg">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-3xl font-bold text-gray-800">找狗狗</h2>
+      <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
+        再來一些狗狗圖片
+      </Button>
+    </div>
+    {dogLoading ? (
+      <LoadingSpinner />
+    ) : (
+      <div className="grid grid-cols-2 gap-4">
+        {dogImages.map((dog, index) => (
+          <img key={index} src={dog} alt="Dog" className="w-full h-full object-cover rounded-md" />
         ))}
       </div>
     )}
@@ -124,6 +127,9 @@ function FunComponent() {
     catImages,
     catLoading,
     loadCatImages,
+    dogImages,
+    dogLoading,
+    loadDogImages,
   } = useFunLogic();
 
   if (error) {
@@ -133,7 +139,7 @@ function FunComponent() {
   return (
     <div className="p-6 bg-gray-100 rounded-lg shadow-md max-w-4xl mx-auto mt-10">
       <div className="flex flex-col space-y-8">
-        <JokeSection joke={joke} jokeLoading={jokeLoading} loadJoke={loadJoke} />
+        {/* <JokeSection joke={joke} jokeLoading={jokeLoading} loadJoke={loadJoke} /> */}
         <MemeSection
           meme={meme}
           memeLoading={memeLoading}
@@ -145,6 +151,7 @@ function FunComponent() {
           displayedMemes={displayedMemes}
         />
         <CatSection catImages={catImages} catLoading={catLoading} loadCatImages={loadCatImages} />
+        <DogSection dogImages={dogImages} dogLoading={dogLoading} loadDogImages={loadDogImages} />
       </div>
     </div>
   );
