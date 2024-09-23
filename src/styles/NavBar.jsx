@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 const navigation = [
-  { name: 'View Random Fun', href: '/fun', current: false },
+  {
+    name: 'View Random Fun',
+    href: '/fun',
+    current: false,
+    subMenu: [
+      { name: '找梗圖', href: '/fun/memes' },
+      { name: '找貓咪', href: '/fun/cats' },
+      { name: '找狗狗', href: '/fun/dogs' },
+    ],
+  },
   { name: 'Interactive Component', href: '/interactive', current: false },
 ];
 
@@ -20,8 +29,18 @@ const NavBarLink = ({ className, imgClassName, spanClassName }) => (
 );
 
 export default function NavBar() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <Disclosure as="nav" className="bg-white border-b border-gray-200">
+    <Disclosure as="nav" className="bg-white border-b border-gray-200 relative">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -44,17 +63,33 @@ export default function NavBar() {
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
-                      'rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
+                  <div key={item.name} className="relative">
+                    <button
+                      onClick={item.subMenu ? toggleDropdown : undefined}
+                      className={classNames(
+                        item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
+                        'rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                    >
+                      {item.name}
+                      {item.subMenu && <span className="ml-2">&#x25BC;</span>}
+                    </button>
+                    {item.subMenu && isDropdownOpen && (
+                      <div className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md">
+                        {item.subMenu.map((subItem) => (
+                          <Link
+                            key={subItem.name}
+                            to={subItem.href}
+                            className="block px-4 py-2 text-black hover:bg-gray-200 hover:text-black"
+                            onClick={closeDropdown}
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
+                      </div>
                     )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </Link>
+                  </div>
                 ))}
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -72,18 +107,35 @@ export default function NavBar() {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
-                    'block rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
+                <div key={item.name}>
+                  <Disclosure.Button
+                    as="a"
+                    href={item.href}
+                   Name={classNames(
+                      item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
+                      'block rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                    {item.subMenu && <span className="ml-2">&#x25BC;</span>}
+                  </Disclosure.Button>
+                  {item.subMenu && (
+                    <Disclosure.Panel className="pl-4">
+                      {item.subMenu.map((subItem) => (
+                        <Disclosure.Button
+                          key={subItem.name}
+                          as="a"
+                          href={subItem.href}
+                          className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
+                          onClick={closeDropdown}
+                        >
+                          {subItem.name}
+                        </Disclosure.Button>
+                      ))}
+                    </Disclosure.Panel>
                   )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
+                </div>
               ))}
             </div>
           </Disclosure.Panel>

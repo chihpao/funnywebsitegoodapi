@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/index.css'; // 引入 CSS 檔案
 
-function HomeContent() {
+function Homepage() {
   return (
     <div className="w-full flex flex-col">
       <div className="background-image-container">
@@ -9,4 +9,4 @@ function HomeContent() {
     </div>
   );
 }
-export default HomeContent;
+export default Homepage;
