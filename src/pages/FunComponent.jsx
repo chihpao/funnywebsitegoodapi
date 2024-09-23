@@ -1,5 +1,5 @@
-// src/components/FunComponent.jsx
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { useFunLogic } from '../hooks/useFunLogic';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -27,7 +27,7 @@ const MemeSection = ({
   currentMemeIndex,
   displayedMemes,
 }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg">
+  <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-3xl font-bold text-gray-800">找梗圖</h2>
       <div className="flex space-x-4">
@@ -58,7 +58,7 @@ const MemeSection = ({
         </Button>
       </div>
     </div>
-      <div className="relative w-full h-64 flex justify-center items-center mb-4">
+    <div className="relative w-full h-64 flex justify-center items-center mb-4">
       {memeLoading ? (
         <LoadingSpinner />
       ) : meme ? (
@@ -71,7 +71,7 @@ const MemeSection = ({
 );
 
 const CatSection = ({ catImages, catLoading, loadCatImages }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg">
+  <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-3xl font-bold text-gray-800">找貓咪</h2>
       <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-700">
@@ -91,7 +91,7 @@ const CatSection = ({ catImages, catLoading, loadCatImages }) => (
 );
 
 const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg">
+  <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-3xl font-bold text-gray-800">找狗狗</h2>
       <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
@@ -110,51 +110,54 @@ const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
   </div>
 );
 
-function FunComponent() {
+export function MemesPage() {
   const {
-    joke,
-    jokeLoading,
-    loadJoke,
     meme,
     memeLoading,
-    error,
     isGenerating,
-    getAnotherMeme,
     getPreviousMeme,
+    getAnotherMeme,
     getNextMeme,
     currentMemeIndex,
     displayedMemes,
-    catImages,
-    catLoading,
-    loadCatImages,
-    dogImages,
-    dogLoading,
-    loadDogImages,
   } = useFunLogic();
 
-  if (error) {
-    return <div className="text-center text-red-500">Error loading meme: {error.message}</div>;
-  }
+  return (
+    <MemeSection
+      meme={meme}
+      memeLoading={memeLoading}
+      isGenerating={isGenerating}
+      getPreviousMeme={getPreviousMeme}
+      getAnotherMeme={getAnotherMeme}
+      getNextMeme={getNextMeme}
+      currentMemeIndex={currentMemeIndex}
+      displayedMemes={displayedMemes}
+    />
+  );
+}
 
+export function CatsPage() {
+  const { catImages, catLoading, loadCatImages } = useFunLogic();
+
+  return <CatSection catImages={catImages} catLoading={catLoading} loadCatImages={loadCatImages} />;
+}
+
+export function DogsPage() {
+  const { dogImages, dogLoading, loadDogImages } = useFunLogic();
+
+  return <DogSection dogImages={dogImages} dogLoading={dogLoading} loadDogImages={loadDogImages} />;
+}
+
+export default function FunComponent() {
   return (
     <div className="p-6 bg-gray-100 rounded-lg shadow-md max-w-4xl mx-auto mt-10">
       <div className="flex flex-col space-y-8">
-        {/* <JokeSection joke={joke} jokeLoading={jokeLoading} loadJoke={loadJoke} /> */}
-        <MemeSection
-          meme={meme}
-          memeLoading={memeLoading}
-          isGenerating={isGenerating}
-          getPreviousMeme={getPreviousMeme}
-          getAnotherMeme={getAnotherMeme}
-          getNextMeme={getNextMeme}
-          currentMemeIndex={currentMemeIndex}
-          displayedMemes={displayedMemes}
-        />
-        <CatSection catImages={catImages} catLoading={catLoading} loadCatImages={loadCatImages} />
-        <DogSection dogImages={dogImages} dogLoading={dogLoading} loadDogImages={loadDogImages} />
+        <Routes>
+          <Route path="memes" element={<MemesPage />} />
+          <Route path="cats" element={<CatsPage />} />
+          <Route path="dogs" element={<DogsPage />} />
+        </Routes>
       </div>
     </div>
   );
 }
-
-export default FunComponent;

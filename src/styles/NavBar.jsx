@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const navigation = [
   {
@@ -21,8 +21,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const NavBarLink = ({ className, imgClassName, spanClassName }) => (
-  <Link to="/" className={`flex items-center ${className}`}>
+const NavBarLink = ({ className, imgClassName, spanClassName, onClick }) => (
+  <Link to="/" className={`flex items-center ${className}`} onClick={onClick}>
     <img src="/NavBarCat01.png" alt="NavBarCat01" className={`w-auto ${imgClassName}`} />
     <span className={`text-2xl text-black ${spanClassName}`}>Stupid Cat</span>
   </Link>
@@ -30,13 +30,26 @@ const NavBarLink = ({ className, imgClassName, spanClassName }) => (
 
 export default function NavBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const navigate = useNavigate();
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const toggleDropdown = (name) => {
+    if (activeDropdown === name) {
+      setIsDropdownOpen(!isDropdownOpen);
+    } else {
+      setIsDropdownOpen(true);
+      setActiveDropdown(name);
+    }
   };
 
   const closeDropdown = () => {
     setIsDropdownOpen(false);
+    setActiveDropdown(null);
+  };
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    closeDropdown();
   };
 
   return (
@@ -56,16 +69,16 @@ export default function NavBar() {
                   )}
                 </Disclosure.Button>
                 {/* 貓咪圖和 Stupid Cat 文字 */}
-                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" />
+                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" onClick={closeDropdown} />
               </div>
               <div className="flex flex-1 items-center justify-center sm:justify-start">
-                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" />
+                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" onClick={closeDropdown} />
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 {navigation.map((item) => (
                   <div key={item.name} className="relative">
                     <button
-                      onClick={item.subMenu ? toggleDropdown : undefined}
+                      onClick={item.subMenu ? () => toggleDropdown(item.name) : () => handleNavigation(item.href)}
                       className={classNames(
                         item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
                         'rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
@@ -75,8 +88,8 @@ export default function NavBar() {
                       {item.name}
                       {item.subMenu && <span className="ml-2">&#x25BC;</span>}
                     </button>
-                    {item.subMenu && isDropdownOpen && (
-                      <div className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md">
+                    {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
+                      <div className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50">
                         {item.subMenu.map((subItem) => (
                           <Link
                             key={subItem.name}
@@ -111,7 +124,7 @@ export default function NavBar() {
                   <Disclosure.Button
                     as="a"
                     href={item.href}
-                   Name={classNames(
+                    className={classNames(
                       item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
                       'block rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
                     )}
