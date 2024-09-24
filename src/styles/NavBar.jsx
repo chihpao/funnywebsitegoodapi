@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const navigation = [
   {
@@ -86,7 +87,7 @@ export default function NavBar() {
                       aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
-                      {item.subMenu && <span className="ml-2">&#x25BC;</span>}
+                      {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
                     </button>
                     {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
                       <div className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50">
@@ -131,7 +132,7 @@ export default function NavBar() {
                     aria-current={item.current ? 'page' : undefined}
                   >
                     {item.name}
-                    {item.subMenu && <span className="ml-2">&#x25BC;</span>}
+                    {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
                   </Disclosure.Button>
                   {item.subMenu && (
                     <Disclosure.Panel className="pl-4">
