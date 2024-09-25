@@ -123,8 +123,8 @@ export default function NavBar() {
               {navigation.map((item) => (
                 <div key={item.name}>
                   <Disclosure.Button
-                    as="a"
-                    href={item.href}
+                    as="div"
+                    onClick={item.name === 'View Random Fun' || item.name === 'Interactive Component' ? (e) => e.preventDefault() : () => handleNavigation(item.href)}
                     className={classNames(
                       item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
                       'block rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
@@ -132,7 +132,7 @@ export default function NavBar() {
                     aria-current={item.current ? 'page' : undefined}
                   >
                     {item.name}
-                    {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
+                    {item.subMenu && item.name !== 'View Random Fun' && item.name !== 'Interactive Component' && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
                   </Disclosure.Button>
                   {item.subMenu && (
                     <Disclosure.Panel className="pl-4">
