@@ -24,7 +24,7 @@ function App() {
   return (
     <Router>
       {isLoading ? (
-        <LoadingPage />
+        <LoadingPage setIsLoading={setIsLoading} />
       ) : (
         <div>
           <NavBar />

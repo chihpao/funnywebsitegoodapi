@@ -23,10 +23,10 @@ function classNames(...classes) {
 }
 
 const NavBarLink = ({ className, imgClassName, spanClassName, onClick }) => (
-  <Link to="/" className={`flex items-center ${className}`} onClick={onClick}>
+  <div className={`flex items-center cursor-pointer ${className}`} onClick={onClick}>
     <img src="/NavBarCat01.png" alt="NavBarCat01" className={`w-auto ${imgClassName}`} />
     <span className={`text-2xl text-black ${spanClassName}`}>Stupid Cat</span>
-  </Link>
+  </div>
 );
 
 export default function NavBar() {
@@ -53,6 +53,11 @@ export default function NavBar() {
     closeDropdown();
   };
 
+  const handleHomeNavigation = () => {
+    navigate('/');
+    closeDropdown();
+  };
+
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200 relative">
       {({ open }) => (
@@ -70,10 +75,10 @@ export default function NavBar() {
                   )}
                 </Disclosure.Button>
                 {/* 貓咪圖和 Stupid Cat 文字 */}
-                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" onClick={closeDropdown} />
+                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" onClick={handleHomeNavigation} />
               </div>
               <div className="flex flex-1 items-center justify-center sm:justify-start">
-                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" onClick={closeDropdown} />
+                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" onClick={handleHomeNavigation} />
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 {navigation.map((item) => (
@@ -123,8 +128,8 @@ export default function NavBar() {
               {navigation.map((item) => (
                 <div key={item.name}>
                   <Disclosure.Button
-                    as="div"
-                    onClick={item.name === 'View Random Fun' || item.name === 'Interactive Component' ? (e) => e.preventDefault() : () => handleNavigation(item.href)}
+                    as="button"
+                    onClick={item.subMenu ? (e) => e.preventDefault() : () => handleNavigation(item.href)}
                     className={classNames(
                       item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
                       'block rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
@@ -132,7 +137,7 @@ export default function NavBar() {
                     aria-current={item.current ? 'page' : undefined}
                   >
                     {item.name}
-                    {item.subMenu && item.name !== 'View Random Fun' && item.name !== 'Interactive Component' && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
+                    {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
                   </Disclosure.Button>
                   {item.subMenu && (
                     <Disclosure.Panel className="pl-4">
