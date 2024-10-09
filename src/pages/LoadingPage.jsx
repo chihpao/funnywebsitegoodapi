@@ -1,20 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-function LoadingPage({ setIsLoading }) {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      document.getElementById('loading-page').classList.add('translate-y-full');
-      setTimeout(() => setIsLoading(false), 1000); // 1秒後隱藏加載頁面
-    }, 3000); // 3秒後開始上移效果
-
-    return () => clearTimeout(timer);
-  }, [setIsLoading]);
-
+function LoadingPage() {
   return (
-    <div id="loading-page" className="fixed inset-0 flex items-center justify-center bg-black z-50 transition-transform duration-1000 ease-in-out">
+    <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
       <div className="text-center">
         <div className="text-8xl font-bold text-white relative">
-          <span className="absolute inset-0 text-black">Unlock</span>
+          <span className="absolute inset-0 text-black stroke-white">Unlock</span>
           <span className="relative">Unlock</span>
         </div>
         <div className="text-6xl font-bold text-white mt-4">your world</div>

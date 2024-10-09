@@ -22,11 +22,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const NavBarLink = ({ className, imgClassName, spanClassName, onClick }) => (
-  <div className={`flex items-center cursor-pointer ${className}`} onClick={onClick}>
+const NavBarLink = ({ className, imgClassName, spanClassName, to }) => (
+  <Link to={to} className={`flex items-center cursor-pointer ${className}`}>
     <img src="/NavBarCat01.png" alt="NavBarCat01" className={`w-auto ${imgClassName}`} />
     <span className={`text-2xl text-black ${spanClassName}`}>Stupid Cat</span>
-  </div>
+  </Link>
 );
 
 export default function NavBar() {
@@ -53,11 +53,6 @@ export default function NavBar() {
     closeDropdown();
   };
 
-  const handleHomeNavigation = () => {
-    navigate('/');
-    closeDropdown();
-  };
-
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200 relative">
       {({ open }) => (
@@ -75,10 +70,10 @@ export default function NavBar() {
                   )}
                 </Disclosure.Button>
                 {/* 貓咪圖和 Stupid Cat 文字 */}
-                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" onClick={handleHomeNavigation} />
+                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" to="/" />
               </div>
               <div className="flex flex-1 items-center justify-center sm:justify-start">
-                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" onClick={handleHomeNavigation} />
+                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" to="/" />
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 {navigation.map((item) => (
@@ -97,14 +92,15 @@ export default function NavBar() {
                     {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
                       <div className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50">
                         {item.subMenu.map((subItem) => (
-                          <Link
+                          <Disclosure.Button
                             key={subItem.name}
+                            as={Link}
                             to={subItem.href}
-                            className="block px-4 py-2 text-black hover:bg-gray-200 hover:text-black"
+                            className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
                             onClick={closeDropdown}
                           >
                             {subItem.name}
-                          </Link>
+                          </Disclosure.Button>
                         ))}
                       </div>
                     )}
@@ -144,8 +140,8 @@ export default function NavBar() {
                       {item.subMenu.map((subItem) => (
                         <Disclosure.Button
                           key={subItem.name}
-                          as="a"
-                          href={subItem.href}
+                          as={Link}
+                          to={subItem.href}
                           className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
                           onClick={closeDropdown}
                         >

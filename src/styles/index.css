@@ -68,3 +68,11 @@
       background-position: center; /* 調整背景位置 */
     }
   }
+
+@layer utilities {
+    .stroke-white {
+      -webkit-text-stroke: 4px white;
+      color: black;
+    }
+  }
+  
