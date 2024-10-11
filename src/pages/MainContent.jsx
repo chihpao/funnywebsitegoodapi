@@ -4,6 +4,7 @@ import HomePage from './HomePage';
 import FunComponent, { MemesPage, CatsPage, DogsPage } from './FunComponent';
 import InteractiveComponent from './InteractiveComponent';
 import LoadingPage from './LoadingPage';
+import ArticlesPage from './ArticlesPage';
 
 function MainContent() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,7 @@ function MainContent() {
       <Route path="/fun/cats" element={<CatsPage />} />
       <Route path="/fun/dogs" element={<DogsPage />} />
       <Route path="/interactive" element={<InteractiveComponent />} />
+      <Route path="/articles" element={<ArticlesPage />} /> {/* 新增這行 */}
     </Routes>
   );
 }

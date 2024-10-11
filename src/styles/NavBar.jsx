@@ -16,6 +16,7 @@ const navigation = [
     ],
   },
   { name: 'Interactive Component', href: '/interactive', current: false },
+  { name: 'Articles', href: '/articles', current: false }, // 新增這行
 ];
 
 function classNames(...classes) {
@@ -107,7 +108,7 @@ export default function NavBar() {
                   </div>
                 ))}
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 hidden">
                 <button
                   type="button"
                   className="relative rounded-full bg-white p-1 text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white"

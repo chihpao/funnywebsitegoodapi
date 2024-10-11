@@ -4,7 +4,7 @@ function Homepage() {
   return (
     <div className="w-full flex flex-col">
       <div className="background-image-container">
-      </div>
+       </div>
     </div>
   );
 }
