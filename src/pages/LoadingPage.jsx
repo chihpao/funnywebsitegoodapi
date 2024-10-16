@@ -44,7 +44,7 @@ function LoadingPage() {
             box-shadow: inset -4px 2px 0px 0px rgba(240, 220, 220, 1);
             -webkit-animation: headAnim 1.5s infinite alternate;
             -webkit-animation-timing-function: ease-out;
-            top: -40px; /* 上移 */
+            top: -80px; /* 上移 */
           }
           .body {
             position: relative;
@@ -89,7 +89,7 @@ function LoadingPage() {
             position: relative;
             z-index: -1;
             left: 0%;
-            top: 5%; /* 上移 */
+            top: -10%; /* 上移 */
             overflow: hidden;
           }
           .hands {
