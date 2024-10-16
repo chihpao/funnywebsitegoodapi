@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useFunLogic } from '../hooks/useFunLogic';
+import { useFunLogic } from '../hooks/useFunHooks';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const LoadingSpinner = () => (
