@@ -4,7 +4,6 @@ import NavBar from './styles/NavBar';
 import MainContent from './pages/MainContent';
 
 function App() {
-
   return (
     <Router>
         <div>
