@@ -53,8 +53,8 @@
 
 /* 新增的背景圖片樣式 */
 .background-image-container {
-  height: 100vh;
-  background-image: url('/tata04.jpg');
+  height: 200vh;
+  background-image: url('/tata05.jpg');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
