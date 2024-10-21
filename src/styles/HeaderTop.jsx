@@ -8,19 +8,19 @@ import spotifyIcon from '../assets/spotify.svg';
 const HeaderTop = () => (
   <div style={styles.headerTop}>
     <div style={styles.icons}>
-      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.facebook.com/chihpaoo/?locale=zh_TW" target="_blank" rel="noopener noreferrer">
         <img src={facebookIcon} alt="Facebook" style={styles.icon} />
       </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.instagram.com/bobbie__moel" target="_blank" rel="noopener noreferrer">
         <img src={instagramIcon} alt="Instagram" style={styles.icon} />
       </a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.linkedin.com/in/chihpao-chang-1745a423a" target="_blank" rel="noopener noreferrer">
         <img src={linkedinIcon} alt="LinkedIn" style={styles.icon} />
       </a>
-      <a href="https://notion.so" target="_blank" rel="noopener noreferrer">
+      <a href="https://chihpao.notion.site/" target="_blank" rel="noopener noreferrer">
         <img src={notionIcon} alt="Notion" style={styles.icon} />
       </a>
-      <a href="https://spotify.com" target="_blank" rel="noopener noreferrer">
+      <a href="https://open.spotify.com/show/2gMSpNkgeKlE2Nyu8Ru4gw?si=17941dfb650a48eb" target="_blank" rel="noopener noreferrer">
         <img src={spotifyIcon} alt="Spotify" style={styles.icon} />
       </a>
     </div>

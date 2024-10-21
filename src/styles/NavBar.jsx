@@ -16,7 +16,7 @@ const navigation = [
     ],
   },
   { name: 'Interactive Component', href: '/interactive', current: false },
-  { name: 'Articles', href: '/articles', current: false }, // 新增這行
+  { name: 'ChatBot', href: '/DifyChat', current: false }, // 新增這行
 ];
 
 function classNames(...classes) {
