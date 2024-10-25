@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import HeaderTop from './styles/HeaderTop';
 import NavBar from './styles/NavBar';
 import MainContent from './pages/MainContent';
+import SkinnyFooter from './components/SkinnyFooter';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
           <HeaderTop />
           <NavBar />
           <MainContent />
+          <SkinnyFooter />
         </div>
     </Router>
   );

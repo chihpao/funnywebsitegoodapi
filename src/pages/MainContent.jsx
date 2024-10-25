@@ -20,6 +20,7 @@ function MainContent() {
   }
 
   return (
+    <>
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/fun" element={<FunComponent />} />
@@ -27,8 +28,9 @@ function MainContent() {
       <Route path="/fun/cats" element={<CatsPage />} />
       <Route path="/fun/dogs" element={<DogsPage />} />
       <Route path="/interactive" element={<InteractiveComponent />} />
-      <Route path="/DifyChat" element={<DifyChat />} /> {/* 新增這行 */}
+      <Route path="/DifyChat" element={<DifyChat />} />
     </Routes>
+    </>
   );
 }
 
