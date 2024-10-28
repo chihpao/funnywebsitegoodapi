@@ -40,7 +40,7 @@ const styles = {
     alignItems: 'center',
     width: '100%',
     padding: '10px',
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#ffffff',
     zIndex: 10,
     position: 'relative',
   },

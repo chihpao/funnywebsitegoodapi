@@ -53,10 +53,10 @@
 
 /* 新增的背景圖片樣式 */
 .background-image-container {
-  height: 200vh;
+  height: 100vh;
   background-image: url('/tata02.jpg');
   background-size: cover;
-  background-position: center top;
+  background-position: top center;
   background-repeat: no-repeat;
   z-index: -1;
 }
@@ -64,8 +64,9 @@
 /* 針對小螢幕進行調整 */
 @media (max-width: 600px) {
     .background-image-container {
-      background-size: cover; /* 確保圖片寬度覆蓋容器 */
-      background-position: center; /* 調整背景位置 */
+      background-size: cover;
+      background-position: center; 
+      height: 100vh;
     }
   }
 
