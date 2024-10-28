@@ -64,8 +64,8 @@
 /* 針對小螢幕進行調整 */
 @media (max-width: 600px) {
     .background-image-container {
-      background-size: cover;
-      background-position: center; 
+      background-size: contain;
+      background-position: top; 
       height: 100vh;
     }
   }
