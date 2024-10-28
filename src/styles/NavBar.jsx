@@ -6,13 +6,13 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const navigation = [
   {
-    name: 'View Random Fun',
+    name: 'Find Random Fun',
     href: '/fun',
     current: false,
     subMenu: [
-      { name: '找梗圖', href: '/fun/memes' },
-      { name: '找貓咪', href: '/fun/cats' },
-      { name: '找狗狗', href: '/fun/dogs' },
+      { name: 'Find Memes', href: '/fun/memes' },
+      { name: 'Find Cats', href: '/fun/cats' },
+      { name: 'Find Dogs', href: '/fun/dogs' },
     ],
   },
   { name: 'Interactive Component', href: '/interactive', current: false },

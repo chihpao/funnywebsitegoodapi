@@ -29,7 +29,7 @@ const MemeSection = ({
 }) => (
   <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">找梗圖</h2>
+      <h2 className="text-3xl font-bold text-gray-800">Find Memes</h2>
       <div className="flex space-x-4">
         <Button
           onClick={getPreviousMeme}
@@ -73,9 +73,9 @@ const MemeSection = ({
 const CatSection = ({ catImages, catLoading, loadCatImages }) => (
   <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">找貓咪</h2>
+      <h2 className="text-3xl font-bold text-gray-800">Find Cats</h2>
       <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-700">
-        再來一些貓咪圖片
+        More Cats
       </Button>
     </div>
     {catLoading ? (
@@ -95,7 +95,7 @@ const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
     <div className="flex justify-between items-center mb-4">
       <h2 className="text-3xl font-bold text-gray-800">找狗狗</h2>
       <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
-        再來一些狗狗圖片
+        More Dogs
       </Button>
     </div>
     {dogLoading ? (
