@@ -8,11 +8,13 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start:server": "node server.cjs",
     "start:dev": "npm run dev",
-    "start": "start /B node server.cjs & npm run dev"
+    "start": "npm run dev"
   },
   "dependencies": {
+    "@builder.io/dev-tools": "^1.1.27",
+    "@builder.io/react": "^6.0.1",
+    "@builder.io/sdk": "^4.0.1",
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@headlessui/react": "^2.1.8",
     "@heroicons/react": "^2.1.5",
