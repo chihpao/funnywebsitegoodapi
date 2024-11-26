@@ -4,6 +4,7 @@ import NavBar from './styles/NavBar';
 import MainContent from './pages/MainContent';
 import SkinnyFooter from './components/SkinnyFooter';
 
+
 function App() {
   return (
     <Router>

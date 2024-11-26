@@ -93,7 +93,7 @@ const CatSection = ({ catImages, catLoading, loadCatImages }) => (
 const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
   <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
     <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">找狗狗</h2>
+      <h2 className="text-3xl font-bold text-gray-800">Find Dogs</h2>
       <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
         More Dogs
       </Button>
