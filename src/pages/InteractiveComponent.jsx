@@ -1,84 +1,104 @@
 import React, { useEffect, useState } from "react";
+import throttle from "lodash/throttle";
+
+const ScrollEffectItem = ({ top, text, dynamicStyles, onClick }) => (
+  <div
+    className="fixed left-0 right-0 h-64 transition-all duration-500 cursor-pointer"
+    style={{
+      top: `${top}px`,
+      opacity: dynamicStyles.opacity,
+      transform: dynamicStyles.transform,
+      backgroundColor: dynamicStyles.backgroundColor,
+      boxShadow: dynamicStyles.boxShadow,
+    }}
+    onClick={onClick}
+  >
+    <h1
+      className="text-center text-4xl font-bold"
+      style={{
+        color: dynamicStyles.color,
+        fontFamily: "monospace",
+      }}
+    >
+      {text}
+    </h1>
+  </div>
+);
 
 const ScrollEffectComponent = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [clicked, setClicked] = useState(false);
+  const [catPosition, setCatPosition] = useState({ top: '80%', left: '10%' });
 
-  // 偵測滾動事件
   useEffect(() => {
-    const handleScroll = () => {
-      const position = window.scrollY;
-      setScrollPosition(position);
-    };
+    const handleScroll = throttle(() => {
+      setScrollPosition(window.scrollY);
+    }, 100);
 
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 計算樣式
-  const opacity = Math.min(1, scrollPosition / 500); // 控制透明度
-  const scale = 1 + scrollPosition / 1000; // 控制大小
-  const rotate = scrollPosition / 10; // 控制旋轉
-  const translateY = scrollPosition / 5; // 控制垂直位移
-  const backgroundColor = `rgb(${Math.min(255, scrollPosition)}, 0, 255)`; // 控制背景顏色
-  const textColor = `rgb(${255 - Math.min(255, scrollPosition)}, 255, 0)`; // 控制文字顏色
-  const boxShadow = `0px ${scrollPosition / 10}px ${scrollPosition / 5}px rgba(0, 255, 255, 0.5)`; // 控制陰影效果
+  useEffect(() => {
+    if (clicked) {
+      const timer = setTimeout(() => {
+        setClicked(false);
+      }, 2000); // 2秒後自動消失
+      return () => clearTimeout(timer);
+    }
+  }, [clicked]);
+
+  const handleClick = () => {
+    setClicked(true);
+    // 隨機改變貓咪的位置和大小
+    setCatPosition({
+      top: `${Math.random() * 80 + 10}%`,
+      left: `${Math.random() * 80 + 10}%`,
+    });
+  };
+
+  const dynamicStyles = {
+    opacity: Math.min(1, scrollPosition / 500),
+    transform: `scale(${1 + scrollPosition / 1000}) rotate(${scrollPosition / 10}deg) translateY(${scrollPosition / 5}px)`,
+    backgroundColor: `rgb(${Math.min(255, scrollPosition)}, 0, 255)`,
+    boxShadow: `0px ${scrollPosition / 10}px ${scrollPosition / 5}px rgba(0, 255, 255, 0.5)`,
+    color: `rgb(${255 - Math.min(255, scrollPosition)}, 255, 0)`,
+  };
+
+  const catStyles = {
+    position: 'fixed',
+    top: catPosition.top,
+    left: catPosition.left,
+    width: '150px',
+    height: '150px',
+    transition: 'transform 0.5s, top 0.5s, left 0.5s',
+    transform: `translateY(${scrollPosition / 2}px)`,
+  };
 
   return (
-    <div className="h-[1000vh] bg-gradient-to-b from-black via-purple-900 to-black"> {/* 讓頁面高度足夠可以滾動，並增加漸變背景 */}
-      <div
-        className="fixed left-0 right-0 h-64 transition-all duration-500"
-        style={{
-          top: '110px', // 設置 top 為 navbar 的高度
-          opacity: `${opacity}`,
-          transform: `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}px)`,
-          backgroundColor: `${backgroundColor}`,
-          boxShadow: `${boxShadow}`,
-          zIndex: 0, // 確保這個組件的 z-index 低於 navbar
-        }}
-      >
-        <h1 className="text-center text-4xl font-bold" style={{ color: `${textColor}`, fontFamily: 'monospace' }}>Design Thinking</h1>
-      </div>
-      <div
-        className="fixed left-0 right-0 h-64 transition-all duration-500"
-        style={{
-          top: '700px', // 設置 top 為 navbar 的高度
-          opacity: `${opacity}`,
-          transform: `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}px)`,
-          backgroundColor: `${backgroundColor}`,
-          boxShadow: `${boxShadow}`,
-          zIndex: 0, // 確保這個組件的 z-index 低於 navbar
-        }}
-      >
-        <h1 className="text-center text-4xl font-bold" style={{ color: `${textColor}`, fontFamily: 'monospace' }}>Almost There!</h1>
-      </div>
-      <div
-        className="fixed left-0 right-0 h-64 transition-all duration-500"
-        style={{
-          top: '1000px', // 設置 top 為 navbar 的高度
-          opacity: `${opacity}`,
-          transform: `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}px)`,
-          backgroundColor: `${backgroundColor}`,
-          boxShadow: `${boxShadow}`,
-          zIndex: 0, // 確保這個組件的 z-index 低於 navbar
-        }}
-      >
-        <h1 className="text-center text-4xl font-bold" style={{ color: `${textColor}`, fontFamily: 'monospace' }}>You Made It!</h1>
-      </div>
-      <div
-        className="fixed left-0 right-0 h-64 transition-all duration-500"
-        style={{
-          top: '1300px', // 設置 top 為 navbar 的高度
-          opacity: `${opacity}`,
-          transform: `scale(${scale}) rotate(${rotate}deg) translateY(${translateY}px)`,
-          backgroundColor: `${backgroundColor}`,
-          boxShadow: `${boxShadow}`,
-          zIndex: 0, // 確保這個組件的 z-index 低於 navbar
-        }}
-      >
-        <h1 className="text-center text-4xl font-bold" style={{ color: `${textColor}`, fontFamily: 'monospace' }}>Congratulations!</h1>
-      </div>
+    <div className="h-[1000vh] bg-gradient-to-b from-black via-purple-900 to-black">
+      {["Design Thinking", "Almost There!", "You Made It!", "Congratulations!"].map(
+        (text, index) => (
+          <ScrollEffectItem
+            key={index}
+            top={110 + index * 300}
+            text={text}
+            dynamicStyles={dynamicStyles}
+            onClick={handleClick}
+          />
+        )
+      )}
+      <img
+        src="src\assets\cat-dance01.gif" // 確保路徑正確
+        alt="Cat"
+        style={catStyles}
+        onClick={handleClick}
+      />
+      {clicked && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <h1 className="text-white text-6xl">You clicked me!</h1>
+        </div>
+      )}
     </div>
   );
 };
