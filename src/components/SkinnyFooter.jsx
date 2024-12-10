@@ -55,6 +55,6 @@ const styles = {
     height: '24px',
     marginLeft: '10px',
   },
-};
+}
 
 export default SkinnyFooter;

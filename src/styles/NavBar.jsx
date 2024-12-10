@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ const navigation = [
       { name: 'Find Dogs', href: '/fun/dogs' },
     ],
   },
-  { name: 'Interactive Component', href: '/interactive', current: false },
+  { name: 'InteractivePage', href: '/interactive', current: false },
   { name: 'ChatBot', href: '/DifyChat', current: false }, // 新增這行
 ];
 
@@ -54,6 +54,19 @@ export default function NavBar() {
     closeDropdown();
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.dropdown')) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200 relative">
       {({ open }) => (
@@ -78,7 +91,7 @@ export default function NavBar() {
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 {navigation.map((item) => (
-                  <div key={item.name} className="relative">
+                  <div key={item.name} className="relative dropdown">
                     <button
                       onClick={item.subMenu ? () => toggleDropdown(item.name) : () => handleNavigation(item.href)}
                       className={classNames(
