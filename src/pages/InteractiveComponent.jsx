@@ -1,4 +1,7 @@
 import React, { useEffect } from 'react';
+import { Global } from '@emotion/react';
+import { moveAnimation } from '../styles/IntComText.jsx';
+
 
 const InteractiveComponent = () => {
   useEffect(() => {
@@ -19,6 +22,8 @@ const InteractiveComponent = () => {
       </div>
       <h1 className="text-4xl font-bold text-center mb-4">阿嗚嗚</h1>
       <p className="text-lg text-center">待更待更...</p>
+      <p className="text-lg text-center animate-move">這是一段會移動的文字</p>
+      <Global styles={moveAnimation} />
     </div>
   );
 };
