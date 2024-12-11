@@ -37,7 +37,7 @@ export const moveAnimation01 = (
         align-items: center;
         justify-content: center;
         border: 1px solid #000;
-        padding: 3px 6px;
+        padding: 12px 8px;
         background-color: transparent;
         overflow: hidden;
         height: 1em;
