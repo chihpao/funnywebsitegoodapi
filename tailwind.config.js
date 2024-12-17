@@ -1,10 +1,18 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    './index.html',
     './src/**/*.{js,jsx,ts,tsx}', // 根據你的專案路徑進行調整
   ],
-  darkMode: 'media', // 或者直接移除這一行
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'],
+      },
+      gridTemplateColumns: {
+        '70/30': '70% 28%',
+      },
+    },
   },
   plugins: [],
 }
