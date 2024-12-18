@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { moveAnimation01 } from '../components/IntComText.jsx';
-import InteractiveBalls from '../components/InteractiveBalls';
+import InteractiveBallsWithMarquee from '../components/InteractiveBallsWithMarquee.jsx';
 
 const InteractiveComponent = () => {
   const names = ['小保', '智強', 'Bill'];
@@ -24,14 +24,16 @@ const InteractiveComponent = () => {
   }, []);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
-    script.async = true;
-    document.body.appendChild(script);
+    if (!customElements.get('lottie-player')) {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
+      script.async = true;
+      document.body.appendChild(script);
 
-    return () => {
-      document.body.removeChild(script);
-    };
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
   }, []);
 
   return (
@@ -84,7 +86,7 @@ const InteractiveComponent = () => {
           <hr className="w-full border-none h-0.5 bg-gradient-to-r from-black via-transparent to-black my-5 animate-gradient" />
         </div>
       </div>
-      <InteractiveBalls />
+      <InteractiveBallsWithMarquee />
     </>
   );
 };
