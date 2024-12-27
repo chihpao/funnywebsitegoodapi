@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.responsive-text {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl;
+}
+  
+.responsive-bg {
+    background-color: white; /* 固定背景顏色 */
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    gap: 1rem; /* 間距 */
+}
+
+.background-image-container {
+    background-size: cover;
+    background-position: center;
+    min-height: calc(100vh - 64px); /* 減去導航欄高度 */
+  }
+
+@media (min-width: 640px) {
+    .button-container {
+        flex-direction: row;
+        gap: 1rem; /* 間距 */
+    }
+}
+
+/* 針對不同螢幕尺寸的額外間距設置 */
+@media (min-width: 768px) {
+    .button-container {
+        gap: 1.5rem; /* 中等螢幕間距 */
+    }
+}
+
+@media (min-width: 1024px) {
+    .button-container {
+        gap: 2rem; /* 大螢幕間距 */
+    }
+}
+
+@media (min-width: 1280px) {
+    .button-container {
+        gap: 2.5rem; /* 超大螢幕間距 */
+    }
+}
+
+@media (min-width: 1536px) {
+    .button-container {
+        gap: 3rem; /* 超超大螢幕間距 */
+    }
+}
+
+
+
+/* 針對小螢幕進行調整 */
+@media (max-width: 600px) {
+    .background-image-container {
+        background-size: cover;
+        background-position: top;
+        min-height: calc(100vh - 64px);
+      }
+    }
+
+@layer utilities {
+    .stroke-white {
+      -webkit-text-stroke: 4px white;
+      color: black;
+    }
+  }
+  
+  
