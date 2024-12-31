@@ -33,7 +33,6 @@ git pull origin main
 * **靜態檢查** : 使用 `npm run lint` 來檢查代碼中的問題。
 * **啟動服務器和開發伺服器** : 使用 `npm run start` 來同時啟動 Node.js 服務器和 `vite` 開發伺服器。
 
-
 # 三、port被占用的處理方法
 
 **1.查找占用端口的進程 ID（PID）[`<port>` 替換為端口號（如 3050）]
