@@ -11,34 +11,34 @@ const projects = [
   },
   { id: 2, title: "我的生活", 
     img: "https://i.imgur.com/1klKIL5.jpeg", 
-    url: "https://chihpao.notion.site/120daaa899518090a0e8ffef49017ccc"
+    url: "https://www.instagram.com/bobbie__moel"
   },
   { id: 3, 
     title: "我的專案", 
     img:"https://i.imgur.com/sljKu6Z.jpeg" , 
-    url: "https://chihpao.notion.site/120daaa899518090a0e8ffef49017ccc"
+    url: "https://github.com/chihpao?tab=repositories"
   }
 ];
 
 const timelineEvents = [
   { 
     year: 2021, 
-    event: "貓咪出生", 
+    event: "從紙箱出生", 
     img: "https://i.imgur.com/5ZUdQMT.jpeg" 
   },
   { 
     year: 2022, 
-    event: "第一次外出", 
+    event: "開始在筆電旁睡覺", 
     img: "https://i.imgur.com/5UdxPFD.jpeg" 
   },
   { 
     year: 2023, 
-    event: "學會抓老鼠", 
+    event: "電腦椅也被占據了", 
     img: "https://i.imgur.com/gi9kUwN.jpeg" 
   },
   { 
     year: 2024, 
-    event: "成為網紅", 
+    event: "隨時準備偷襲媽咪", 
     img: "https://i.imgur.com/vNSncQm.jpeg" 
   }
 ];
@@ -287,9 +287,9 @@ function Homepage() {
         </div>
       </section>
 
-      <section className="py-8 px-4 md:px-8 bg-gray-100">
+      <section className="px-4 md:px-8 bg-gray-100 pb-0">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-lg p-6 shadow-xl">
+          <div>
             <h3 className="text-xl font-bold mb-4">收聽 Podcast</h3>
             <div className="aspect-w-16 aspect-h-9">
               <iframe
@@ -303,9 +303,9 @@ function Homepage() {
         </div>
       </section>
 
-      <section className="py-8 px-4 md:px-8">
+      <section className="px-4 md:px-8 pt-0">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">成長時間軸</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mt-8 mb-8">成長時間軸</h2>
           <Timeline />
         </div>
       </section>
