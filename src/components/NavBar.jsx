@@ -44,7 +44,17 @@ const NavBarLink = ({ className, imgClassName, spanClassName, to }) => (
 export default function NavBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [mobileMenuStates, setMobileMenuStates] = useState({});
   const navigate = useNavigate();
+  
+  const toggleMobileSubmenu = (name, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setMobileMenuStates(prev => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
+  };
 
   const toggleDropdown = (name) => {
     if (activeDropdown === name) {
@@ -60,8 +70,15 @@ export default function NavBar() {
     setActiveDropdown(null);
   };
 
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleNavigation = (path, isSubMenuItem = false, close = null, isExternalLink = false) => {
+    if (isExternalLink) {
+      window.open(path, '_blank');
+    } else {
+      navigate(path);
+      if (isSubMenuItem) {
+        close();
+      }
+    }
     closeDropdown();
   };
 
@@ -80,12 +97,11 @@ export default function NavBar() {
 
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200 relative">
-      {({ open }) => (
+      {({ open, close }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button */}
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
@@ -94,7 +110,6 @@ export default function NavBar() {
                     <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
-                {/* 貓咪圖和 Stupid Cat 文字 */}
                 <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" to="/" />
               </div>
               <div className="flex flex-1 items-center justify-start sm:justify-start">
@@ -107,7 +122,7 @@ export default function NavBar() {
                       onClick={item.subMenu ? () => toggleDropdown(item.name) : () => handleNavigation(item.href)}
                       className={classNames(
                         item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
-                        'rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
+                        'rounded-md px-3 py-2 text-lg font-medium'
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
@@ -127,7 +142,15 @@ export default function NavBar() {
                             target={subItem.target}
                             rel="noopener noreferrer"
                             className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
-                            onClick={closeDropdown}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleNavigation(
+                                subItem.href, 
+                                true, 
+                                close, 
+                                item.name === 'Find Pao'
+                              );
+                            }}
                           >
                             {subItem.name}
                           </Link>
@@ -153,33 +176,55 @@ export default function NavBar() {
             <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => (
                 <div key={item.name}>
-                  <Disclosure.Button
-                    as="button"
-                    onClick={item.subMenu ? (e) => e.preventDefault() : () => handleNavigation(item.href)}
-                    className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
-                      'block rounded-md px-3 py-2 text-lg font-medium' // 調整字體大小
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                    {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
-                  </Disclosure.Button>
-                  {item.subMenu && (
-                    <Disclosure.Panel className="pl-4">
-                      {item.subMenu.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          to={subItem.href}
-                          target={subItem.target}
-                          rel="noopener noreferrer"
-                          className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
-                          onClick={closeDropdown}
-                        >
-                          {subItem.name}
-                        </Link>
-                      ))}
-                    </Disclosure.Panel>
+                  {item.subMenu ? (
+                    <>
+                      <div
+                        onClick={(e) => toggleMobileSubmenu(item.name, e)}
+                        className={classNames(
+                          item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
+                          'block rounded-md px-3 py-2 text-lg font-medium cursor-pointer'
+                        )}
+                      >
+                        {item.name}
+                        <span className="ml-2">
+                          <i className={`fas ${mobileMenuStates[item.name] ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                        </span>
+                      </div>
+                      {mobileMenuStates[item.name] && (
+                          <div className="pl-4">
+                          {item.subMenu.map((subItem) => (
+                            <Link
+                              key={subItem.name}
+                              to={subItem.href}
+                              target={subItem.target}
+                              rel="noopener noreferrer"
+                              className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (item.name === 'Find Pao') {
+                                  window.open(subItem.href, '_blank');
+                                } else {
+                                  handleNavigation(subItem.href, true, close);
+                                }
+                              }}
+                            >
+                              {subItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className={classNames(
+                        item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
+                        'block rounded-md px-3 py-2 text-lg font-medium'
+                      )}
+                      onClick={() => handleNavigation(item.href, true, close)}
+                    >
+                      {item.name}
+                    </Link>
                   )}
                 </div>
               ))}
