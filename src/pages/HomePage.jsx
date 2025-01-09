@@ -77,28 +77,21 @@ function TransitionSection() {
         <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100">
           {[...Array(8)].map((_, i) => (
             <motion.path
-              key={i}
-              d={`M 500 50 L ${500 + 250 * Math.cos(i * Math.PI / 4)} ${50 + 250 * Math.sin(i * Math.PI / 4)}`}
-              stroke="rgba(255,255,255,0.6)"
-              strokeWidth="3"
-              fill="none"
-              animate={{
-                opacity: [0.3, 0.8, 0.3],
-                pathLength: [0, 1, 0],
-                rotate: [0, 360],
-                strokeWidth: ["3px", "4px", "3px"]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.2
-              }}
-              style={{
-                transformOrigin: "500px 50px",
-                filter: "drop-shadow(0 0 2px rgba(255,255,255,0.5))"
-              }}
-            />
+            key={i}
+            d={`M 500 50 L ${500 + 250 * Math.cos(i * Math.PI / 4)} ${50 + 250 * Math.sin(i * Math.PI / 4)}`}
+            stroke="rgba(255,255,255,0.6)"
+            strokeWidth="3"  
+            fill="none"
+            animate={{
+              opacity: [0.3, 0.8, 0.3],
+              pathLength: [0, 1, 0],
+              strokeWidth: ["3px", "4px", "3px"]
+            }}
+            style={{
+              willChange: "transform",
+              transformOrigin: "500px 50px"
+            }}
+          />
           ))}
           <motion.circle
             cx="500"
@@ -199,73 +192,149 @@ function ProjectCard({ project }) {
     </motion.a>
   );
 }
+// 箭頭樣式
+function TimelineArrow() {
+  return (
+    <motion.div
+      className="absolute w-8 h-24"
+      animate={{
+        y: ["0%", "100%"],
+      }}
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        ease: "linear",
+        repeatType: "loop"
+      }}
+    >
+      <svg 
+        viewBox="0 0 32 96" 
+        className="w-full h-full"
+      >
+        <motion.path
+          d="M16 4 L16 72 M8 64 L16 72 L24 64"
+          className="stroke-current"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ 
+            pathLength: 1, 
+            opacity: [0.2, 1, 0.2]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+          style={{
+            filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
+          }}
+        />
+      </svg>
+    </motion.div>
+  );
+}
 
 function Timeline() {
   return (
     <div className="relative py-8">
-      {/* 時間軸 - 改為黑色 */}
-      <motion.div
-        initial={{ height: 0 }}
-        whileInView={{ height: "100%" }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.5 }}
-        className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-black z-[5]"
-      />
+      {/* 現代化動態箭頭時間軸 */}
+      <div 
+        className="absolute left-1/2 transform -translate-x-1/2 h-full z-10"
+        style={{
+          background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.05) 50%, rgba(255,255,255,0) 100%)",
+          width: "2px"
+        }}
+      >
+        {[...Array(5)].map((_, index) => (
+          <div
+            key={index}
+            className="absolute left-1/2 transform -translate-x-1/2"
+            style={{ 
+              top: `${index * 20}%`,
+              color: `hsl(${index * 30}, 70%, 50%)`
+            }}
+          >
+            <TimelineArrow />
+          </div>
+        ))}
+      </div>
+
+      {/* 時間軸內容 */}
       {timelineEvents.map((event, index) => (
         <motion.div
           key={event.year}
-          initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: index * 0.2 }}
-          className={`flex flex-col md:flex-row items-center mb-8 md:mb-12 relative ${
+          className={`flex flex-col md:flex-row items-center mb-16 md:mb-24 relative ${
             index % 2 === 0 ? 'md:flex-row-reverse' : ''
           }`}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, delay: index * 0.2 }}
         >
-          {/* 手機版文字顯示 - 統一寬度 */}
-          <div className="flex items-center justify-center w-[calc(100%-1rem)] mx-2 md:hidden z-20">
-            <div className="bg-white w-full px-4 py-2 rounded-t-md shadow-sm flex items-center justify-center">
-              <span className="text-xl font-bold text-gray-900">{event.year}</span>
-              <span className="mx-2 text-gray-400">•</span>
-              <span className="text-lg text-gray-700">{event.event}</span>
-            </div>
-          </div>
-
-          {/* 圖片區塊 - 統一寬度和圓角 */}
-          <div className="w-[calc(100%-1rem)] md:w-[calc(50%-2rem)] mx-2 md:mx-4 z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-b-md md:rounded-xl p-3 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden"
+          {/* 手機版文字顯示 - 提高z-index */}
+          <div className="flex items-center justify-center w-[calc(100%-1rem)] mx-2 md:hidden z-50">
+            <motion.div 
+              className="bg-white/95 backdrop-blur-sm w-full px-6 py-4 rounded-lg shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="relative aspect-w-16 aspect-h-9">
-                <img 
-                  src={event.img} 
-                  alt={event.event}
-                  className="absolute inset-0 w-full h-full object-cover rounded-lg"
-                />
-              </div>
+              <span className="text-2xl font-bold text-gray-900">{event.year}</span>
+              <span className="mx-3 text-gray-400">→</span>
+              <span className="text-lg text-gray-700">{event.event}</span>
             </motion.div>
           </div>
 
-          {/* 桌面版文字顯示 */}
-          <div className={`hidden md:block w-[calc(50%-2rem)] p-4 ${
-            index % 2 === 0 ? 'text-right' : 'text-left'
-          }`}>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.year}</h3>
-            <p className="text-gray-700 text-lg">{event.event}</p>
-          </div>
-
-          {/* 圓點 - 改為黑色且置中 */}
-          <motion.div
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
+          {/* 圖片區塊 - 提高z-index */}
+          <motion.div 
+            className="w-[calc(100%-1rem)] md:w-[calc(50%-4rem)] mx-2 md:mx-8 z-40"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="absolute left-1/2 top-[50%] transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-black rounded-full z-20 hidden md:block"
-          />
+          >
+            <motion.div
+              className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="relative aspect-w-16 aspect-h-9 overflow-hidden rounded-lg">
+                <motion.img 
+                  src={event.img} 
+                  alt={event.event}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.4 }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* 桌面版文字顯示 */}
+          <motion.div 
+            className={`hidden md:block w-[calc(50%-4rem)] p-6 ${
+              index % 2 === 0 ? 'text-right pr-16' : 'text-left pl-16'
+            }`}
+            initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            exit={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <motion.h3 
+              className="text-3xl font-bold text-gray-900 mb-3"
+              whileHover={{ scale: 1.05 }}
+            >
+              {event.year}
+            </motion.h3>
+            <motion.p 
+              className="text-xl text-gray-700 leading-relaxed"
+              whileHover={{ x: index % 2 === 0 ? -10 : 10 }}
+            >
+              {event.event}
+            </motion.p>
+          </motion.div>
         </motion.div>
       ))}
     </div>
