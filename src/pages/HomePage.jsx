@@ -245,13 +245,9 @@ function Timeline() {
   return (
     <div className="relative py-8">
       {/* 現代化動態箭頭時間軸 */}
+      <div className="hidden md:block">
       <div
         className="absolute left-1/2 transform -translate-x-1/2 h-full z-10"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(0,0,0,0.05) 50%, rgba(255,255,255,0) 100%)",
-          width: "2px",
-        }}
       >
         {[...Array(5)].map((_, index) => (
           <div
@@ -260,11 +256,13 @@ function Timeline() {
             style={{
               top: `${index * 20}%`,
               color: `hsl(${index * 30}, 70%, 50%)`,
+              marginLeft: "-16px"
             }}
           >
             <TimelineArrow />
           </div>
         ))}
+        </div>
       </div>
 
       {/* 時間軸內容 */}
@@ -326,21 +324,22 @@ function Timeline() {
             initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            exit={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <motion.h3
-              className="text-3xl font-bold text-gray-900 mb-3"
-              whileHover={{ scale: 1.05 }}
-            >
-              {event.year}
-            </motion.h3>
-            <motion.p
-              className="text-xl text-gray-700 leading-relaxed"
-              whileHover={{ x: index % 2 === 0 ? -10 : 10 }}
-            >
-              {event.event}
-            </motion.p>
+            <motion.div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-md hover:shadow-lg transition-all">
+              <motion.h3
+                className="text-3xl font-bold text-gray-900 mb-3 inline-block bg-gradient-to-r from-teal-500 to-blue-500 bg-clip-text text-transparent"
+                whileHover={{ scale: 1.05 }}
+              >
+                {event.year}
+              </motion.h3>
+              <motion.p
+                className="text-xl text-gray-700 leading-relaxed font-medium"
+                whileHover={{ x: index % 2 === 0 ? -10 : 10 }}
+              >
+                {event.event}
+              </motion.p>
+            </motion.div>
           </motion.div>
         </motion.div>
       ))}
