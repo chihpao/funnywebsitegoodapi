@@ -17,9 +17,6 @@ const images = [
   { src: "/tata10.jpg", position: "bottom" },  
 ];
 
-
-
-
 const projects = [
   {
     id: 1,
