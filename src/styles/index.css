@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 瀏覽器翻譯工具兼容 */
+.notranslate {
+    translate: no;
+}
+
 /* Custom styles */
 .responsive-text {
     @apply text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl;
