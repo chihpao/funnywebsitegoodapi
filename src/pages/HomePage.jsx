@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 // Static data
+
+// tata圖片陣列
+const slideImages = [
+  '/tata01.jpg',
+  '/tata02.jpg',
+  '/tata03.jpg',  
+  '/tata04.jpg',
+  '/tata05.jpg',
+  '/tata06.jpg',
+  '/tata07.jpg',
+  '/tata08.jpg',
+  '/tata09.jpg',
+  '/tata10.jpg',
+];
+
+
+
 const projects = [
   {
     id: 1,
@@ -47,23 +64,24 @@ const timelineEvents = [
 ];
 
 function HeroSection() {
+  
   return (
     <section className="relative h-screen">
       <div
         className="w-full h-[calc(100vh-64px)] bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('/tata02.jpg')" }}
+        style={{ backgroundImage: "url('tata02.jpg')" }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent flex items-center justify-center">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-center text-white px-4"
-        >
-          <h1 className="text-4xl md:text-7xl font-bold mb-4 tracking-tight">
+          //位置調整
+          className="absolute top-3 left-3 text-white" 
+        >          
+          <div className="border-2 border-indigo-50 bg-opacity-30 backdrop-blur-sm text-2xl md:text-5xl font-bold mb-2 tracking-tight px-3 py-1">
             TaTa
-          </h1>
-          <p className="text-lg md:text-2xl font-light">超級好貓</p>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -277,10 +295,10 @@ function Timeline() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, delay: index * 0.2 }}
         >
-          {/* 手機版文字顯示 - 提高z-index */}
+          {/* 手機版文字樣式 */}
           <div className="flex items-center justify-center w-[calc(100%-1rem)] mx-2 md:hidden z-60">
             <motion.div
-              className="bg-white/95 backdrop-blur-sm w-full px-6 py-4 rounded-lg shadow-lg"
+              className="bg-white/95 backdrop-blur-sm w-full px-6 py-4 rounded-lg shadow-lg text-center"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -288,7 +306,7 @@ function Timeline() {
                 {event.year}
               </span>
               <span className="mx-3 text-gray-400">→</span>
-              <span className="text-lg text-gray-700">{event.event}</span>
+              <span className="text-lg text-gray-900">{event.event}</span>
             </motion.div>
           </div>
 
@@ -316,7 +334,7 @@ function Timeline() {
             </motion.div>
           </motion.div>
 
-          {/* 桌面版文字顯示 */}
+          {/* 桌面版文字樣式 */}
           <motion.div
             className={`hidden md:block w-[calc(50%-4rem)] p-6 ${
               index % 2 === 0 ? "text-right pr-16" : "text-left pl-16"
@@ -326,9 +344,9 @@ function Timeline() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <motion.div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-md hover:shadow-lg transition-all">
+            <motion.div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
               <motion.h3
-                className="text-3xl font-bold text-gray-900 mb-3 inline-block bg-gradient-to-r from-teal-500 to-blue-500 bg-clip-text text-transparent"
+                className="text-3xl font-bold text-gray-900 mb-3 inline-block"
                 whileHover={{ scale: 1.05 }}
               >
                 {event.year}
@@ -381,7 +399,7 @@ function Homepage() {
       <section className="px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
-            成長時間軸
+            TaTa成長時間軸
           </h2>
           <Timeline />
         </div>
