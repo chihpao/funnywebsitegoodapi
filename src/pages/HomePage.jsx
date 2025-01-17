@@ -3,19 +3,20 @@ import { motion } from "framer-motion";
 
 // Static data
 
-// tata圖片陣列
-const slideImages = [
-  '/tata01.jpg',
-  '/tata02.jpg',
-  '/tata03.jpg',  
-  '/tata04.jpg',
-  '/tata05.jpg',
-  '/tata06.jpg',
-  '/tata07.jpg',
-  '/tata08.jpg',
-  '/tata09.jpg',
-  '/tata10.jpg',
+// 設定每張圖片對應的position
+const images = [
+  { src: "/tata01.jpg", position: "center" }, 
+  { src: "/tata02.jpg", position: "top"  },   
+  { src: "/tata03.jpg", position: "right 40%" },
+  { src: "/tata04.jpg", position: "left 40%" },
+  { src: "/tata05.jpg", position: "bottom" },
+  { src: "/tata06.jpg", position: "center" },
+  { src: "/tata07.jpg", position: "top" },
+  { src: "/tata08.jpg", position: "right 40%" },
+  { src: "/tata09.jpg", position: "left 40%" },
+  { src: "/tata10.jpg", position: "bottom" },  
 ];
+
 
 
 
@@ -64,21 +65,33 @@ const timelineEvents = [
 ];
 
 function HeroSection() {
-  
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="relative h-screen">
-      <div
-        className="w-full h-[calc(100vh-64px)] bg-cover bg-no-repeat"
-        style={{ backgroundImage: "url('tata02.jpg')" }}
-      />
+      <div className="w-full h-[calc(100vh-64px)] relative overflow-hidden">
+        <img
+          key={index}
+          src={images[index].src}
+          alt="TaTa"
+          className={`object-cover w-full h-full`}
+          style={{ objectPosition: images[index].position }}
+        />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          //位置調整
-          className="absolute top-3 left-3 text-white" 
-        >          
+          className="absolute top-3 left-3 text-white"
+        >
           <div className="border-2 border-indigo-50 bg-opacity-30 backdrop-blur-sm text-2xl md:text-5xl font-bold mb-2 tracking-tight px-3 py-1">
             TaTa
           </div>
