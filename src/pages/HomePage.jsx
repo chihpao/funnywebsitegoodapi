@@ -87,7 +87,7 @@ function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="absolute top-3 left-3 text-white"
+          className="absolute top-3 right-3 text-white"
         >
           <div className="border-2 border-indigo-50 bg-opacity-30 backdrop-blur-sm text-2xl md:text-5xl font-bold mb-2 tracking-tight px-3 py-1">
             TaTa
