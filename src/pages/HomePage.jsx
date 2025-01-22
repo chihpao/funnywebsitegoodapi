@@ -5,16 +5,16 @@ import { motion } from "framer-motion";
 
 // 設定每張圖片對應的position
 const images = [
-  { src: "/tata01.jpg", position: "center" }, 
-  { src: "/tata02.jpg", position: "top"  },   
-  { src: "/tata03.jpg", position: "right 40%" },
-  { src: "/tata04.jpg", position: "left 40%" },
+  { src: "/tata01.jpg", position: "center" },
+  { src: "/tata02.jpg", position: "top" },
+  { src: "/tata03.jpg", position: "99% 25%" },  // 改用百分比格式
+  { src: "/tata04.jpg", position: "90% 50%" },  // 改用百分比格式
   { src: "/tata05.jpg", position: "bottom" },
   { src: "/tata06.jpg", position: "center" },
   { src: "/tata07.jpg", position: "top" },
-  { src: "/tata08.jpg", position: "right 40%" },
-  { src: "/tata09.jpg", position: "left 40%" },
-  { src: "/tata10.jpg", position: "bottom" },  
+  { src: "/tata08.jpg", position: "60% 50%" },  // 改用百分比格式
+  { src: "/tata09.jpg", position: "40% 50%" },  // 改用百分比格式
+  { src: "/tata10.jpg", position: "bottom" },
 ];
 
 const projects = [
@@ -64,24 +64,71 @@ const timelineEvents = [
 function HeroSection() {
   const [index, setIndex] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
+  // position除錯用
+  console.log('Current position:', images[index].position);
+
+  const handlePrevious = () => {
+    setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <section className="relative h-screen">
-      <div className="w-full h-[calc(100vh-64px)] relative overflow-hidden">
-        <img
+      <div className="w-full h-[calc(100vh-64px)] relative overflow-hidden border-2 border-blue-500">
+        <motion.div
           key={index}
-          src={images[index].src}
-          alt="TaTa"
-          className={`object-cover w-full h-full`}
-          style={{ objectPosition: images[index].position }}
-        />
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full h-full relative border-2 border-red-500"
+        >
+          <img
+            src={images[index].src}
+            alt="TaTa"
+            className="absolute inset-0 w-full h-full object-cover border border-blue-500"
+            style={{ 
+              objectFit: 'cover',
+              objectPosition: `${images[index].position}`,
+              transform: 'translateZ(0)'  // 強制硬體加速
+            }}
+          />
+          {/* 測試用資訊 */}
+          <div className="absolute top-0 left-0 bg-black/50 text-white p-2 z-50">
+            Current Image: {index + 1}<br/>
+            Position: {images[index].position}
+          </div>
+        </motion.div>
+        
+        <motion.button
+          onClick={handlePrevious}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 
+                     bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
+                     backdrop-blur-sm transition-all duration-200 z-10"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </motion.button>
+
+        <motion.button
+          onClick={handleNext}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 
+                     bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
+                     backdrop-blur-sm transition-all duration-200 z-10"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </motion.button>
       </div>
+      
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
