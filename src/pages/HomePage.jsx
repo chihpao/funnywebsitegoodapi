@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-// Static data
-
-// 設定每張圖片對應的position
+// 設定每張圖片對應的 position
 const images = [
   { src: "/tata01.jpg", position: "center" },
   { src: "/tata02.jpg", position: "top" },
-  { src: "/tata03.jpg", position: "99% 25%" },  // 改用百分比格式
-  { src: "/tata04.jpg", position: "90% 50%" },  // 改用百分比格式
-  { src: "/tata05.jpg", position: "bottom" },
+  { src: "/tata03.jpg", position: "50% 30%" },   
+  { src: "/tata04.jpg", position: "100% 80%" }, 
+  { src: "/tata05.jpg", position: "100% 40%" },
   { src: "/tata06.jpg", position: "center" },
-  { src: "/tata07.jpg", position: "top" },
-  { src: "/tata08.jpg", position: "60% 50%" },  // 改用百分比格式
-  { src: "/tata09.jpg", position: "40% 50%" },  // 改用百分比格式
-  { src: "/tata10.jpg", position: "bottom" },
+  { src: "/tata07.jpg", position: "50% 30%" },
+  { src: "/tata08.jpg", position: "60% 100%" }, 
+  { src: "/tata09.jpg", position: "80% 60%" },
+  { src: "/tata10.jpg", position: "80% 60%" },
 ];
 
 const projects = [
@@ -59,13 +57,17 @@ const timelineEvents = [
     event: "隨時準備偷襲媽咪",
     img: "https://i.imgur.com/vNSncQm.jpeg",
   },
+  {
+    year: 2025,
+    event: "回眸一看百媚生",
+    img: "https://i.imgur.com/Lse14kD.jpeg",
+  },
 ];
 
 function HeroSection() {
   const [index, setIndex] = useState(0);
 
-  // position除錯用
-  console.log('Current position:', images[index].position);
+  console.log("Current position:", images[index].position);
 
   const handlePrevious = () => {
     setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -77,69 +79,61 @@ function HeroSection() {
 
   return (
     <section className="relative h-screen">
-      <div className="w-full h-[calc(100vh-64px)] relative overflow-hidden border-2 border-blue-500">
+      <div className="w-full h-[calc(100vh-64px)] relative overflow-hidden">
         <motion.div
           key={index}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full h-full relative border-2 border-red-500"
-        >
-          <img
-            src={images[index].src}
-            alt="TaTa"
-            className="absolute inset-0 w-full h-full object-cover border border-blue-500"
-            style={{ 
-              objectFit: 'cover',
-              objectPosition: `${images[index].position}`,
-              transform: 'translateZ(0)'  // 強制硬體加速
-            }}
-          />
-          {/* 測試用資訊 */}
-          <div className="absolute top-0 left-0 bg-black/50 text-white p-2 z-50">
-            Current Image: {index + 1}<br/>
-            Position: {images[index].position}
-          </div>
-        </motion.div>
-        
-        <motion.button
-          onClick={handlePrevious}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 
-                     bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
-                     backdrop-blur-sm transition-all duration-200 z-10"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </motion.button>
+          className="w-full h-full relative"
+          style={{
+            backgroundImage: `url(${images[index].src})`,
+            backgroundPosition: images[index].position,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        />
 
-        <motion.button
-          onClick={handleNext}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 
-                     bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
-                     backdrop-blur-sm transition-all duration-200 z-10"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </motion.button>
-      </div>
-      
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="absolute top-3 right-3 text-white"
-        >
-          <div className="border-2 border-indigo-50 bg-opacity-30 backdrop-blur-sm text-2xl md:text-5xl font-bold mb-2 tracking-tight px-3 py-1">
-            TaTa
-          </div>
-        </motion.div>
+        {/* 修改後的按鈕 */}
+        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
+          <motion.button
+            onClick={handlePrevious}
+            className="bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
+                       backdrop-blur-sm transition-all duration-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </motion.button>
+
+          <motion.button
+            onClick={handleNext}
+            className="bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
+                       backdrop-blur-sm transition-all duration-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </motion.button>
+        </div>
+
+        {/* ...existing code... */}
       </div>
     </section>
   );
@@ -163,8 +157,8 @@ function TransitionSection() {
             <motion.path
               key={i}
               d={`M 500 50 L ${
-                500 + 250 * Math.cos(i * Math.PI / 4)
-              } ${50 + 250 * Math.sin(i * Math.PI / 4)}`}
+                500 + 250 * Math.cos((i * Math.PI) / 4)
+              } ${50 + 250 * Math.sin((i * Math.PI) / 4)}`}
               stroke="rgba(255,255,255,0.6)"
               strokeWidth="3"
               fill="none"
@@ -274,6 +268,7 @@ function ProjectCard({ project }) {
     </motion.a>
   );
 }
+
 // 箭頭樣式
 function TimelineArrow() {
   return (
@@ -292,7 +287,7 @@ function TimelineArrow() {
       <svg viewBox="0 0 32 96" className="w-full h-full">
         <motion.path
           d="M16 4 L16 72 M8 64 L16 72 L24 64"
-          className="stroke-current"
+          stroke="black"
           initial={{ pathLength: 0, opacity: 0 }}
           animate={{
             pathLength: 1,
@@ -321,22 +316,20 @@ function Timeline() {
     <div className="relative py-8">
       {/* 現代化動態箭頭時間軸 */}
       <div className="hidden md:block">
-      <div
-        className="absolute left-1/2 transform -translate-x-1/2 h-full z-10"
-      >
-        {[...Array(5)].map((_, index) => (
-          <div
-            key={index}
-            className="absolute left-1/2 transform -translate-x-1/2"
-            style={{
-              top: `${index * 20}%`,
-              color: `hsl(${index * 30}, 70%, 50%)`,
-              marginLeft: "-16px"
-            }}
-          >
-            <TimelineArrow />
-          </div>
-        ))}
+        <div className="absolute left-1/2 transform -translate-x-1/2 h-full z-10">
+          {[...Array(5)].map((_, index) => (
+            <div
+              key={index}
+              className="absolute left-1/2 transform -translate-x-1/2"
+              style={{
+                top: `${index * 20}%`,
+                color: `hsl(${index * 30}, 70%, 50%)`,
+                marginLeft: "-16px",
+              }}
+            >
+              <TimelineArrow />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -355,7 +348,8 @@ function Timeline() {
           {/* 手機版文字樣式 */}
           <div className="flex items-center justify-center w-[calc(100%-1rem)] mx-2 md:hidden z-60">
             <motion.div
-              className="bg-white/95 backdrop-blur-sm w-full px-6 py-4 rounded-lg shadow-lg text-center"
+              // 移除邊框與背景，只保留文字
+              className="w-full text-center"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -367,7 +361,7 @@ function Timeline() {
             </motion.div>
           </div>
 
-          {/* 圖片區塊 - 提高z-index */}
+          {/* 圖片區塊 */}
           <motion.div
             className="w-[calc(100%-1rem)] md:w-[calc(50%-4rem)] mx-2 md:mx-8 z-40"
             initial={{ opacity: 0, y: 50 }}
@@ -401,7 +395,11 @@ function Timeline() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <motion.div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center">
+            <motion.div
+              // 同樣移除背景與邊框，只保留文字
+              className="text-center"
+              whileHover={{ scale: 1.02 }}
+            >
               <motion.h3
                 className="text-3xl font-bold text-gray-900 mb-3 inline-block"
                 whileHover={{ scale: 1.05 }}
