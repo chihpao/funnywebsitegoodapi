@@ -94,14 +94,13 @@ function HeroSection() {
           }}
         />
 
-        {/* 修改後的按鈕 */}
+        {/* 優化後的按鈕 */}
         <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
           <motion.button
             onClick={handlePrevious}
-            className="bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
-                       backdrop-blur-sm transition-all duration-200"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white p-3 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -116,10 +115,9 @@ function HeroSection() {
 
           <motion.button
             onClick={handleNext}
-            className="bg-black/30 hover:bg-black/50 text-white p-3 rounded-full
-                       backdrop-blur-sm transition-all duration-200"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white p-3 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

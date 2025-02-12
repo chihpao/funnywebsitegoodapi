@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useFunLogic } from '../hooks/useFunHooks';
+import { useFunLogic } from '../API/FunApi';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const LoadingSpinner = () => (
@@ -58,11 +58,15 @@ const MemeSection = ({
         </Button>
       </div>
     </div>
-    <div className="relative w-full h-64 flex justify-center items-center mb-4">
+    <div className="relative w-full h-96 flex justify-center items-center mb-4">
       {memeLoading ? (
         <LoadingSpinner />
       ) : meme ? (
-        <img src={meme.src} alt={meme.title} className="w-full h-full object-contain rounded-md" />
+        <img
+          src={meme.src}
+          alt={meme.title}
+          className="w-full h-full object-contain rounded-md"
+        />
       ) : (
         <div className="text-center text-gray-700">點藍色按鈕開始</div>
       )}
