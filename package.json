@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"cd server && pnpm run dev\" \"vite\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -21,7 +21,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tsparticles/engine": "^3.5.0",
     "@tsparticles/react": "^3.0.0",
-    "axios": "^1.7.4",
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "framer-motion": "^11.15.0",
@@ -46,6 +46,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
     "eslint": "^8.56.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
@@ -56,6 +57,9 @@
     "vite": "^5.0.12"
   },
   "pnpm": {
+    "overrides": {
+      "strip-ansi": "6.0.1"
+    },
     "ignoredBuiltDependencies": [
       "@tsparticles/engine",
       "core-js",
