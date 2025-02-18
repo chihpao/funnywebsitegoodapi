@@ -1,5 +1,3 @@
-// 語言: JavaScript (React)
-// 檔案位置: /src/App.jsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
@@ -9,22 +7,22 @@ import FunComponent, { MemesPage, CatsPage, DogsPage } from './pages/FunComponen
 import InteractiveComponent from './pages/InteractiveComponent';
 import API from './pages/API';
 import LoadingPage from './pages/LoadingPage';
+import CustomCursor from './components/CustomCursor';
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    const timer = setTimeout(() => setIsLoading(false), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
+  if (isLoading) return <LoadingPage />;
 
   return (
     <Router>
+      <CustomCursor />
       <div translate="no">
         <NavBar />
         <Routes>

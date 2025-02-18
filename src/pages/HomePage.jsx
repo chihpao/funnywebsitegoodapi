@@ -432,10 +432,10 @@ function Homepage() {
           </div>
         </div>
       </section>
-
-      <section className="px-4 md:px-8">
+      {/* podcast section 先蓋住，因為鼠標會影響*/}
+      {/* <section className="px-4 md:px-8" >
         <div className="max-w-7xl mx-auto">
-          <div>
+          <div style={{ cursor: 'none', position: 'relative'}}>
             <h3 className="text-xl font-bold mb-4">收聽 Podcast</h3>
             <div>
               <iframe
@@ -447,7 +447,7 @@ function Homepage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
