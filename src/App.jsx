@@ -9,9 +9,10 @@ import API from './pages/API';
 import LoadingPage from './pages/LoadingPage';
 import CustomCursor from './components/CustomCursor';
 
-
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  // 檢查 pointer 是否為 fine 用來判斷是否為非觸控裝置
+  const isNonTouchDevice = window.matchMedia('(pointer: fine)').matches;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
@@ -22,7 +23,7 @@ function App() {
 
   return (
     <Router>
-      <CustomCursor />
+      {isNonTouchDevice && <CustomCursor />}
       <div translate="no">
         <NavBar />
         <Routes>
