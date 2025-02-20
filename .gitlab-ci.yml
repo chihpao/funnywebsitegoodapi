@@ -1,0 +1,36 @@
+stages:
+  - test
+  - deploy
+
+variables:
+  NODE_ENV: production
+  PNPM_CACHE_FOLDER: .pnpm-store  # 指定 pnpm 的快取目錄
+
+cache:
+  paths:
+    - .pnpm-store  # 快取 pnpm 安裝的套件，加速後續 CI/CD 速度
+
+test-job:
+  stage: test
+  image: node:18  # 你可以改成其他 Node.js 版本
+  before_script:
+    - corepack enable  # 確保 pnpm 可用
+    - pnpm install --frozen-lockfile  # 安裝依賴，但不修改 lockfile
+  script:
+    - echo "🔍 Running tests..."
+    - pnpm run test  # 這裡請改成你的測試指令
+  only:
+    - main
+
+deploy-job:
+  stage: deploy
+  image: node:18
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+  script:
+    - echo "🚀 Deploying to production server..."
+    - pnpm run build  # 執行建置
+    - scp -r ./dist/ user@your-server-ip:/var/www/html  # 這行視你的部署方式調整
+  only:
+    - main
