@@ -130,7 +130,7 @@ export const useCats = () => {
 };
 
 export const useDogs = () => {
-  const { data, loading, reload: loadDogImages } = useDataFetching(fetchDogImages);
+  const { data, loading, reload: loadDogImages } = useDataFetching(fetchDogImages, []);
   const dogImages = data?.message || [];
   return { dogImages, loading, loadDogImages };
 };

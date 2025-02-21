@@ -16,7 +16,19 @@ git commit -m "修改了什麼"
 **4.推送到遠端倉庫(假設分支名稱是 main，如果是其他分支名稱，替換 main 為其他分支名稱)**
 git push origin main
 
-## 從Github上拉回來的步驟，
+## 全部一起
+
+### main分支
+
+git push origin main  # 推送到 GitHub
+git push gitlab main  # 推送到 GitLab
+
+### 所有分支
+
+git push --all origin
+git push --all gitlab
+
+## 從Github上拉回來的步驟
 
 **1.確認在正確的分支上（通常是 main 或 master 分支）**
 git branch
