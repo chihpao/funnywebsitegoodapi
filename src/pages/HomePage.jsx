@@ -3,16 +3,46 @@ import { motion } from "framer-motion";
 
 // 設定每張圖片對應的 position
 const images = [
-  { src: "/tata01.jpg", position: "center" },
-  { src: "/tata02.jpg", position: "top" },
-  { src: "/tata03.jpg", position: "50% 30%" },   
-  { src: "/tata04.jpg", position: "100% 80%" }, 
-  { src: "/tata05.jpg", position: "100% 40%" },
-  { src: "/tata06.jpg", position: "center" },
-  { src: "/tata07.jpg", position: "50% 30%" },
-  { src: "/tata08.jpg", position: "60% 100%" }, 
-  { src: "/tata09.jpg", position: "80% 60%" },
-  { src: "/tata10.jpg", position: "80% 60%" },
+  { src: "/tata01.jpg",
+    position: "center",
+    mobilePosition: "center"
+  },
+  { src: "/tata02.jpg",
+    position: "top",
+    mobilePosition: "5% 50%"
+  },
+  { src: "/tata03.jpg",
+    position: "50% 30%",
+    mobilePosition: "70% center"
+  },   
+  { src: "/tata04.jpg",
+    position: "100% 80%",
+    mobilePosition: "1% center"
+  }, 
+  { src: "/tata05.jpg",
+    position: "100% 40%",
+    mobilePosition: "7% center"
+  },
+  { src: "/tata06.jpg",
+    position: "center",
+    mobilePosition: "80% center"
+  },
+  { src: "/tata07.jpg",
+    position: "50% 30%",
+    mobilePosition: "55% center"
+  },
+  { src: "/tata08.jpg",
+    position: "60% 100%",
+    mobilePosition: "center"
+  }, 
+  { src: "/tata09.jpg",
+    position: "80% 60%",
+    mobilePosition: "15% center"
+  },
+  { src: "/tata10.jpg",
+    position: "80% 60%",
+    mobilePosition: "75% center"
+  }
 ];
 
 const projects = [
@@ -66,8 +96,35 @@ const timelineEvents = [
 
 function HeroSection() {
   const [index, setIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
-  console.log("Current position:", images[index].position);
+  // 最小滑動距離
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNext();
+    }
+    if (isRightSwipe) {
+      handlePrevious();
+    }
+  };
 
   const handlePrevious = () => {
     setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -79,7 +136,12 @@ function HeroSection() {
 
   return (
     <section className="relative h-screen">
-      <div className="w-full h-[calc(100vh-64px)] relative overflow-hidden">
+      <div 
+        className="w-full h-[calc(100vh-64px)] relative overflow-hidden"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <motion.div
           key={index}
           initial={{ opacity: 0 }}
@@ -88,50 +150,60 @@ function HeroSection() {
           className="w-full h-full relative"
           style={{
             backgroundImage: `url(${images[index].src})`,
-            backgroundPosition: images[index].position,
+            backgroundPosition: window.innerWidth <= 768 
+              ? images[index].mobilePosition 
+              : images[index].position,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
         />
 
-        {/* 優化後的按鈕 */}
+        {/* 簡潔的箭頭按鈕 */}
         <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
           <motion.button
             onClick={handlePrevious}
-            className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white p-3 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white/50 flex items-center justify-center hover:bg-black/50 transition-all duration-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
+              stroke="white"
+              strokeWidth={2.5}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </motion.button>
 
           <motion.button
             onClick={handleNext}
-            className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white p-3 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white/50 flex items-center justify-center hover:bg-black/50 transition-all duration-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
+              stroke="white"
+              strokeWidth={2.5}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </motion.button>
         </div>
-
-        {/* ...existing code... */}
       </div>
     </section>
   );
