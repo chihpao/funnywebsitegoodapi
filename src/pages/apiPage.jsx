@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function API() {
+export default function api() {
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold mb-4">API 說明</h1>
