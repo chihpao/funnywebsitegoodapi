@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const navigation = [
   { name: 'InteractivePage', href: '/interactive', current: false },
-  { name: 'API', href: '/API', current: false },
+  { name: 'api', href: '/api', current: false },
   {
     name: 'Find Random Fun',
     href: '/fun',
