@@ -5,7 +5,7 @@ import SkinnyFooter from './components/SkinnyFooter';
 import HomePage from './pages/HomePage';
 import FunComponent, { MemesPage, CatsPage, DogsPage } from './pages/FunComponent';
 import InteractiveComponent from './pages/InteractiveComponent';
-import API from './pages/API';
+import API from './pages/api';
 import LoadingPage from './pages/LoadingPage';
 import CustomCursor from './components/CustomCursor';
 
