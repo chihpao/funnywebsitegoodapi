@@ -9,9 +9,9 @@ export default function api() {
       </p>
       <ul className="list-disc pl-5">
         <li>隨機笑話: <a href="https://funnywebsitegoodapi.vercel.app/api/joke" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/joke</a></li>
-        <li>搞笑梗圖: <a href="https://funnywebsitegoodapi.vercel.app/api/memes" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/memes</a></li>
-        <li>貓咪圖片: <a href="https://funnywebsitegoodapi.vercel.app/api/cats" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/cats</a></li>
-        <li>狗狗圖片: <a href="https://funnywebsitegoodapi.vercel.app/api/dogs" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/dogs</a></li>
+        <li>搞笑梗圖: <a href="https://funnywebsitegoodapi.vercel.app/api/meme" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/meme</a></li>
+        <li>貓咪圖片: <a href="https://funnywebsitegoodapi.vercel.app/api/cat" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/cat</a></li>
+        <li>狗狗圖片: <a href="https://funnywebsitegoodapi.vercel.app/api/dog" className="text-blue-600" target="_blank" rel="noreferrer">https://funnywebsitegoodapi.vercel.app/api/dog</a></li>
       </ul>
       <p className="mt-4">
       </p>
