@@ -6,7 +6,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const navigation = [
   { name: 'InteractivePage', href: '/interactive', current: false },
-  { name: 'api', href: '/api', current: false },
+  // { name: 'api', href: '/api', current: false },
   {
     name: 'Find Random Fun',
     href: '/fun',
@@ -97,7 +97,9 @@ export default function NavBar() {
   }, []);
 
   return (
-    <Disclosure as="nav" className="bg-white border-b border-gray-200 relative">
+    <>
+    <div className="h-16"></div>
+    <Disclosure as="nav" className="bg-white border-b border-gray-200 fixed top-0 w-full z-50">
       {({ open, close }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -234,5 +236,6 @@ export default function NavBar() {
         </>
       )}
     </Disclosure>
+    </>
   );
 }

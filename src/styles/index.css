@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 /* 瀏覽器翻譯工具兼容 */
+
 .notranslate {
     translate: no;
 }

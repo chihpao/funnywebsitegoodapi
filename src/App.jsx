@@ -8,10 +8,10 @@ import InteractiveComponent from './pages/InteractiveComponent';
 import API from './pages/apiPage';
 import LoadingPage from './pages/LoadingPage';
 import CustomCursor from './components/CustomCursor';
+import ScrollToTop from './components/ScrollToTop';
 
-function App() {
+function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
-  // 檢查 pointer 是否為 fine 用來判斷是否為非觸控裝置
   const isNonTouchDevice = window.matchMedia('(pointer: fine)').matches;
 
   useEffect(() => {
@@ -24,21 +24,28 @@ function App() {
   return (
     <Router>
       {isNonTouchDevice && <CustomCursor />}
-      <div translate="no">
+      <div className="min-h-screen bg-white">
         <NavBar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/fun" element={<FunComponent />} />
-          <Route path="/fun/memes" element={<MemesPage />} />
-          <Route path="/fun/cats" element={<CatsPage />} />
-          <Route path="/fun/dogs" element={<DogsPage />} />
-          <Route path="/interactive" element={<InteractiveComponent />} />
-          <Route path="/api" element={<API />} />
-        </Routes>
+        <main className="container mx-auto px-4 py-8">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/fun" element={<FunComponent />} />
+            <Route path="/fun/memes" element={<MemesPage />} />
+            <Route path="/fun/cats" element={<CatsPage />} />
+            <Route path="/fun/dogs" element={<DogsPage />} />
+            <Route path="/interactive" element={<InteractiveComponent />} />
+            {/* <Route path="/api" element={<API />} /> */}
+          </Routes>
+        </main>
+        <ScrollToTop />
         <SkinnyFooter />
       </div>
     </Router>
   );
+}
+
+function App() {
+  return <AppContent />;
 }
 
 export default App;
