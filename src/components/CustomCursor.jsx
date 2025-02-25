@@ -3,17 +3,27 @@ import { useState, useEffect } from 'react';
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isClickable, setIsClickable] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const moveHandler = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
-      // 檢查目前 target 是否為可點擊元素 (例如 a, button, input ...)
       const clickable = e.target.closest('a, button, input, textarea, select, [role="button"]');
       setIsClickable(!!clickable);
     };
 
+    const mouseEnterHandler = () => setIsVisible(true);
+    const mouseLeaveHandler = () => setIsVisible(false);
+
     document.addEventListener('mousemove', moveHandler);
-    return () => document.removeEventListener('mousemove', moveHandler);
+    document.addEventListener('mouseenter', mouseEnterHandler);
+    document.addEventListener('mouseleave', mouseLeaveHandler);
+
+    return () => {
+      document.removeEventListener('mousemove', moveHandler);
+      document.removeEventListener('mouseenter', mouseEnterHandler);
+      document.removeEventListener('mouseleave', mouseLeaveHandler);
+    };
   }, []);
 
   const style = {
@@ -28,7 +38,8 @@ const CustomCursor = () => {
     zIndex: 9999,
     transition: 'background-color 0.2s, border 0.2s',
     backgroundColor: isClickable ? 'white' : 'black',
-    border: isClickable ? '2px solid black' : 'none'
+    border: isClickable ? '2px solid black' : 'none',
+    opacity: isVisible ? 1 : 0
   };
 
   return <div style={style} />;
