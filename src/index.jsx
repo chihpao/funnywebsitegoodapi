@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './styles/index.css'
 
 
+
 const rootElement = document.getElementById('root');
 rootElement.className = 'notranslate';
 

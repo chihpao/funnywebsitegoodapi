@@ -5,6 +5,7 @@ import SkinnyFooter from './components/SkinnyFooter';
 import HomePage from './pages/HomePage';
 import FunComponent, { MemesPage, CatsPage, DogsPage } from './pages/FunComponent';
 import InteractiveComponent from './pages/InteractiveComponent';
+import AppChatbot from './pages/chatbotpage';
 import API from './pages/apiPage';
 import LoadingPage from './pages/LoadingPage';
 import CustomCursor from './components/CustomCursor';
@@ -28,6 +29,7 @@ function AppContent() {
         <NavBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/aiagent" element={<AppChatbot />} />
             <Route path="/fun" element={<FunComponent />} />
             <Route path="/fun/memes" element={<MemesPage />} />
             <Route path="/fun/cats" element={<CatsPage />} />
