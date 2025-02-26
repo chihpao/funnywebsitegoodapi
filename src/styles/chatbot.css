@@ -1,0 +1,84 @@
+/* 整體頁面容器 */
+.chatbot-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+  }
+  
+  /* 聊天機器人容器 */
+  .chatbot-container {
+    width: 100%;
+    max-width: 800px;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* 標題區 */
+  .chatbot-header {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .chatbot-header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .chatbot-header p {
+    font-size: 1.125rem;
+    color: #6b7280;
+  }
+  
+  /* 聊天主體區域 */
+  .chatbot-main {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+  
+  /* 基本容器 */
+  .react-chatbot-kit-chat-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  .react-chatbot-kit-chat-inner-container {
+    height: 100% !important;
+  }
+  
+  .react-chatbot-kit-chat-message-container {
+    height: calc(100% - 60px) !important;
+    overflow-y: auto !important;
+  }
+  
+  /* 修正訊息氣泡樣式 */
+  .react-chatbot-kit-chat-bot-message {
+    background-color: #4F46E5 !important;
+    color: white !important;
+  }
+  
+  /* RWD 樣式 */
+  @media (max-width: 640px) {
+    .chatbot-container {
+      height: 90vh;
+      border-radius: 12px;
+    }
+    
+    .chatbot-header h1 {
+      font-size: 1.5rem;
+    }
+    
+    .chatbot-header p {
+      font-size: 1rem;
+    }
+  }
