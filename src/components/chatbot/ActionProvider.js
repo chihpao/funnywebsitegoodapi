@@ -4,7 +4,38 @@ class ActionProvider {
     this.setState = setStateFunc;
     this.createClientMessage = createClientMessage;
   }
+  handleMessage = async (message) => {
+    try {
+      // 使用相對路徑，這樣在 Vercel 上會自動使用相同域名
+      const response = await fetch('/api/chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: message }),
+      });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const botMessage = this.createChatBotMessage(data.reply);
+      
+      this.setState((prev) => ({
+        ...prev,
+        messages: [...prev.messages, botMessage],
+      }));
+    } catch (error) {
+      console.error('Error:', error);
+      const errorMessage = this.createChatBotMessage("與 AI 小幫手溝通時發生錯誤，請稍後再試。");
+      
+      this.setState((prev) => ({
+        ...prev,
+        messages: [...prev.messages, errorMessage],
+      }));
+    }
+  };
   handleGreeting() {
     const greetingMessage = this.createChatBotMessage("您好！很高興與您聊天。");
     this.updateChatbotState(greetingMessage);
