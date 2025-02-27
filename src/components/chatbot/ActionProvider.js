@@ -45,7 +45,7 @@ class ActionProvider {
     console.log("User message in ActionProvider:", message);
 
     try {
-      const response = await fetch('http://localhost:4000/api/chatbot', { // 調用後端 API 端點 /api/chatbot
+      const response = await fetch('/api/chatbot', { // 調用後端 API 端點 /api/chatbot
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
