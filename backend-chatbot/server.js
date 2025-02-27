@@ -4,7 +4,7 @@ const cors = require('cors');
 const { GoogleGenerativeAI } = require("@google/generative-ai"); // 注意 GoogleGenerativeAI 是兩個大寫 "I"
 
 const app = express();
-const port = 3002;
+const port = 4000;
 
 app.use(cors()); // 啟用 CORS，允許跨域請求
 app.use(bodyParser.json()); // 使用 body-parser 中介軟體解析 JSON 格式的請求體

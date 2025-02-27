@@ -4,7 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"cd server && pnpm run dev\" \"vite\"",
+    "dev": "concurrently \"cd backend-chatbot && node server.js\" \"vite\"",
+    "dev:all": "concurrently \"cd server && pnpm run dev\" \"cd backend-chatbot && node server.js\" \"vite\"",
+    "dev:api": "cd server && pnpm run dev",
+    "dev:chatbot": "cd backend-chatbot && node server.js",
+    "dev:frontend": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
