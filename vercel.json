@@ -6,6 +6,10 @@
   "regions": ["hkg1"],
   "routes": [
     {
+      "src": "/api/chatbot",
+      "dest": "/api/chatbot.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/$1"
     },
