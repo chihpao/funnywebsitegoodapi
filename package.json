@@ -16,6 +16,7 @@
     "start": "vite preview"
   },
   "dependencies": {
+    "@google/generative-ai": "^latest",
     "@botpress/webchat": "^2.3.8",
     "@botpress/webchat-generator": "^0.2.15",
     "@emotion/react": "^11.14.0",

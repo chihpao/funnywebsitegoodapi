@@ -22,7 +22,10 @@ class ActionProvider {
       console.log("API 回應狀態碼:", response.status);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // 嘗試解析錯誤回應中的詳細資訊
+        const errorData = await response.json().catch(() => ({}));
+        console.error("API 返回錯誤:", errorData);
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       console.log("API 回應 OK，解析 JSON 資料");
@@ -47,7 +50,17 @@ class ActionProvider {
         stack: error.stack
       });
       
-      const errorMessage = this.createChatBotMessage("與 AI 小幫手溝通時發生錯誤，請稍後再試。");
+      // 更好的錯誤訊息處理
+      let errorMsg = "與 AI 小幫手溝通時發生錯誤，請稍後再試。";
+      
+      // 如果有特定錯誤類型，顯示更具體的訊息
+      if (error.message.includes("NetworkError") || error.message.includes("Failed to fetch")) {
+        errorMsg = "網路連接問題，無法連接到 AI 服務。";
+      } else if (error.message.includes("API 密鑰")) {
+        errorMsg = "AI 服務配置問題，請聯繫管理員。";
+      }
+      
+      const errorMessage = this.createChatBotMessage(errorMsg);
       console.log("建立錯誤訊息:", errorMessage);
       
       this.setState((prev) => {
@@ -83,7 +96,10 @@ class ActionProvider {
       console.log("API 回應狀態碼 (在 handleUserMessage 中):", response.status);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`); // 處理 API 錯誤
+        // 嘗試解析錯誤回應中的詳細資訊
+        const errorData = await response.json().catch(() => ({}));
+        console.error("API 返回錯誤 (在 handleUserMessage 中):", errorData);
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       console.log("API 回應 OK，解析 JSON 資料 (在 handleUserMessage 中)");
@@ -103,7 +119,20 @@ class ActionProvider {
         stack: error.stack
       });
       
-      const errorMessage = this.createChatBotMessage("與AI小幫手溝通時發生錯誤，請稍後再試。");
+      // 更好的錯誤訊息處理
+      let errorMsg = "與 AI 小幫手溝通時發生錯誤，請稍後再試。";
+      
+      // 如果有特定錯誤類型，顯示更具體的訊息
+      if (error.message.includes("NetworkError") || error.message.includes("Failed to fetch")) {
+        errorMsg = "網路連接問題，無法連接到 AI 服務。";
+      } else if (error.message.includes("API 密鑰")) {
+        errorMsg = "AI 服務配置問題，請聯繫管理員。";
+      } else if (error.message && !error.message.includes("HTTP error")) {
+        // 如果有具體的錯誤訊息但不是標準 HTTP 錯誤
+        errorMsg = `錯誤: ${error.message}`;
+      }
+      
+      const errorMessage = this.createChatBotMessage(errorMsg);
       console.log("建立錯誤訊息 (在 handleUserMessage 中):", errorMessage);
       
       this.updateChatbotState(errorMessage); // 顯示錯誤訊息
