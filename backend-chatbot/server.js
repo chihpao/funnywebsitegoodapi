@@ -6,11 +6,16 @@ const { GoogleGenerativeAI } = require("@google/generative-ai"); // 注意 Googl
 const app = express();
 const port = 4000;
 
-app.use(cors()); // 啟用 CORS，允許跨域請求
+app.use(cors({
+  origin: 'http://localhost:5173', // 前端服務的 URL
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+// 啟用 CORS，允許跨域請求
 app.use(bodyParser.json()); // 使用 body-parser 中介軟體解析 JSON 格式的請求體
 
 // 初始化 Google Gemini API 客戶端
-const genAI = new GoogleGenerativeAI("AIzaSyBPziChz020y0o5S6afQMQYmt3roH6uOA8");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "AIzaSyBPziChz020y0o5S6afQMQYmt3roH6uOA8");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // 處理前端 chatbot 發送的 POST 請求，端點為 /api/chatbot

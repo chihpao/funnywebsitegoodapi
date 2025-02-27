@@ -11,9 +11,11 @@ export default defineConfig({
     }
   },
   server: {
-    '/api/chatbot': {
-      target: 'http://localhost:4000',
-      changeOrigin: true,
+      proxy: {  // 修正這裡
+        '/api/chatbot': {
+          target: 'http://localhost:4000',
+          changeOrigin: true,
+        }
+      }
     }
-  }
-});
+  });
