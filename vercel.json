@@ -7,11 +7,7 @@
   "routes": [
     {
       "src": "/api/chatbot",
-      "dest": "/api/chatbot.js"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/pages/api/chatbot"
     },
     {
       "handle": "filesystem"
