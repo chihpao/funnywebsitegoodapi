@@ -1,58 +1,126 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const { GoogleGenerativeAI } = require("@google/generative-ai"); // 注意 GoogleGenerativeAI 是兩個大寫 "I"
+require('dotenv').config();
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const axios = require('axios');
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 10000;
 
+// 啟用 CORS，解決跨域請求問題
 app.use(cors({
-  origin: 'http://localhost:5173', // 前端服務的 URL
-  methods: ['GET', 'POST'],
-  credentials: true
+  origin: '*', // 在生產環境中應設置為你的前端網址
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-// 啟用 CORS，允許跨域請求
-app.use(bodyParser.json()); // 使用 body-parser 中介軟體解析 JSON 格式的請求體
 
-// 初始化 Google Gemini API 客戶端
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "AIzaSyBPziChz020y0o5S6afQMQYmt3roH6uOA8");
+// 啟用 JSON 請求解析
+app.use(express.json());
+
+// 初始化 Google Generative AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-// 處理前端 chatbot 發送的 POST 請求，端點為 /api/chatbot
-app.post('/api/chatbot', async (req, res) => {
-  const userMessage = req.body.message; // 從請求體中獲取使用者訊息
-  console.log("Received message from frontend:", userMessage);
-
-  // 使用 Google Gemini API 獲取 AI 回覆
-  try {
-    const aiAgentResponse = await generateGeminiResponse(userMessage); // 調用 generateGeminiResponse 函數
-    res.json({ reply: aiAgentResponse }); // 將 AI 代理人的回覆以 JSON 格式返回給前端
-  } catch (error) {
-    console.error("Gemini API 呼叫錯誤:", error);
-    res.status(500).json({ reply: "與 AI 服務通訊時發生錯誤，請稍後再試。" }); // 返回錯誤訊息給前端
-  }
-});
 
 // 使用 Google Gemini API 生成回應的函數
 async function generateGeminiResponse(userMessage) {
   try {
-    const result = await model.generateContent(userMessage); // 調用 Gemini Pro 模型的 generateContent 方法
-    const responseText = result.response.text(); // 從 Gemini API 回應中提取文字回覆
-
-    console.log("Gemini API response:", responseText); // 輸出 Gemini API 的原始回應 (除錯用)
+    const result = await model.generateContent(userMessage);
+    const responseText = result.response.text();
+    console.log("Gemini API 回應:", responseText);
     return responseText;
   } catch (error) {
     console.error("Gemini API 錯誤:", error);
-    throw error; // 將錯誤拋出，讓上層的 try...catch 區塊處理
+    throw error;
   }
 }
 
+// ===== API 端點 =====
 
-// 處理根路徑 '/' 的 GET 請求 (用於測試伺服器是否啟動)
-app.get('/', (req, res) => {
-  res.send('Backend API server is running with Gemini API!'); // 修改測試訊息
+// 1. 聊天機器人 API
+app.post('/api/chatbot', async (req, res) => {
+  const userMessage = req.body.message;
+  console.log("收到前端聊天訊息:", userMessage);
+  
+  if (!userMessage) {
+    return res.status(400).json({ reply: "請提供訊息內容" });
+  }
+
+  try {
+    const aiResponse = await generateGeminiResponse(userMessage);
+    res.json({ reply: aiResponse });
+  } catch (error) {
+    console.error("AI 回應生成錯誤:", error);
+    res.status(500).json({ 
+      reply: "與 AI 服務通訊時發生錯誤，請稍後再試。",
+      error: error.message
+    });
+  }
 });
 
+// 2. 笑話 API
+app.get('/api/joke', async (req, res) => {
+  try {
+    const response = await axios.get('https://official-joke-api.appspot.com/random_joke');
+    console.log('笑話 API 回應:', response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error('取得笑話時發生錯誤:', error);
+    res.status(500).json({ error: '無法取得笑話', details: error.message });
+  }
+});
+
+// 3. 迷因 API
+app.get('/api/memes', async (req, res) => {
+  try {
+    const response = await axios.get('https://memes.tw/wtf/api');
+    console.log('迷因 API 回應收到');
+    res.json(response.data);
+  } catch (error) {
+    console.error('取得迷因時發生錯誤:', error);
+    res.status(500).json({ error: '無法取得迷因', details: error.message });
+  }
+});
+
+// 4. 貓咪 API
+app.get('/api/cats', async (req, res) => {
+  try {
+    const response = await axios.get('https://api.thecatapi.com/v1/images/search?limit=10');
+    console.log('貓咪 API 回應收到');
+    res.json(response.data);
+  } catch (error) {
+    console.error('取得貓咪圖片時發生錯誤:', error);
+    res.status(500).json({ error: '無法取得貓咪圖片', details: error.message });
+  }
+});
+
+// 5. 狗狗 API
+app.get('/api/dogs', async (req, res) => {
+  try {
+    const response = await axios.get('https://dog.ceo/api/breeds/image/random/10');
+    console.log('狗狗 API 回應收到');
+    res.json(response.data);
+  } catch (error) {
+    console.error('取得狗狗圖片時發生錯誤:', error);
+    res.status(500).json({ error: '無法取得狗狗圖片', details: error.message });
+  }
+});
+
+// 6. 根路徑 - API 狀態檢查
+app.get('/', (req, res) => {
+  res.send('TaTa API 服務運行中 - 包含 Chatbot、笑話、迷因、貓咪和狗狗 API!');
+});
+
+// 7. 健康檢查端點 - Render 用於監控服務
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'API 服務正常運行中' });
+});
+
+// 啟動服務器
 app.listen(port, () => {
-  console.log(`Backend API server listening at http://localhost:${port}`);
+  console.log(`API 服務運行於 http://localhost:${port}`);
+  console.log(`聊天機器人 API 端點: http://localhost:${port}/api/chatbot`);
+  console.log(`笑話 API 端點: http://localhost:${port}/api/joke`);
+  console.log(`迷因 API 端點: http://localhost:${port}/api/memes`);
+  console.log(`貓咪 API 端點: http://localhost:${port}/api/cats`);
+  console.log(`狗狗 API 端點: http://localhost:${port}/api/dogs`);
 });
