@@ -80,7 +80,7 @@ const InteractiveComponent = () => {
                   {names[currentNameIndex]}
                 </div>
               </div>
-              ，今年 29 歲，從非營利組織華麗轉身到資訊業，這個跳躍之大，堪比珍珠奶茶裡的珍珠從杯底被吸到嘴裡。我以前當社工，專攻疾病議題和身心障礙議題，天天扮演「社會問題的 Debugger」。現在呢，跑到 IV&V 的專案當專案人員，檢查系統漏洞，但其實最大的漏洞可能是我自己──因為我對新環境的崩潰速度超過系統。
+              ，今年 31 歲，從非營利組織華麗轉身到資訊業，這個跳躍之大，堪比珍珠奶茶裡的珍珠從杯底被吸到嘴裡。我以前當社工，專攻疾病議題和身心障礙議題，天天扮演「社會問題的 Debugger」。現在呢，跑到 IV&V 的專案當專案人員，檢查系統漏洞，但其實最大的漏洞可能是我自己──因為我對新環境的崩潰速度超過系統。
             </div>
             <div className="text-lg mt-4">
               身高不高也不矮，體重嘛，突破了 70 公斤，我正在努力減肥，但體重計每天都像在開玩笑：「你確定要站上來嗎？」目前處於人生最重時期，目標是減到讓我可以重新相信鏡子的友情。如果珍珠奶茶消失，我大概也會隨之倒下。
@@ -109,7 +109,7 @@ const InteractiveComponent = () => {
             <hr className="w-full border-none h-0.5 bg-gradient-to-r from-black via-transparent to-black my-5 animate-gradient" />
           </div>
         </div>
-        <InteractiveBallsWithMarquee />
+        {/* <InteractiveBallsWithMarquee /> */}
       </div>
     </>
   );
