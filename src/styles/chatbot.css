@@ -1,4 +1,4 @@
-/* 整體頁面容器 */
+@import './chatbot-widgets.css';
 .chatbot-page {
     min-height: 100vh;
     display: flex;

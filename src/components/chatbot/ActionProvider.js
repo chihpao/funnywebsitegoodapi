@@ -1,3 +1,6 @@
+import { ApiService } from '../../services/api';
+import { ChatUtils } from '../../utils/chatUtils';
+
 class ActionProvider {
   constructor(createChatBotMessage, setStateFunc, createClientMessage) {
     this.createChatBotMessage = createChatBotMessage;
@@ -6,78 +9,184 @@ class ActionProvider {
     console.log("ActionProvider 已初始化");
   }
   
-  // 主要處理使用者訊息的方法
+  /**
+   * 主要處理使用者訊息的方法
+   * @param {string} message - 使用者輸入的訊息
+   */
   handleMessage = async (message) => {
     console.log("handleMessage 被調用，訊息內容:", message);
+    
     try {
-      // 呼叫 API 取得回應
-      const data = await this.callAPI(message);
+      // 檢測是否為特殊命令
+      const command = ChatUtils.detectCommand(message);
       
-      // 建立機器人回應訊息
-      const botMessage = this.createChatBotMessage(data.reply);
-      console.log("建立聊天機器人訊息:", botMessage);
-      
-      // 更新聊天狀態
-      this.updateChatbotState(botMessage);
+      if (command) {
+        // 處理特殊命令
+        await this.handleCommand(command);
+      } else {
+        // 常規對話處理
+        await this.handleChatbotResponse(message);
+      }
     } catch (error) {
       this.handleError(error);
     }
   };
   
-  // 處理問候訊息
+  /**
+   * 處理常規聊天回應
+   * @param {string} message - 使用者訊息
+   */
+  async handleChatbotResponse(message) {
+    // 呼叫 API 服務層取得回應
+    const data = await ApiService.sendChatMessage(message);
+    
+    // 格式化並建立機器人回應訊息
+    const formattedReply = ChatUtils.formatBotMessage(data.reply);
+    const botMessage = this.createChatBotMessage(formattedReply);
+    console.log("建立聊天機器人訊息:", botMessage);
+    
+    // 更新聊天狀態
+    this.updateChatbotState(botMessage);
+  }
+  
+  /**
+   * 處理特殊命令
+   * @param {Object} command - 命令對象
+   */
+  async handleCommand(command) {
+    console.log("處理特殊命令:", command);
+    
+    switch (command.type) {
+      case "HELP":
+        this.handleHelp();
+        break;
+        
+      case "JOKE":
+        await this.handleJoke();
+        break;
+        
+      case "CAT":
+        await this.handleCat();
+        break;
+        
+      case "DOG":
+        await this.handleDog();
+        break;
+        
+      default:
+        // 未知命令，使用默認處理
+        await this.handleChatbotResponse(command.type);
+    }
+  }
+  
+  /**
+   * 處理 /help 命令
+   */
+  handleHelp() {
+    const helpMessage = this.createChatBotMessage(
+      "可用命令:<br>" +
+      "/help - 顯示此幫助訊息<br>" +
+      "/joke - 獲取隨機笑話<br>" +
+      "/cat - 獲取隨機貓咪圖片<br>" +
+      "/dog - 獲取隨機狗狗圖片"
+    );
+    this.updateChatbotState(helpMessage);
+  }
+  
+  /**
+   * 處理 /joke 命令
+   */
+  async handleJoke() {
+    try {
+      const jokeData = await ApiService.getRandomJoke();
+      const jokeMessage = this.createChatBotMessage(
+        `${jokeData.setup}<br><br>${jokeData.punchline}`
+      );
+      this.updateChatbotState(jokeMessage);
+    } catch (error) {
+      const errorMsg = "無法獲取笑話，請稍後再試。";
+      const errorMessage = this.createChatBotMessage(errorMsg);
+      this.updateChatbotState(errorMessage);
+    }
+  }
+  
+  /**
+   * 處理 /cat 命令
+   */
+  async handleCat() {
+    try {
+      const catsData = await ApiService.getRandomCats();
+      if (catsData && catsData.length > 0) {
+        const catImage = catsData[0].url;
+        const catMessage = this.createChatBotMessage(
+          "這是一隻可愛的貓咪:",
+          {
+            widget: "imageWidget",
+            payload: { src: catImage, alt: "Random Cat" }
+          }
+        );
+        this.updateChatbotState(catMessage);
+      } else {
+        throw new Error("找不到貓咪圖片");
+      }
+    } catch (error) {
+      const errorMsg = "無法獲取貓咪圖片，請稍後再試。";
+      const errorMessage = this.createChatBotMessage(errorMsg);
+      this.updateChatbotState(errorMessage);
+    }
+  }
+  
+  /**
+   * 處理 /dog 命令
+   */
+  async handleDog() {
+    try {
+      const dogsData = await ApiService.getRandomDogs();
+      if (dogsData && dogsData.message && dogsData.message.length > 0) {
+        const dogImage = dogsData.message[0];
+        const dogMessage = this.createChatBotMessage(
+          "這是一隻可愛的狗狗:",
+          {
+            widget: "imageWidget",
+            payload: { src: dogImage, alt: "Random Dog" }
+          }
+        );
+        this.updateChatbotState(dogMessage);
+      } else {
+        throw new Error("找不到狗狗圖片");
+      }
+    } catch (error) {
+      const errorMsg = "無法獲取狗狗圖片，請稍後再試。";
+      const errorMessage = this.createChatBotMessage(errorMsg);
+      this.updateChatbotState(errorMessage);
+    }
+  }
+  
+  /**
+   * 處理問候訊息
+   */
   handleGreeting() {
     console.log("handleGreeting 被調用");
-    const greetingMessage = this.createChatBotMessage("您好！很高興與您聊天。");
+    const greetingMessage = this.createChatBotMessage("您好！很高興與您聊天。我是 TaTa 的 AI 助手，有什麼我能幫您的嗎？");
     console.log("建立問候訊息:", greetingMessage);
     this.updateChatbotState(greetingMessage);
   }
   
-  // API 呼叫抽離成獨立函數
-  async callAPI(message) {
-    console.log("準備發送 API 請求到 Render 部署的後端");
-    const response = await fetch('https://funnywebsitegoodapi.onrender.com/api/chatbot', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: message }),
-    });
-
-    console.log("API 回應狀態碼:", response.status);
-
-    if (!response.ok) {
-      // 嘗試解析錯誤回應中的詳細資訊
-      const errorData = await response.json().catch(() => ({}));
-      console.error("API 返回錯誤:", errorData);
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-    }
-
-    console.log("API 回應 OK，解析 JSON 資料");
-    const data = await response.json();
-    console.log("解析後的回應資料:", data);
-    return data;
-  }
-  
-  // 錯誤處理抽離成獨立函數
+  /**
+   * 錯誤處理函數
+   * @param {Error} error - 錯誤對象
+   */
   handleError(error) {
     console.error('發生錯誤:', error);
     console.error('錯誤詳情:', {
       name: error.name,
       message: error.message,
+      code: error.code || 'UNKNOWN',
       stack: error.stack
     });
     
-    // 根據錯誤類型生成適當的錯誤訊息
-    let errorMsg = "與 AI 小幫手溝通時發生錯誤，請稍後再試。";
-    
-    if (error.message.includes("NetworkError") || error.message.includes("Failed to fetch")) {
-      errorMsg = "網路連接問題，無法連接到 AI 服務。";
-    } else if (error.message.includes("API 密鑰")) {
-      errorMsg = "AI 服務配置問題，請聯繫管理員。";
-    } else if (error.message && !error.message.includes("HTTP error")) {
-      // 如果有具體的錯誤訊息但不是標準 HTTP 錯誤
-      errorMsg = `錯誤: ${error.message}`;
-    }
+    // 使用 ChatUtils 取得友好的錯誤訊息
+    const errorMsg = ChatUtils.getFriendlyErrorMessage(error);
     
     const errorMessage = this.createChatBotMessage(errorMsg);
     console.log("建立錯誤訊息:", errorMessage);
@@ -85,7 +194,10 @@ class ActionProvider {
     this.updateChatbotState(errorMessage);
   }
 
-  // 更新聊天機器人狀態
+  /**
+   * 更新聊天機器人狀態
+   * @param {Object} message - 聊天機器人訊息對象
+   */
   updateChatbotState(message) {
     console.log("updateChatbotState 被調用，訊息:", message);
     this.setState(prevState => {
