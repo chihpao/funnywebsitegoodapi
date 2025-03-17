@@ -7,6 +7,16 @@ const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 10000;
 
+// 啟用壓縮
+const compression = require('compression');
+app.use(compression());
+
+// 設定快取控制
+const cacheControl = require('express-cache-controller');
+app.use(cacheControl({
+  maxAge: 300 // 5分鐘快取
+}));
+
 // 啟用 CORS，解決跨域請求問題
 app.use(cors({
   origin: '*', // 在生產環境中應設置為你的前端網址
@@ -14,8 +24,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// 啟用 JSON 請求解析
-app.use(express.json());
+// 啟用 JSON 請求解析，限制請求大小
+app.use(express.json({ limit: '1mb' }));
 
 // 初始化 Google Generative AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -107,12 +117,20 @@ app.get('/api/dogs', async (req, res) => {
 
 // 6. 根路徑 - API 狀態檢查
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'public, max-age=60'); // 1分鐘快取
   res.send('TaTa API 服務運行中 - 包含 Chatbot、笑話、迷因、貓咪和狗狗 API!');
 });
 
-// 7. 健康檢查端點 - Render 用於監控服務
+// 7. 健康檢查端點 - Vercel 用於監控服務
 app.get('/health', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store'); // 不快取健康檢查
   res.status(200).json({ status: 'ok', message: 'API 服務正常運行中' });
+});
+
+// 錯誤處理中間件
+app.use((err, req, res, next) => {
+  console.error('全域錯誤處理:', err);
+  res.status(500).json({ error: '伺服器錯誤', details: err.message });
 });
 
 // 啟動服務器
