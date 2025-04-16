@@ -29,8 +29,8 @@ function AppContent() {
         <NavBar />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {/* 先把AI agent註解 */}
-            {/* <Route path="/aiagent" element={<AppChatbot />} /> */}
+            {/* AI 聊天機器人路由 */}
+            <Route path="/aiagent" element={<AppChatbot />} />
             <Route path="/fun" element={<FunComponent />} />
             <Route path="/fun/memes" element={<MemesPage />} />
             <Route path="/fun/cats" element={<CatsPage />} />

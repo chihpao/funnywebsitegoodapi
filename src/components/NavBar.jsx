@@ -5,8 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const navigation = [
-  //先把AI agent註解
-  // { name: 'AI Agent', href: '/aiagent', current: false },
+  { name: 'AI 智能助手', href: '/aiagent', current: false },
   { name: 'InteractivePage', href: '/interactive', current: false },
   // { name: 'api', href: '/api', current: false },
   {
