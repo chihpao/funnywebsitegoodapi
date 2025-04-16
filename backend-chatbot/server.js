@@ -1,46 +1,67 @@
+/**
+ * Gemini 聊天機器人後端服務
+ * 提供 API 端點與 Google Gemini AI 進行互動，以及其他有趣的 API 服務
+ */
+
+// 引入必要的套件
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const axios = require('axios');
+require('dotenv').config(); // 載入環境變數
+const { GoogleGenerativeAI } = require('@google/generative-ai'); // Google Gemini AI SDK
+const axios = require('axios'); // HTTP 請求工具
 
+// 初始化 Express 應用
 const app = express();
 const port = process.env.PORT || 10000;
 
-// 啟用壓縮
+/**
+ * 中間件配置
+ */
+// 啟用壓縮，減少傳輸大小
 const compression = require('compression');
 app.use(compression());
 
-// 設定快取控制
+// 設定快取控制，提高回應速度
 const cacheControl = require('express-cache-controller');
 app.use(cacheControl({
-  maxAge: 300 // 5分鐘快取
+  maxAge: 300 // 5分鐘快取時間
 }));
 
 // 啟用 CORS，解決跨域請求問題
 app.use(cors({
-  origin: '*', // 在生產環境中應設置為你的前端網址
+  origin: '*', // 在生產環境中應設置為特定的前端網址，增加安全性
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// 啟用 JSON 請求解析，限制請求大小
+// 啟用 JSON 請求解析，並限制請求大小以防止濫用
 app.use(express.json({ limit: '1mb' }));
 
-// 初始化 Google Generative AI
+/**
+ * Google Gemini AI 配置
+ */
+// 初始化 Google Generative AI 客戶端
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// 選擇 Gemini 模型 (gemini-1.5-flash 適合快速回應的場景)
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-// 使用 Google Gemini API 生成回應的函數
+/**
+ * 使用 Google Gemini API 生成回應的函數
+ * @param {string} userMessage - 使用者輸入的訊息
+ * @returns {Promise<string>} - Gemini AI 的回應文字
+ * @throws {Error} - 如果 API 調用失敗
+ */
 async function generateGeminiResponse(userMessage) {
   try {
+    // 呼叫 Gemini API 生成內容
     const result = await model.generateContent(userMessage);
+    // 提取回應文字
     const responseText = result.response.text();
     console.log("Gemini API 回應:", responseText);
     return responseText;
   } catch (error) {
     console.error("Gemini API 錯誤:", error);
-    throw error;
+    throw error; // 將錯誤向上傳遞，由調用者處理
   }
 }
 

@@ -12,7 +12,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start:dev": "npm run dev",
+    "start:dev": "pnpm run dev",
     "start": "vite preview"
   },
   "dependencies": {

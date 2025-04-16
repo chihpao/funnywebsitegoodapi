@@ -4,22 +4,31 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
+/**
+ * 導航選項配置
+ * 定義應用程序的主要導航選項和子選單
+ */
 const navigation = [
+  // 主要頁面選項
   { name: 'AI 智能助手', href: '/aiagent', current: false },
-  { name: 'InteractivePage', href: '/interactive', current: false },
-  // { name: 'api', href: '/api', current: false },
+  { name: '互動頁面', href: '/interactive', current: false },
+  // { name: 'API 文檔', href: '/api', current: false }, // 暂未啟用
+  
+  // 隨機樂趣功能選項及子選單
   {
-    name: 'Find Random Fun',
+    name: '隨機樂趣',
     href: '/fun',
     current: false,
     subMenu: [
-      { name: 'Find Memes', href: '/fun/memes' },
-      { name: 'Find Cats', href: '/fun/cats' },
-      { name: 'Find Dogs', href: '/fun/dogs' },
+      { name: '隨機迴因', href: '/fun/memes' },
+      { name: '隨機貓圖', href: '/fun/cats' },
+      { name: '隨機狗圖', href: '/fun/dogs' },
     ],
   },
+  
+  // 作者社群媒體連結
   {
-    name: 'Find Pao',
+    name: '關於作者',
     href: '',
     current: false,
     subMenu: [
@@ -28,17 +37,31 @@ const navigation = [
       { name: 'Pao @ Instagram', href: 'https://www.instagram.com/bobbie__moel' },
       { name: 'Pao @ Linkedin', href: 'https://www.linkedin.com/in/chihpao-chang-1745a423a/' },
       { name: 'Pao @ Facebook', href: 'https://www.facebook.com/chihpaoo/?locale=zh_TW' },
-    ].map(item => ({ ...item, target: '_blank' })),
+    ].map(item => ({ ...item, target: '_blank' })), // 設置外部連結在新標籤頁開啟
   },
 ];
 
+/**
+ * 合併 CSS 類名的實用函數
+ * @param {...string} classes - 要合併的 CSS 類名
+ * @returns {string} 合併後的類名字符串
+ */
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+/**
+ * 導航欄標誌連結組件
+ * 顯示導航欄左側的標誌和文字
+ * @param {string} className - 容器的額外類名
+ * @param {string} imgClassName - 圖片的額外類名
+ * @param {string} spanClassName - 文字的額外類名
+ * @param {string} to - 連結目標路徑
+ * @returns {JSX.Element} 標誌連結組件
+ */
 const NavBarLink = ({ className, imgClassName, spanClassName, to }) => (
   <Link to={to} className={`flex items-center cursor-pointer ${className}`}>
-    <img src="/NavBarCat01.png" alt="NavBarCat01" className={`w-auto ${imgClassName}`} />
+    <img src="/NavBarCat01.png" alt="網站標誌" className={`w-auto ${imgClassName}`} />
     <span className={`text-2xl text-black ${spanClassName}`}>Stupid Cat</span>
   </Link>
 );
@@ -72,15 +95,25 @@ export default function NavBar() {
     setActiveDropdown(null);
   };
 
+  /**
+   * 處理導航選項的點擊
+   * @param {string} path - 目標路徑或 URL
+   * @param {boolean} isSubMenuItem - 是否為子選單項目
+   * @param {Function} close - 關閉移動端選單的函數
+   * @param {boolean} isExternalLink - 是否為外部連結
+   */
   const handleNavigation = (path, isSubMenuItem = false, close = null, isExternalLink = false) => {
     if (isExternalLink) {
+      // 外部連結在新標籤頁開啟
       window.open(path, '_blank');
     } else {
+      // 內部連結使用 React Router 導航
       navigate(path);
-      if (isSubMenuItem) {
+      if (isSubMenuItem && close) {
         close();
       }
     }
+    // 關閉任何打開的下拉選單
     closeDropdown();
   };
 
@@ -136,7 +169,7 @@ export default function NavBar() {
                     {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
                       <div
                         className={`absolute ${
-                          item.name === 'Find Pao' ? 'right-0' : 'left-0'
+                          item.name === '關於作者' ? 'right-0' : 'left-0'
                         } top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50`}
                       >
                         {item.subMenu.map((subItem) => (
@@ -148,11 +181,12 @@ export default function NavBar() {
                             className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
                             onClick={(e) => {
                               e.preventDefault();
+                              // 如果是關於作者選單，將其視為外部連結
                               handleNavigation(
                                 subItem.href, 
                                 true, 
                                 close, 
-                                item.name === 'Find Pao'
+                                item.name === '關於作者'
                               );
                             }}
                           >
@@ -205,7 +239,8 @@ export default function NavBar() {
                               className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
                               onClick={(e) => {
                                 e.preventDefault();
-                                if (item.name === 'Find Pao') {
+                                // 如果是關於作者選單，將其視為外部連結
+                                if (item.name === '關於作者') {
                                   window.open(subItem.href, '_blank');
                                 } else {
                                   handleNavigation(subItem.href, true, close);
