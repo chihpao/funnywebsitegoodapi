@@ -13,7 +13,7 @@ export class ApiService {
       // 從環境變量取得基本 URL，或使用預設的線上服務 URL
       // 注意：確保這裡的備用 URL 指向您實際部署的後端 API 地址
       // 使用 Vercel 部署的後端 API 地址
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://funnywebsitegoodapi-backend.vercel.app';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://backend-chatbot-psi.vercel.app';
       return `${baseUrl}${endpoint}`;
     }
   
