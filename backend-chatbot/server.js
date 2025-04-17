@@ -29,7 +29,7 @@ app.use(cacheControl({
 
 // 啟用 CORS，解決跨域請求問題
 app.use(cors({
-  origin: '*', // 在生產環境中應設置為特定的前端網址，增加安全性
+  origin: process.env.CORS_ORIGIN || '*', // 優先使用環境變數中設定的前端網址，如果未設置則允許所有來源
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
