@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Disclosure } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Disclosure, Transition } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -62,7 +62,7 @@ function classNames(...classes) {
 const NavBarLink = ({ className, imgClassName, spanClassName, to }) => (
   <Link to={to} className={`flex items-center cursor-pointer ${className}`}>
     <img src="/NavBarCat01.png" alt="網站標誌" className={`w-auto ${imgClassName}`} />
-    <span className={`text-2xl text-black ${spanClassName}`}>Stupid Cat</span>
+    <span className={`text-xl sm:text-2xl text-black font-medium ${spanClassName}`}>Stupid Cat</span>
   </Link>
 );
 
@@ -138,39 +138,42 @@ export default function NavBar() {
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <span className="sr-only">Open main menu</span>
+              {/* 行動裝置選單按鈕 */}
+              <div className="flex items-center sm:hidden">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <span className="sr-only">打開選單</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
                     <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
-                <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" to="/" />
               </div>
-              <div className="flex flex-1 items-center justify-start sm:justify-start">
-                <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" to="/" />
+              
+              {/* Logo 區域 */}
+              <div className="flex flex-1 items-center justify-center sm:justify-start">
+                <NavBarLink className="" imgClassName="h-10 sm:h-12" spanClassName="ml-2" to="/" />
               </div>
-              <div className="hidden sm:flex sm:space-x-4">
+              {/* 桌面版選單 */}
+              <div className="hidden sm:flex sm:items-center sm:space-x-4">
                 {navigation.map((item) => (
                   <div key={item.name} className="relative dropdown">
                     <button
                       onClick={item.subMenu ? () => toggleDropdown(item.name) : () => handleNavigation(item.href)}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
-                        'rounded-md px-3 py-2 text-lg font-medium'
+                        item.current ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900',
+                        'rounded-md px-3 py-2 text-base font-medium transition-colors duration-200'
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
-                      {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
+                      {item.subMenu && <span className="ml-1"><i className="fas fa-chevron-down text-xs"></i></span>}
                     </button>
                     {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
                       <div
                         className={`absolute ${
                           item.name === '關於作者' ? 'right-0' : 'left-0'
-                        } top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50`}
+                        } top-full mt-1 w-52 bg-white shadow-lg rounded-md z-50 overflow-hidden border border-gray-100`}
                       >
                         {item.subMenu.map((subItem) => (
                           <Link
@@ -178,7 +181,7 @@ export default function NavBar() {
                             to={subItem.href}
                             target={subItem.target}
                             rel="noopener noreferrer"
-                            className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                             onClick={(e) => {
                               e.preventDefault();
                               // 如果是關於作者選單，將其視為外部連結
@@ -198,14 +201,9 @@ export default function NavBar() {
                   </div>
                 ))}
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 hidden">
-                <button
-                  type="button"
-                  className="relative rounded-full bg-white p-1 text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+              {/* 右側區域保留空間，未來可加入使用者資訊或通知等 */}
+              <div className="flex items-center">
+                {/* 未來可在此加入使用者資訊或通知圖標 */}
               </div>
             </div>
           </div>

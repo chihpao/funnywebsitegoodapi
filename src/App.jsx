@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // 佈局組件
 import NavBar from './components/NavBar';
 import SkinnyFooter from './components/SkinnyFooter';
+import Layout from './components/Layout';
 import CustomCursor from './components/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -45,16 +46,18 @@ function AppContent() {
         <NavBar />
         
         {/* 應用路由配置 */}
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/aiagent" element={<AppChatbot />} />
-          <Route path="/fun" element={<FunComponent />} />
-          <Route path="/fun/memes" element={<MemesPage />} />
-          <Route path="/fun/cats" element={<CatsPage />} />
-          <Route path="/fun/dogs" element={<DogsPage />} />
-          <Route path="/interactive" element={<InteractiveComponent />} />
-          {/* <Route path="/api" element={<API />} /> */}
-        </Routes>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/aiagent" element={<AppChatbot />} />
+            <Route path="/fun" element={<FunComponent />} />
+            <Route path="/fun/memes" element={<MemesPage />} />
+            <Route path="/fun/cats" element={<CatsPage />} />
+            <Route path="/fun/dogs" element={<DogsPage />} />
+            <Route path="/interactive" element={<InteractiveComponent />} />
+            {/* <Route path="/api" element={<API />} /> */}
+          </Routes>
+        </Layout>
         
         {/* 回到頂部按鈕 */}
         <ScrollToTop />

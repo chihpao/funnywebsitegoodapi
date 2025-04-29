@@ -3,35 +3,116 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 基礎設定 */
+@layer base {
+  :root {
+    --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+    --animation-timing: 0.2s ease-in-out;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans text-gray-800 antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 只在非觸控設備上啟用自訂游標 */
+  @media (pointer: fine) {
+    html:not(.no-js), body:not(.no-js), .use-custom-cursor {
+      cursor: none !important;
+    }
+  }
+  
+  /* 觸控設備上停用自訂游標 */
+  @media (pointer: coarse) {
+    .custom-cursor {
+      display: none !important;
+    }
+  }
+}
 
 /* 瀏覽器翻譯工具兼容 */
-
 .notranslate {
     translate: no;
 }
 
-/* Custom styles */
-.responsive-text {
+/* 元件樣式 */
+@layer components {
+  /* 響應式文字 */
+  .responsive-text {
     @apply text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl;
-}
+  }
+
+  /* 標題樣式 */
+  .title-lg {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  .title-md {
+    @apply text-xl sm:text-2xl md:text-3xl font-bold tracking-tight;
+  }
+
+  .title-sm {
+    @apply text-lg sm:text-xl md:text-2xl font-bold tracking-tight;
+  }
+
+  /* 按鈕樣式 */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md text-base font-medium transition-all duration-200;
+  }
+
+  .btn-primary {
+    @apply btn bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  }
+
+  .btn-accent {
+    @apply btn bg-teal-500 text-white hover:bg-teal-600 focus:ring-2 focus:ring-offset-2 focus:ring-teal-400;
+  }
   
-.responsive-bg {
-    background-color: white; /* 固定背景顏色 */
+  /* 卡片容器 */
+  .card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-200;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg hover:-translate-y-1;
+  }
 }
 
+/* 佈局元素 */
 .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 垂直居中 */
-    justify-content: center; /* 水平居中 */
-    gap: 1rem; /* 間距 */
+    @apply flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-4 md:gap-6 lg:gap-8;
 }
 
 .background-image-container {
-    background-size: cover;
-    background-position: center;
-    min-height: calc(100vh - 64px); /* 減去導航欄高度 */
-  }
+    @apply bg-cover bg-center min-h-[calc(100vh-64px)];
+}
+
+/* 頁面區塊 */
+.section {
+    @apply py-12 sm:py-16 md:py-20;
+}
+
+.section-lg {
+    @apply py-16 sm:py-20 md:py-24;
+}
+
+/* 響應式間距 */
+.space-y-responsive {
+    @apply space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10;
+}
+
+.space-x-responsive {
+    @apply space-x-0 sm:space-x-4 md:space-x-6 lg:space-x-8;
+}
 
 @media (min-width: 640px) {
     .button-container {
@@ -40,49 +121,84 @@
     }
 }
 
-/* 針對不同螢幕尺寸的額外間距設置 */
-@media (min-width: 768px) {
-    .button-container {
-        gap: 1.5rem; /* 中等螢幕間距 */
-    }
+/* 動畫效果 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@media (min-width: 1024px) {
-    .button-container {
-        gap: 2rem; /* 大螢幕間距 */
-    }
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-@media (min-width: 1280px) {
-    .button-container {
-        gap: 2.5rem; /* 超大螢幕間距 */
-    }
+@keyframes slideInRight {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-@media (min-width: 1536px) {
-    .button-container {
-        gap: 3rem; /* 超超大螢幕間距 */
-    }
+/* 動畫類 */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
 
+.animate-slide-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
 
-/* 針對小螢幕進行調整 */
-@media (max-width: 600px) {
-    .background-image-container {
-        background-size: cover;
-        background-position: top;
-        min-height: calc(100vh - 64px);
-      }
-    }
+/* 動畫延遲 */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* 響應式設計修正 */
+@media (max-width: 640px) {
+  .background-image-container {
+    background-position: top;
+    min-height: calc(100vh - 64px);
+  }
+
+  .container {
+    @apply px-4;
+  }
+}
 
 @layer utilities {
-    .stroke-white {
-      -webkit-text-stroke: 4px white;
-      color: black;
-    }
+  .stroke-white {
+    -webkit-text-stroke: 1px white;
+    color: black;
+  }
+
+  .stroke-white-md {
+    -webkit-text-stroke: 2px white;
+    color: black;
   }
   
-  html, body, * {
-    cursor: none !important;
+  .stroke-white-lg {
+    -webkit-text-stroke: 3px white;
+    color: black;
   }
+  
+  .opacity-85 {
+    opacity: 0.85;
+  }
+  
+  .opacity-95 {
+    opacity: 0.95;
+  }
+
+  /* 毛玻璃效果 */
+  .glass {
+    @apply bg-white bg-opacity-20 backdrop-blur-md;
+  }
+  
+  .glass-dark {
+    @apply bg-gray-800 bg-opacity-30 backdrop-blur-md;
+  }
+}

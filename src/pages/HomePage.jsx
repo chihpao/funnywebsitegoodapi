@@ -98,6 +98,25 @@ function HeroSection() {
   const [index, setIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  
+  // 從畫面大小取得目前裝置的尺寸狀態
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0
+  });
+
+  // 監察裝置尺寸變化
+  React.useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 最小滑動距離
   const minSwipeDistance = 50;
@@ -137,7 +156,7 @@ function HeroSection() {
   return (
     <section className="relative h-screen">
       <div 
-        className="w-full h-[calc(100vh-64px)] relative overflow-hidden"
+        className="w-full h-screen fixed top-0 left-0 z-10 relative overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -147,10 +166,10 @@ function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-full h-full relative"
+          className="w-full h-full absolute top-0 left-0"
           style={{
             backgroundImage: `url(${images[index].src})`,
-            backgroundPosition: window.innerWidth <= 768 
+            backgroundPosition: windowSize.width <= 768 
               ? images[index].mobilePosition 
               : images[index].position,
             backgroundRepeat: "no-repeat",
@@ -159,24 +178,24 @@ function HeroSection() {
         />
 
         {/* 簡潔的箭頭按鈕 */}
-        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
+        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 z-20">
           <motion.button
             onClick={handlePrevious}
-            className="w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white/50 flex items-center justify-center hover:bg-black/50 transition-all duration-200"
-            whileHover={{ scale: 1.1 }}
+            className="w-12 h-12 bg-white bg-opacity-50 backdrop-blur-sm rounded-full flex items-center justify-center focus:outline-none shadow-lg"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.8)" }}
             whileTap={{ scale: 0.9 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-black"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="white"
-              strokeWidth={2.5}
+              stroke="currentColor"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeWidth={2}
                 d="M15 19l-7-7 7-7"
               />
             </svg>
@@ -184,25 +203,38 @@ function HeroSection() {
 
           <motion.button
             onClick={handleNext}
-            className="w-12 h-12 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white/50 flex items-center justify-center hover:bg-black/50 transition-all duration-200"
-            whileHover={{ scale: 1.1 }}
+            className="w-12 h-12 bg-white bg-opacity-50 backdrop-blur-sm rounded-full flex items-center justify-center focus:outline-none shadow-lg"
+            whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.8)" }}
             whileTap={{ scale: 0.9 }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 text-black"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="white"
-              strokeWidth={2.5}
+              stroke="currentColor"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeWidth={2}
                 d="M9 5l7 7-7 7"
               />
             </svg>
           </motion.button>
+        </div>
+        
+        {/* 圖片說明指示器 */}
+        <div className="absolute bottom-10 left-0 right-0 flex justify-center space-x-2 z-20">
+          {images.map((_, i) => (
+            <motion.div
+              key={i}
+              className={`w-2 h-2 rounded-full ${i === index ? 'bg-white' : 'bg-white bg-opacity-50'}`}
+              whileHover={{ scale: 1.5 }}
+              onClick={() => setIndex(i)}
+              style={{ cursor: 'pointer' }}
+            />
+          ))}
         </div>
       </div>
     </section>
@@ -492,7 +524,7 @@ function Timeline() {
 
 function Homepage() {
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 relative">
       <HeroSection />
       <TransitionSection />
       <section className="py-8 px-4 md:px-8">

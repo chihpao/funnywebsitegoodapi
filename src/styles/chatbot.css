@@ -1,11 +1,16 @@
 @import './chatbot-widgets.css';
+
+/* 聊天頁面基本樣式 */
 .chatbot-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+    background-image: url('/chat-bg-pattern.png'), linear-gradient(to bottom right, #4F46E5, #8B5CF6);
+    background-size: 200px, cover;
+    background-blend-mode: overlay;
+    font-family: var(--font-sans);
   }
   
   /* 聊天機器人容器 */
@@ -15,17 +20,32 @@
     height: 80vh;
     display: flex;
     flex-direction: column;
-    background-color: white;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.25), 0 0 1px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
     overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.18);
   }
   
   /* 標題區 */
   .chatbot-header {
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     text-align: center;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    background: linear-gradient(to right, rgba(249, 250, 251, 0.9), rgba(243, 244, 246, 0.9));
+    position: relative;
+  }
+  
+  .chatbot-header:after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(79, 70, 229, 0.3), transparent);
   }
   
   .chatbot-header h1 {
@@ -33,11 +53,24 @@
     font-weight: 700;
     color: #1f2937;
     margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #4F46E5, #8B5CF6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
   .chatbot-header p {
     font-size: 1.125rem;
     color: #6b7280;
+    font-weight: 500;
+  }
+  
+  .chatbot-commands-info {
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: rgba(243, 244, 246, 0.7);
+    font-size: 0.875rem;
   }
   
   /* 聊天主體區域 */
@@ -59,19 +92,148 @@
   .react-chatbot-kit-chat-message-container {
     height: calc(100% - 60px) !important;
     overflow-y: auto !important;
+    padding: 1rem !important;
   }
   
   /* 修正訊息氣泡樣式 */
   .react-chatbot-kit-chat-bot-message {
     background-color: #4F46E5 !important;
     color: white !important;
+    border-radius: 18px 18px 18px 4px !important;
+    padding: 12px 18px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+    position: relative;
+    max-width: 80% !important;
+  }
+  
+  .react-chatbot-kit-chat-bot-message:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: #4F46E5;
+    border-radius: 0 0 10px 0;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+  
+  .react-chatbot-kit-user-chat-message {
+    background-color: #F3F4F6 !important;
+    color: #1F2937 !important;
+    border-radius: 18px 18px 4px 18px !important;
+    padding: 12px 18px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+    position: relative;
+    max-width: 80% !important;
+  }
+  
+  .react-chatbot-kit-user-chat-message:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: #F3F4F6;
+    border-radius: 0 0 0 10px;
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+  }
+  
+  /* 輸入區域樣式 */
+  .react-chatbot-kit-chat-input-container {
+    padding: 0.75rem !important;
+    border-top: 1px solid rgba(229, 231, 235, 0.5) !important;
+    background: linear-gradient(to right, rgba(249, 250, 251, 0.9), rgba(243, 244, 246, 0.9)) !important;
+  }
+  
+  .react-chatbot-kit-chat-input {
+    border-radius: 30px !important;
+    border: 1px solid rgba(209, 213, 219, 0.5) !important;
+    padding: 0.75rem 1rem !important;
+    background-color: white !important;
+    font-size: 1rem !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .react-chatbot-kit-chat-input:focus {
+    outline: none !important;
+    border-color: #4F46E5 !important;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2) !important;
+  }
+  
+  .react-chatbot-kit-chat-btn-send {
+    background-color: #4F46E5 !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 8px !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .react-chatbot-kit-chat-btn-send:hover {
+    background-color: #4338CA !important;
+    transform: scale(1.05) !important;
+  }
+  
+  /* 訊息時間戳記 */
+  .message-timestamp {
+    font-size: 0.7rem;
+    color: #9CA3AF;
+    margin-top: 4px;
+    text-align: right;
+  }
+  
+  /* 訊息打字動畫 */
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+  
+  .typing-indicator span {
+    height: 8px;
+    width: 8px;
+    background-color: #4F46E5;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 3px;
+    animation: typing 1.4s infinite ease-in-out both;
+  }
+  
+  .typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes typing {
+    0% { transform: scale(0.6); opacity: 0.6; }
+    50% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.6); opacity: 0.6; }
   }
   
   /* RWD 樣式 */
   @media (max-width: 640px) {
+    .chatbot-page {
+      padding: 0.5rem;
+    }
+    
     .chatbot-container {
-      height: 90vh;
-      border-radius: 12px;
+      height: 92vh;
+      border-radius: 16px;
+      max-width: 100%;
+    }
+    
+    .chatbot-header {
+      padding: 1rem;
     }
     
     .chatbot-header h1 {
@@ -79,6 +241,60 @@
     }
     
     .chatbot-header p {
-      font-size: 1rem;
+      font-size: 0.875rem;
+    }
+    
+    .chatbot-commands-info {
+      font-size: 0.75rem;
+    }
+    
+    .react-chatbot-kit-chat-bot-message,
+    .react-chatbot-kit-user-chat-message {
+      max-width: 90% !important;
+      font-size: 0.875rem !important;
+    }
+    
+    .chatbot-footer {
+      padding: 0.75rem;
+      font-size: 0.75rem;
+    }
+  }
+  
+  /* 暗色模式支援 */
+  @media (prefers-color-scheme: dark) {
+    .chatbot-page {
+      background-image: url('/chat-bg-pattern.png'), linear-gradient(to bottom right, #312E81, #5B21B6);
+    }
+    
+    .chatbot-container {
+      background-color: rgba(30, 41, 59, 0.8);
+    }
+    
+    .chatbot-header,
+    .react-chatbot-kit-chat-input-container {
+      background: linear-gradient(to right, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.9));
+      border-color: rgba(51, 65, 85, 0.5);
+    }
+    
+    .chatbot-header h1 {
+      background: linear-gradient(to right, #818CF8, #C4B5FD);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    
+    .chatbot-header p,
+    .chatbot-footer p {
+      color: #D1D5DB;
+    }
+    
+    .chatbot-commands-info {
+      background-color: rgba(51, 65, 85, 0.5);
+      color: #D1D5DB;
+    }
+    
+    .react-chatbot-kit-chat-input {
+      background-color: rgba(51, 65, 85, 0.7) !important;
+      color: #E5E7EB !important;
+      border-color: rgba(75, 85, 99, 0.5) !important;
     }
   }
