@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import ImageGallery from "../components/ImageGallery";
 
 // 設定每張圖片對應的 position
 const images = [
@@ -382,45 +383,46 @@ function TimelineArrow() {
 }
 
 function Timeline() {
-  return (
-    <div className="relative py-8">
-      {/* 現代化動態箭頭時間軸 */}
-      <div className="hidden md:block">
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full z-10">
-          {[...Array(5)].map((_, index) => (
-            <div
-              key={index}
-              className="absolute left-1/2 transform -translate-x-1/2"
-              style={{
-                top: `${index * 20}%`,
-                color: `hsl(${index * 30}, 70%, 50%)`,
-                marginLeft: "-16px",
-              }}
-            >
-              <TimelineArrow />
-            </div>
-          ))}
-        </div>
-      </div>
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-      {/* 時間軸內容 */}
+  const openGallery = (index) => {
+    setSelectedImageIndex(index);
+    setGalleryOpen(true);
+  };
+
+  const closeGallery = () => {
+    setGalleryOpen(false);
+  };
+
+  return (
+    <div className="relative py-16">
+      {/* 中央線 */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-indigo-100 md:block hidden"></div>
+      
+      {/* 行動裝置中央線 */}
+      <div className="absolute left-8 md:left-auto h-full w-1 bg-indigo-100 md:hidden"></div>
+      
+      {/* 時間線項目 */}
       {timelineEvents.map((event, index) => (
         <motion.div
           key={event.year}
-          className={`flex flex-col md:flex-row items-center mb-16 md:mb-24 relative ${
-            index % 2 === 0 ? "md:flex-row-reverse" : ""
-          }`}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.8, delay: index * 0.2 }}
+          className={`flex flex-col md:flex-row items-start mb-12 ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
         >
-          {/* 手機版文字樣式 */}
-          <div className="flex items-center justify-center w-[calc(100%-1rem)] mx-2 md:hidden z-60">
+          {/* 時間線箭頭 */}
+          <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 mt-6">
+            <TimelineArrow />
+          </div>
+          
+          {/* 行動裝置文字樣式 */}
+          <div className="md:hidden flex items-center pl-16 mb-4">
             <motion.div
-              // 移除邊框與背景，只保留文字
-              className="w-full text-center"
-              whileHover={{ scale: 1.05 }}
+              className="flex items-center"
+              whileHover={{ x: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
               <span className="text-2xl font-bold text-gray-900">
@@ -431,7 +433,7 @@ function Timeline() {
             </motion.div>
           </div>
 
-          {/* 圖片區塊 */}
+          {/* 圖片區塊 - 添加點擊事件打開相簿 */}
           <motion.div
             className="w-[calc(100%-1rem)] md:w-[calc(50%-4rem)] mx-2 md:mx-8 z-40"
             initial={{ opacity: 0, y: 50 }}
@@ -440,8 +442,9 @@ function Timeline() {
             transition={{ duration: 0.5 }}
           >
             <motion.div
-              className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg hover:shadow-xl transition"
+              className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg hover:shadow-xl transition cursor-pointer"
               whileHover={{ scale: 1.02 }}
+              onClick={() => openGallery(index)}
             >
               <div className="relative aspect-w-16 aspect-h-9 overflow-hidden rounded-lg">
                 <motion.img
@@ -451,6 +454,14 @@ function Timeline() {
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.4 }}
                 />
+                {/* 添加提示圖標，表示可點擊查看 */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-300">
+                  <div className="text-white opacity-0 hover:opacity-100 transition-opacity duration-300 text-center">
+                    <span className="bg-black bg-opacity-50 px-3 py-1 rounded-full text-sm">
+                      點擊查看
+                    </span>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -486,6 +497,14 @@ function Timeline() {
           </motion.div>
         </motion.div>
       ))}
+      
+      {/* 圖片相簿組件 */}
+      <ImageGallery
+        images={timelineEvents}
+        initialIndex={selectedImageIndex}
+        isOpen={galleryOpen}
+        onClose={closeGallery}
+      />
     </div>
   );
 }
