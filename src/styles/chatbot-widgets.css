@@ -1,34 +1,175 @@
 /* 圖片小部件樣式 */
 .chat-image-container {
-    width: 100%;
-    margin: 8px 0;
-    border-radius: 8px;
-    overflow: hidden;
+  width: 100%;
+  margin: 12px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.chat-image-container:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 縮放狀態 */
+.chat-image-container.zoomed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 20px;
+  border-radius: 0;
+}
+
+.chat-image-container.zoomed .chat-image {
+  max-height: 90vh;
+  max-width: 90vw;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: none;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+}
+
+.chat-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+/* 載入中狀態 */
+.chat-image.loading {
+  opacity: 0;
+  height: 200px;
+}
+
+.chat-image.loaded {
+  opacity: 1;
+}
+
+.chat-image.error {
+  opacity: 0.7;
+  filter: grayscale(50%);
+}
+
+/* 載入中動畫 */
+.chat-image-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(249, 250, 251, 0.9);
+  border-radius: 8px;
+  z-index: 5;
+}
+
+.image-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(79, 70, 229, 0.2);
+  border-radius: 50%;
+  border-top-color: #4F46E5;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+.chat-image-loading span {
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+/* 錯誤狀態 */
+.chat-image-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ef4444;
+  padding: 12px;
+  background-color: #fee2e2;
+  border-radius: 8px;
+  margin: 8px 0;
+  text-align: center;
+  border: 1px solid #fecaca;
+}
+
+.chat-image-error .error-icon {
+  font-size: 1.25rem;
+}
+
+/* 控制區 */
+.chat-image-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chat-image-container:hover .chat-image-controls {
+  opacity: 1;
+}
+
+.chat-image-container.zoomed .chat-image-controls {
+  opacity: 1;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 100px);
+  padding: 20px;
+}
+
+.image-control-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #4F46E5;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.image-control-btn:hover {
+  transform: scale(1.1);
+  background-color: white;
+}
+
+.image-caption {
+  color: white;
+  font-size: 0.875rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* 動畫效果 */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-  
-  .chat-image {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-  }
-  
-  .chat-image-error {
-    color: #ef4444;
-    padding: 8px;
-    background-color: #fee2e2;
-    border-radius: 8px;
-    margin: 8px 0;
-    text-align: center;
-  }
-  
-  /* 動畫效果 */
-  .chat-image {
-    transition: all 0.3s ease;
-  }
-  
-  .chat-image:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
+}
