@@ -14,16 +14,11 @@ const navigation = [
   { name: '互動頁面', href: '/interactive', current: false },
   // { name: 'API 文檔', href: '/api', current: false }, // 暂未啟用
   
-  // 隨機樂趣功能選項及子選單
+  // 隨機樂趣功能選項 - 改為單一頁面
   {
     name: '隨機樂趣',
     href: '/fun',
     current: false,
-    subMenu: [
-      { name: '隨機迴因', href: '/fun/memes' },
-      { name: '隨機貓圖', href: '/fun/cats' },
-      { name: '隨機狗圖', href: '/fun/dogs' },
-    ],
   },
   
   // 作者社群媒體連結
@@ -137,7 +132,8 @@ export default function NavBar() {
       {({ open, close }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
+            <div className="relative flex h-16 items-center">
+              {/* 移動版選單按鈕 */}
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
@@ -149,11 +145,15 @@ export default function NavBar() {
                 </Disclosure.Button>
                 <NavBarLink className="ml-2" imgClassName="h-10" spanClassName="ml-2" to="/" />
               </div>
-              <div className="flex flex-1 items-center justify-start sm:justify-start">
+              
+              {/* 左側 Logo */}
+              <div className="flex items-center justify-start w-1/4">
                 <NavBarLink className="" imgClassName="h-16 mr-2 hidden sm:block" spanClassName="hidden sm:block" to="/" />
               </div>
-              <div className="hidden sm:flex sm:space-x-4">
-                {navigation.map((item) => (
+              
+              {/* 中間導航項目 */}
+              <div className="hidden sm:flex sm:space-x-4 sm:justify-center w-2/4">
+                {navigation.filter(item => item.name !== '關於作者').map((item) => (
                   <div key={item.name} className="relative dropdown">
                     <button
                       onClick={item.subMenu ? () => toggleDropdown(item.name) : () => handleNavigation(item.href)}
@@ -168,9 +168,7 @@ export default function NavBar() {
                     </button>
                     {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
                       <div
-                        className={`absolute ${
-                          item.name === '關於作者' ? 'right-0' : 'left-0'
-                        } top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50`}
+                        className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50"
                       >
                         {item.subMenu.map((subItem) => (
                           <Link
@@ -181,12 +179,55 @@ export default function NavBar() {
                             className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
                             onClick={(e) => {
                               e.preventDefault();
-                              // 如果是關於作者選單，將其視為外部連結
                               handleNavigation(
                                 subItem.href, 
                                 true, 
                                 close, 
-                                item.name === '關於作者'
+                                false
+                              );
+                            }}
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {/* 右側「關於作者」 */}
+              <div className="hidden sm:flex sm:items-center sm:justify-end w-1/4 pr-4">
+                {navigation.filter(item => item.name === '關於作者').map((item) => (
+                  <div key={item.name} className="relative dropdown">
+                    <button
+                      onClick={item.subMenu ? () => toggleDropdown(item.name) : () => handleNavigation(item.href)}
+                      className={classNames(
+                        item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
+                        'rounded-md px-3 py-2 text-lg font-medium'
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                    >
+                      {item.name}
+                      {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
+                    </button>
+                    {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
+                      <div
+                        className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+                      >
+                        {item.subMenu.map((subItem) => (
+                          <Link
+                            key={subItem.name}
+                            to={subItem.href}
+                            target={subItem.target}
+                            rel="noopener noreferrer"
+                            className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleNavigation(
+                                subItem.href, 
+                                true, 
+                                close, 
+                                true
                               );
                             }}
                           >
