@@ -83,6 +83,4 @@
     }
   }
   
-  html, body, * {
-    cursor: none !important;
-  }
+  /* 已移除強制隱藏鼠標的樣式 */

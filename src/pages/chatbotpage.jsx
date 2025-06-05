@@ -1,24 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Chatbot from 'react-chatbot-kit';
+import config from '../components/chatbot/config';
+import MessageParser from '../components/chatbot/MessageParser';
+import ActionProvider from '../components/chatbot/ActionProvider';
+import TimestampWrapper from '../components/TimestampWrapper';
+import TypingIndicator from '../components/TypingIndicator';
+import { FiMessageCircle, FiX, FiHelpCircle, FiRefreshCw, FiAlertTriangle } from 'react-icons/fi';
 import 'react-chatbot-kit/build/main.css';
-
-// 聊天機器人組件
-import config from '../components/chatbot/config.jsx';
-import MessageParser from '../components/chatbot/MessageParser.js';
-import ActionProvider from '../components/chatbot/ActionProvider.js';
-
-// 樣式
 import '../styles/chatbot.css';
-
-// 圖標
-import { 
-  FiHelpCircle, 
-  FiMessageCircle, 
-  FiRefreshCw, 
-  FiAlertTriangle, 
-  FiX 
-} from 'react-icons/fi';
+import '../styles/typingIndicator.css';
 
 /**
  * 聊天機器人頁面組件
@@ -28,8 +19,10 @@ const ChatbotPage = () => {
   // 狀態管理
   const [isLoading, setIsLoading] = useState(true);  // 加載狀態
   const [error, setError] = useState(null);          // 錯誤信息
+  const [isTyping, setIsTyping] = useState(false);   // 打字狀態
   const [typingEffect, setTypingEffect] = useState(false); // 打字效果
   const chatContainerRef = useRef(null);            // 聊天容器引用
+  const chatInputRef = useRef(null); // 添加聊天輸入框的引用
   
   /**
    * 檢查聊天機器人所需要的 API 服務是否可用
@@ -80,18 +73,42 @@ const ChatbotPage = () => {
     checkApiAvailability();
     
     /**
-     * 處理窗口大小變化時滾動到底部
-     * 確保聊天內容在調整窗口大小後仍然可見
-     */
-    const handleResize = () => {
-      if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+   * 處理窗口大小變化時滾動到底部
+   * 確保聊天內容在調整窗口大小後仍然可見
+   */
+  const handleResize = () => {
+    scrollToBottom();
+  };
+  
+  /**
+   * 滾動聊天區域到底部
+   * 用於新訊息出現和窗口大小變化時
+   */
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      const chatContainer = document.querySelector('.react-chatbot-kit-chat-message-container');
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
-    };
-    
-    // 添加和清除事件監聽器
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    }
+  };
+  
+  // 添加和清除事件監聽器
+  window.addEventListener('resize', handleResize);
+  
+  // 添加訊息變化監聽器，當有新訊息時自動滾動到底部
+  const observer = new MutationObserver(scrollToBottom);
+  setTimeout(() => {
+    const chatContainer = document.querySelector('.react-chatbot-kit-chat-message-container');
+    if (chatContainer) {
+      observer.observe(chatContainer, { childList: true, subtree: true });
+    }
+  }, 2000); // 等待聊天容器完全加載
+  
+  return () => {
+    window.removeEventListener('resize', handleResize);
+    observer.disconnect();
+  };
   }, []);
 
   /**
@@ -114,6 +131,29 @@ const ChatbotPage = () => {
   const clearChatHistory = () => {
     localStorage.removeItem('chatMessages');
     window.location.reload();
+  };
+  
+  /**
+   * 處理命令標籤點擊事件
+   * 將命令填入聊天輸入框並自動提交
+   */
+  const handleCommandClick = (command) => {
+    // 找到聊天輸入框元素
+    const chatInput = document.querySelector('.react-chatbot-kit-chat-input');
+    const sendButton = document.querySelector('.react-chatbot-kit-chat-btn-send');
+    
+    if (chatInput && sendButton) {
+      // 設置輸入框的值為選擇的命令
+      chatInput.value = command;
+      // 聚焦輸入框
+      chatInput.focus();
+      
+      // 創建一個小延遲，讓用戶有時間看到命令被填入
+      setTimeout(() => {
+        // 觸發點擊發送按鈕事件
+        sendButton.click();
+      }, 300);
+    }
   };
   
   /**
@@ -172,6 +212,7 @@ const ChatbotPage = () => {
           saveMessages={saveMessages}
           loadMessages={loadMessages}
         />
+        <TimestampWrapper />
       </div>
     );
   };
@@ -199,10 +240,10 @@ const ChatbotPage = () => {
             <div className="commands-inline">
               <FiHelpCircle className="commands-icon" />
               <strong>可用命令:</strong>
-              <span className="command-tag">/help</span>
-              <span className="command-tag">/joke</span>
-              <span className="command-tag">/cat</span>
-              <span className="command-tag">/dog</span>
+              <span className="command-tag" onClick={() => handleCommandClick('/help')}>/help</span>
+              <span className="command-tag" onClick={() => handleCommandClick('/joke')}>/joke</span>
+              <span className="command-tag" onClick={() => handleCommandClick('/cat')}>/cat</span>
+              <span className="command-tag" onClick={() => handleCommandClick('/dog')}>/dog</span>
             </div>
           </div>
           
@@ -225,16 +266,7 @@ const ChatbotPage = () => {
           </div>
         </main>
         
-        {/* 頁尾區 - 顯示版本和 API 信息 */}
-        <footer className="chatbot-footer">
-          <div className="footer-content">
-            <p>由先進 AI 技術提供支援</p>
-            <div className="footer-meta">
-              <p className="version">版本: 1.2.0</p>
-              <p className="api-info">API: {import.meta.env.VITE_API_BASE_URL || 'http://localhost:10000'}</p>
-            </div>
-          </div>
-        </footer>
+        {/* 移除頁尾區 */}
       </div>
     </div>
   );

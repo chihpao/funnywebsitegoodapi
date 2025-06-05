@@ -48,11 +48,6 @@ class ActionProvider {
     // 更新聊天狀態
     this.updateChatbotState(botMessage);
   }
-  
-  /**
-   * 處理特殊命令
-   * @param {Object} command - 命令對象
-   */
   async handleCommand(command) {
     console.log("處理特殊命令:", command);
     

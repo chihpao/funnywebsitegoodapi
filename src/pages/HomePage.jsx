@@ -397,11 +397,9 @@ function Timeline() {
 
   return (
     <div className="relative py-16">
-      {/* 中央線 */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-indigo-100 md:block hidden"></div>
+      {/* 已移除中央線 */}
       
-      {/* 行動裝置中央線 */}
-      <div className="absolute left-8 md:left-auto h-full w-1 bg-indigo-100 md:hidden"></div>
+      {/* 已移除行動裝置中央線 */}
       
       {/* 時間線項目 */}
       {timelineEvents.map((event, index) => (

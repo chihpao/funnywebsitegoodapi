@@ -19,6 +19,9 @@ const CustomCursor = () => {
     document.addEventListener('mouseenter', mouseEnterHandler);
     document.addEventListener('mouseleave', mouseLeaveHandler);
 
+    // 移除網站上的自定義鼠標樣式，恢復為瀏覽器預設鼠標
+    document.body.style.cursor = 'auto';
+    
     return () => {
       document.removeEventListener('mousemove', moveHandler);
       document.removeEventListener('mouseenter', mouseEnterHandler);
@@ -26,19 +29,18 @@ const CustomCursor = () => {
     };
   }, []);
 
+  // 只顯示鼠標指向位置的淺藍色圓形區塊
   const style = {
     position: 'fixed',
     left: position.x,
     top: position.y,
     transform: 'translate(-50%, -50%)',
-    width: 20,
-    height: 20,
+    width: 40, // 增大圓形區塊大小
+    height: 40, // 增大圓形區塊大小
     borderRadius: '50%',
     pointerEvents: 'none',
-    zIndex: 9999,
-    transition: 'background-color 0.2s, border 0.2s',
-    backgroundColor: isClickable ? 'white' : 'black',
-    border: isClickable ? '2px solid black' : 'none',
+    zIndex: 9998, // 確保在鼠標下方
+    backgroundColor: 'rgba(173, 216, 230, 0.6)', // 淺藍色底色，半透明
     opacity: isVisible ? 1 : 0
   };
 
