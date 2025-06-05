@@ -27,90 +27,108 @@ const MemeSection = ({
   currentMemeIndex,
   displayedMemes,
 }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">Find Memes</h2>
-      <div className="flex space-x-4">
-        <Button
-          onClick={getPreviousMeme}
-          className="bg-purple-500 hover:bg-purple-700"
-          disabled={currentMemeIndex <= 0}
-        >
-          <i className="fas fa-arrow-left"></i>
-        </Button>
-        <Button
-          onClick={getAnotherMeme}
-          className="bg-blue-500 hover:bg-blue-700"
-          disabled={memeLoading || isGenerating}
-        >
-          {isGenerating ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mx-auto"></div>
-          ) : (
-            <i className="fas fa-random"></i>
-          )}
-        </Button>
-        <Button
-          onClick={getNextMeme}
-          className="bg-orange-500 hover:bg-orange-700"
-          disabled={currentMemeIndex >= displayedMemes.length - 1}
-        >
-          <i className="fas fa-arrow-right"></i>
-        </Button>
+  <div className="w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white">
+    <div className="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+      <div className="flex justify-between items-center p-6 border-b">
+        <h2 className="text-3xl font-bold text-gray-800">隨機迴因</h2>
+        <div className="flex space-x-4">
+          <Button
+            onClick={getPreviousMeme}
+            className="bg-purple-500 hover:bg-purple-700"
+            disabled={currentMemeIndex <= 0}
+          >
+            <i className="fas fa-arrow-left"></i>
+          </Button>
+          <Button
+            onClick={getAnotherMeme}
+            className="bg-blue-500 hover:bg-blue-700"
+            disabled={memeLoading || isGenerating}
+          >
+            {isGenerating ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mx-auto"></div>
+            ) : (
+              <i className="fas fa-random"></i>
+            )}
+          </Button>
+          <Button
+            onClick={getNextMeme}
+            className="bg-orange-500 hover:bg-orange-700"
+            disabled={currentMemeIndex >= displayedMemes.length - 1}
+          >
+            <i className="fas fa-arrow-right"></i>
+          </Button>
+        </div>
       </div>
-    </div>
-    <div className="relative w-full h-96 flex justify-center items-center mb-4">
-      {memeLoading ? (
-        <LoadingSpinner />
-      ) : meme ? (
-        <img
-          src={meme.src}
-          alt={meme.title}
-          className="w-full h-full object-contain rounded-md"
-        />
-      ) : (
-        <div className="text-center text-gray-700">點藍色按鈕開始</div>
-      )}
+      <div className="relative w-full h-[70vh] flex justify-center items-center p-6 bg-gray-50">
+        {memeLoading ? (
+          <LoadingSpinner />
+        ) : meme ? (
+          <img
+            src={meme.src}
+            alt={meme.title}
+            className="max-w-full max-h-full object-contain rounded-md shadow-md"
+          />
+        ) : (
+          <div className="text-center text-gray-700 text-xl">點藍色按鈕開始</div>
+        )}
+      </div>
     </div>
   </div>
 );
 
 const CatSection = ({ catImages, catLoading, loadCatImages }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">Find Cats</h2>
-      <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-700">
-        More Cats
-      </Button>
-    </div>
-    {catLoading ? (
-      <LoadingSpinner />
-    ) : (
-      <div className="grid grid-cols-2 gap-4">
-        {catImages.map((cat, index) => (
-          <img key={index} src={cat.url} alt="Cat" className="w-full h-full object-cover rounded-md" />
-        ))}
+  <div className="w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white">
+    <div className="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+      <div className="flex justify-between items-center p-6 border-b">
+        <h2 className="text-3xl font-bold text-gray-800">隨機貓圖</h2>
+        <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-700">
+          更多貓貓
+        </Button>
       </div>
-    )}
+      <div className="p-6 bg-gray-50">
+        {catLoading ? (
+          <div className="flex justify-center items-center h-[60vh]">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {catImages.map((cat, index) => (
+              <div key={index} className="aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                <img src={cat.url} alt="貓貓" className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   </div>
 );
 
 const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
-  <div className="p-6 bg-white rounded-lg shadow-lg relative z-10">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-gray-800">Find Dogs</h2>
-      <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
-        More Dogs
-      </Button>
-    </div>
-    {dogLoading ? (
-      <LoadingSpinner />
-    ) : (
-      <div className="grid grid-cols-2 gap-4">
-        {dogImages.map((dog, index) => (
-          <img key={index} src={dog} alt="Dog" className="w-full h-full object-cover rounded-md" />
-        ))}
+  <div className="w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white">
+    <div className="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+      <div className="flex justify-between items-center p-6 border-b">
+        <h2 className="text-3xl font-bold text-gray-800">隨機狗圖</h2>
+        <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
+          更多狗狗
+        </Button>
       </div>
-    )}
+      <div className="p-6 bg-gray-50">
+        {dogLoading ? (
+          <div className="flex justify-center items-center h-[60vh]">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {dogImages.map((dog, index) => (
+              <div key={index} className="aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                <img src={dog} alt="狗狗" className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   </div>
 );
 
@@ -177,45 +195,45 @@ export function FunMainPage() {
   const navigateToDogs = () => navigate('/fun/dogs');
 
   return (
-    <div className="p-8 bg-white rounded-lg shadow-lg max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">隨機樂趣</h1>
-      <p className="text-lg text-gray-600 text-center mb-10">選擇一個類別，探索有趣的內容！</p>
+    <div className="min-h-[calc(100vh-100px)] w-screen flex flex-col items-center justify-center bg-white">
+      <h1 className="text-5xl font-bold text-center text-gray-800 mb-8">隨機樂趣</h1>
+      <p className="text-xl text-gray-600 text-center mb-12">選擇一個類別，探索有趣的內容！</p>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl px-6 mx-auto">
         {/* 隨機迴因按鈕 */}
         <div 
           onClick={navigateToMemes} 
-          className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center"
+          className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
         >
-          <div className="bg-white/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-laugh-squint text-white text-3xl"></i>
+          <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+            <i className="fas fa-laugh-squint text-white text-4xl"></i>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">隨機迴因</h2>
-          <p className="text-white/80">探索最有趣的網路迴因</p>
+          <h2 className="text-3xl font-bold text-white mb-4">隨機迴因</h2>
+          <p className="text-white/90 text-lg">探索最有趣的網路迴因</p>
         </div>
 
         {/* 隨機貓圖按鈕 */}
         <div 
           onClick={navigateToCats} 
-          className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center"
+          className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
         >
-          <div className="bg-white/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-cat text-white text-3xl"></i>
+          <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+            <i className="fas fa-cat text-white text-4xl"></i>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">隨機貓圖</h2>
-          <p className="text-white/80">可愛的貓咪照片集</p>
+          <h2 className="text-3xl font-bold text-white mb-4">隨機貓圖</h2>
+          <p className="text-white/90 text-lg">可愛的貓咪照片集</p>
         </div>
 
         {/* 隨機狗圖按鈕 */}
         <div 
           onClick={navigateToDogs} 
-          className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer text-center"
+          className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
         >
-          <div className="bg-white/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-            <i className="fas fa-dog text-white text-3xl"></i>
+          <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
+            <i className="fas fa-dog text-white text-4xl"></i>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">隨機狗圖</h2>
-          <p className="text-white/80">可愛的狗狗照片集</p>
+          <h2 className="text-3xl font-bold text-white mb-4">隨機狗圖</h2>
+          <p className="text-white/90 text-lg">可愛的狗狗照片集</p>
         </div>
       </div>
     </div>
@@ -224,15 +242,13 @@ export function FunMainPage() {
 
 export default function FunComponent() {
   return (
-    <div className="p-6 bg-gray-100 rounded-lg shadow-md max-w-4xl mx-auto mt-10">
-      <div className="flex flex-col space-y-8">
-        <Routes>
-          <Route index element={<FunMainPage />} />
-          <Route path="memes" element={<MemesPage />} />
-          <Route path="cats" element={<CatsPage />} />
-          <Route path="dogs" element={<DogsPage />} />
-        </Routes>
-      </div>
+    <div className="w-screen overflow-hidden">
+      <Routes>
+        <Route index element={<FunMainPage />} />
+        <Route path="memes" element={<MemesPage />} />
+        <Route path="cats" element={<CatsPage />} />
+        <Route path="dogs" element={<DogsPage />} />
+      </Routes>
     </div>
   );
 }
