@@ -4,8 +4,7 @@ import ImageWidget from './widgets/ImageWidget';
 const config = {
   botName: "阿保AI Agent",
   initialMessages: [
-    createChatBotMessage("您好！我是阿保保保，請問有什麼可以為您服務的嗎？"),
-    createChatBotMessage("您可以輸入 /help 查看所有可用命令。")
+    createChatBotMessage("您好！我是阿保保保，請問有什麼可以為您服務的嗎？\n可用命令: /help, /joke, /cat, /dog"),
   ],
   customStyles: {
     botMessageBox: {

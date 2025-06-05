@@ -225,6 +225,17 @@ const ChatbotPage = () => {
         <span>退出</span>
       </Link>
 
+      {/* 清除記錄按鈕 - 移動到退出按鈕旁邊 */}
+      {!isLoading && !error && (
+        <button 
+          onClick={clearChatHistory} 
+          className="clear-history-btn float-right"
+          title="清除訊天記錄"
+        >
+          <FiRefreshCw /> 清除記錄
+        </button>
+      )}
+
       <div className="chatbot-fullpage-container">
         {/* 標題區 - 顯示聊天機器人名稱和可用命令 */}
         <header className="chatbot-header">
@@ -246,17 +257,6 @@ const ChatbotPage = () => {
               <span className="command-tag" onClick={() => handleCommandClick('/dog')}>/dog</span>
             </div>
           </div>
-          
-          {/* 清除記錄按鈕 - 僅在聊天機器人正常加載時顯示 */}
-          {!isLoading && !error && (
-            <button 
-              onClick={clearChatHistory} 
-              className="clear-history-btn"
-              title="清除聊天記錄"
-            >
-              <FiRefreshCw /> 清除記錄
-            </button>
-          )}
         </header>
         
         {/* 聊天主區域 - 顯示聊天內容 */}
