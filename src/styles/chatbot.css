@@ -385,18 +385,15 @@ html, body {
 }
 
 .react-chatbot-kit-chat-message-container {
-  padding: 1.5rem 2rem !important;
-  flex-grow: 1 !important;
+  padding: 16px 24px !important;
   overflow-y: auto !important;
-  background: transparent;
-  height: calc(100vh - 180px) !important; /* 增加可見的訊息空間 */
-  width: 100vw !important;
+  height: calc(100vh - 175px) !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--primary-light) transparent !important;
   display: flex !important;
   flex-direction: column !important;
-  scroll-behavior: smooth !important;
-  background-color: var(--bg-light) !important;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-light) transparent;
+  gap: 10px !important;
+  width: 100% !important;
 }
 
 .react-chatbot-kit-chat-message-container::-webkit-scrollbar {
@@ -414,23 +411,23 @@ html, body {
 
 /* 訊息氣泡樣式 - 爲 AI 訊息 */
 .react-chatbot-kit-chat-bot-message {
-  background-color: var(--primary-color) !important;
+  background-color: #4F46E5 !important;
   color: white !important;
+  border: none !important;
   border-radius: 18px 18px 18px 4px !important;
   padding: 14px 18px !important;
   font-size: 1rem !important;
-  box-shadow: var(--shadow-sm) !important;
-  max-width: 80% !important;
+  font-weight: normal !important;
+  line-height: 1.4 !important;
+  position: relative !important;
+  animation: fadeInLeft 0.3s ease !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
   margin-bottom: 20px !important;
-  margin-right: auto !important;
-  margin-left: 0 !important;
-  position: relative;
-  animation: fadeInLeft 0.3s ease;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
-  white-space: pre-wrap !important;
-  line-height: 1.5 !important;
-  letter-spacing: 0.01em !important;
+  width: auto !important;
+  max-width: 70% !important;
+  text-align: left !important;
+  overflow: visible !important;
   float: left !important;
   clear: both !important;
 }
@@ -438,71 +435,72 @@ html, body {
 /* 機器人訊息容器 */
 .react-chatbot-kit-chat-bot-message-container {
   position: relative !important;
-  padding-left: 40px !important;
-  margin-bottom: 20px !important;
+  padding-left: 0 !important;
+  margin-bottom: 5px !important;
   width: 100% !important;
   text-align: left !important;
+  padding-bottom: 10px !important;
+  display: block !important;
 }
 
 /* 隱藏自動生成的機器人頭像 */
-.react-chatbot-kit-chat-bot-avatar {
+.react-chatbot-kit-chat-bot-avatar,
+.react-chatbot-kit-chat-bot-avatar-container,
+.react-chatbot-kit-chat-bot-avatar-letter {
   display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* 自定義機器人頭像 */
+/* 移除自定義機器人頭像 */
 .react-chatbot-kit-chat-bot-message-container::before {
+  display: none !important;
   content: '' !important;
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  width: 32px !important;
-  height: 32px !important;
-  background-color: var(--primary-dark) !important;
-  border-radius: 50% !important;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>') !important;
-  background-size: 20px !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  box-shadow: var(--shadow-sm) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.react-chatbot-kit-chat-bot-message-container:hover::before {
-  transform: scale(1.1) !important;
-  box-shadow: var(--shadow-md) !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* 添加訊息時間戳 */
 .react-chatbot-kit-chat-bot-message::after {
   content: attr(data-time) !important;
   position: absolute !important;
-  bottom: -18px !important;
-  left: 10px !important;
+  bottom: -20px !important;
+  left: 0 !important;
   font-size: 0.7rem !important;
   color: var(--text-secondary) !important;
   opacity: 0.8 !important;
+  padding: 2px 0 !important;
+  background-color: transparent !important;
+  z-index: 5 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
 }
 
 .react-chatbot-kit-chat-bot-message-arrow {
   display: none !important;
 }
 
+/* 訊息氣泡樣式 -/* 用戶訊息氣泡樣式 */
 .react-chatbot-kit-user-chat-message {
-  background-color: white !important;
-  color: var(--text-primary) !important;
+  background-color: transparent !important;
+  border: 1px solid #e0e0e0 !important;
   border-radius: 18px 18px 4px 18px !important;
   padding: 14px 18px !important;
   font-size: 1rem !important;
-  box-shadow: var(--shadow-sm) !important;
-  border: 1px solid #E5E7EB !important;
-  max-width: 80% !important;
+  font-weight: normal !important;
+  line-height: 1.4 !important;
+  position: relative !important;
+  animation: fadeInRight 0.3s ease !important;
+  text-align: left !important;
+  color: #333 !important;
   margin-bottom: 20px !important;
-  margin-left: auto !important;
-  margin-right: 0 !important;
-  line-height: 1.5 !important;
-  letter-spacing: 0.01em !important;
-  position: relative;
-  animation: fadeInRight 0.3s ease;
+  max-width: 70% !important;
+  width: auto !important;
+  overflow: visible !important;
   float: right !important;
   clear: both !important;
 }
@@ -510,49 +508,48 @@ html, body {
 /* 用戶訊息容器 */
 .react-chatbot-kit-user-chat-message-container {
   position: relative !important;
-  padding-right: 40px !important;
-  margin-bottom: 20px !important;
+  padding-right: 0 !important;
+  margin-bottom: 5px !important;
   width: 100% !important;
   text-align: right !important;
+  padding-bottom: 10px !important;
+  display: block !important;
 }
 
 /* 隱藏自動生成的用戶頭像 */
-.react-chatbot-kit-user-avatar {
+.react-chatbot-kit-user-avatar,
+.react-chatbot-kit-user-avatar-container,
+.react-chatbot-kit-user-avatar-icon {
   display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* 自定義用戶頭像 */
+/* 移除自定義用戶頭像 */
 .react-chatbot-kit-user-chat-message-container::after {
+  display: none !important;
   content: '' !important;
-  position: absolute !important;
-  right: 0 !important;
-  top: 0 !important;
-  width: 32px !important;
-  height: 32px !important;
-  background-color: #64748B !important;
-  border-radius: 50% !important;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>') !important;
-  background-size: 20px !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  box-shadow: var(--shadow-sm) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-.react-chatbot-kit-user-chat-message-container:hover::after {
-  transform: scale(1.1) !important;
-  box-shadow: var(--shadow-md) !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* 添加訊息時間戳 */
 .react-chatbot-kit-user-chat-message::after {
   content: attr(data-time) !important;
   position: absolute !important;
-  bottom: -18px !important;
-  right: 10px !important;
+  bottom: -20px !important;
+  right: 0 !important;
   font-size: 0.7rem !important;
   color: var(--text-secondary) !important;
   opacity: 0.8 !important;
+  padding: 2px 0 !important;
+  background-color: transparent !important;
+  z-index: 5 !important;
+  white-space: nowrap !important;
 }
 
 .react-chatbot-kit-user-chat-message-arrow {
