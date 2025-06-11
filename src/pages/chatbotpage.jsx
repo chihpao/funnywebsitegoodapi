@@ -225,11 +225,11 @@ const ChatbotPage = () => {
         <span>退出</span>
       </Link>
 
-      {/* 清除記錄按鈕 - 移動到退出按鈕旁邊 */}
+      {/* 清除記錄按鈕 - 放在退出按鈕右邊 */}
       {!isLoading && !error && (
         <button 
           onClick={clearChatHistory} 
-          className="clear-history-btn float-right"
+          className="clear-history-btn"
           title="清除訊天記錄"
         >
           <FiRefreshCw /> 清除記錄
@@ -237,27 +237,7 @@ const ChatbotPage = () => {
       )}
 
       <div className="chatbot-fullpage-container">
-        {/* 標題區 - 顯示聊天機器人名稱和可用命令 */}
-        <header className="chatbot-header">
-          <div className="chatbot-header-content">
-            <h1>
-              <FiMessageCircle className="header-icon" />
-              阿保智能助手
-            </h1>
-          </div>
-          
-          {/* 命令提示區 - 顯示可用的聊天命令 */}
-          <div className="chatbot-commands-info">
-            <div className="commands-inline">
-              <FiHelpCircle className="commands-icon" />
-              <strong>可用命令:</strong>
-              <span className="command-tag" onClick={() => handleCommandClick('/help')}>/help</span>
-              <span className="command-tag" onClick={() => handleCommandClick('/joke')}>/joke</span>
-              <span className="command-tag" onClick={() => handleCommandClick('/cat')}>/cat</span>
-              <span className="command-tag" onClick={() => handleCommandClick('/dog')}>/dog</span>
-            </div>
-          </div>
-        </header>
+        {/* 標題區已移除 */}
         
         {/* 聊天主區域 - 顯示聊天內容 */}
         <main className="chatbot-main-wrapper">

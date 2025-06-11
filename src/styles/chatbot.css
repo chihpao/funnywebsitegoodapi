@@ -255,10 +255,23 @@ html, body {
 }
 
 /* 浮動在右上角的清除按鈕 */
-.float-right {
+.clear-history-btn {
   position: fixed;
   top: 1rem;
-  right: 1rem;
+  left: 8rem; /* 放在退出按鈕右邊 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
   z-index: 1100;
 }
 
@@ -266,6 +279,7 @@ html, body {
   background-color: #F9FAFB;
   color: #EF4444;
   border-color: #FEE2E2;
+  transform: translateY(-2px);
 }
 
 /* 聊天主體區域包裝器 */
@@ -284,6 +298,7 @@ html, body {
   right: 0;
   bottom: 0;
   overflow-y: auto;
+  padding-top: 3.5rem; /* 添加頂部內邊距，避免訊息被固定按鈕遮擋 */
   overflow-x: hidden;
   background-color: var(--bg-light);
 }
@@ -364,6 +379,7 @@ html, body {
   height: 100vh !important;
   border-radius: 0 !important;
   border: none !important;
+  padding-top: 1rem !important; /* 添加頂部內邊距 */
   box-shadow: none !important;
   background-color: white !important;
   position: relative !important;
@@ -385,15 +401,15 @@ html, body {
 }
 
 .react-chatbot-kit-chat-message-container {
-  padding: 16px 24px !important;
-  overflow-y: auto !important;
-  height: calc(100vh - 175px) !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: var(--primary-light) transparent !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
+  padding: 1.5rem !important;
+  padding-top: 3.5rem !important; /* 增加頂部內邊距，避免被按鈕遮擋 */
+  background: transparent !important;
   width: 100% !important;
+  height: calc(100vh - 80px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  flex-grow: 1 !important;
+  position: relative !important;
 }
 
 .react-chatbot-kit-chat-message-container::-webkit-scrollbar {
@@ -807,7 +823,15 @@ html, body {
     font-size: 0.8rem;
   }
   
-  .exit-button svg {
+  .clear-history-btn {
+    top: 0.75rem;
+    left: 6.5rem; /* 調整平板版位置 */
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .exit-button svg, 
+  .clear-history-btn svg {
     font-size: 1rem;
   }
   
@@ -855,7 +879,14 @@ html, body {
     padding: 0.3rem 0.6rem;
   }
   
-  .exit-button span {
+  .clear-history-btn {
+    top: 0.5rem;
+    left: 5.5rem; /* 調整手機版位置 */
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .exit-button span,
+  .clear-history-btn span {
     font-size: 0.75rem;
   }
   
