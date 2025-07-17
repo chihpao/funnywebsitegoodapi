@@ -62,11 +62,26 @@ const NavBarLink = ({ className, imgClassName, spanClassName, to }) => (
 );
 
 export default function NavBar() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [dropdownState, setDropdownState] = useState({
+    isOpen: false,
+    activeDropdown: null
+  });
   const [mobileMenuStates, setMobileMenuStates] = useState({});
   const navigate = useNavigate();
   
+  // 統一的下拉選單控制
+  const toggleDropdown = (name) => {
+    setDropdownState(prev => ({
+      isOpen: prev.activeDropdown === name ? !prev.isOpen : true,
+      activeDropdown: name
+    }));
+  };
+
+  const closeDropdown = () => {
+    setDropdownState({ isOpen: false, activeDropdown: null });
+  };
+
+  // 移動端子選單切換
   const toggleMobileSubmenu = (name, e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -76,42 +91,26 @@ export default function NavBar() {
     }));
   };
 
-  const toggleDropdown = (name) => {
-    if (activeDropdown === name) {
-      setIsDropdownOpen(!isDropdownOpen);
-    } else {
-      setIsDropdownOpen(true);
-      setActiveDropdown(name);
-    }
-  };
-
-  const closeDropdown = () => {
-    setIsDropdownOpen(false);
-    setActiveDropdown(null);
-  };
-
   /**
-   * 處理導航選項的點擊
+   * 統一的導航處理函數
    * @param {string} path - 目標路徑或 URL
-   * @param {boolean} isSubMenuItem - 是否為子選單項目
-   * @param {Function} close - 關閉移動端選單的函數
-   * @param {boolean} isExternalLink - 是否為外部連結
+   * @param {Object} options - 導航選項
    */
-  const handleNavigation = (path, isSubMenuItem = false, close = null, isExternalLink = false) => {
-    if (isExternalLink) {
-      // 外部連結在新標籤頁開啟
-      window.open(path, '_blank');
+  const handleNavigation = (path, options = {}) => {
+    const { isExternal = false, closeMobileMenu = null } = options;
+    
+    if (isExternal) {
+      window.open(path, '_blank', 'noopener,noreferrer');
     } else {
-      // 內部連結使用 React Router 導航
       navigate(path);
-      if (isSubMenuItem && close) {
-        close();
+      if (closeMobileMenu) {
+        closeMobileMenu();
       }
     }
-    // 關閉任何打開的下拉選單
     closeDropdown();
   };
 
+  // 點擊外部關閉下拉選單
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown')) {
@@ -210,29 +209,17 @@ export default function NavBar() {
                       {item.name}
                       {item.subMenu && <span className="ml-2"><i className="fas fa-chevron-down"></i></span>}
                     </button>
-                    {item.subMenu && isDropdownOpen && activeDropdown === item.name && (
-                      <div
-                        className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50"
-                      >
+                    {item.subMenu && dropdownState.isOpen && dropdownState.activeDropdown === item.name && (
+                      <div className="absolute right-0 z-10 mt-2 w-48 origin-top-left rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         {item.subMenu.map((subItem) => (
-                          <Link
+                          <button
                             key={subItem.name}
-                            to={subItem.href}
-                            target={subItem.target}
-                            rel="noopener noreferrer"
-                            className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleNavigation(
-                                subItem.href, 
-                                true, 
-                                close, 
-                                true
-                              );
-                            }}
+                            type="button"
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleNavigation(subItem.href, { isExternal: true })}
                           >
                             {subItem.name}
-                          </Link>
+                          </button>
                         ))}
                       </div>
                     )}
@@ -280,12 +267,11 @@ export default function NavBar() {
                               className="block px-3 py-2 text-black hover:bg-gray-200 hover:text-black"
                               onClick={(e) => {
                                 e.preventDefault();
-                                // 如果是關於作者選單，將其視為外部連結
-                                if (item.name === '關於作者') {
-                                  window.open(subItem.href, '_blank');
-                                } else {
-                                  handleNavigation(subItem.href, true, close);
-                                }
+                                const isExternal = item.name === '關於作者';
+                                handleNavigation(subItem.href, { 
+                                  isExternal, 
+                                  closeMobileMenu: close 
+                                });
                               }}
                             >
                               {subItem.name}
@@ -301,7 +287,7 @@ export default function NavBar() {
                         item.current ? 'bg-gray-900 text-white' : 'text-black hover:bg-gray-200 hover:text-black',
                         'block rounded-md px-3 py-2 text-lg font-medium'
                       )}
-                      onClick={() => handleNavigation(item.href, true, close)}
+                      onClick={() => handleNavigation(item.href, { closeMobileMenu: close })}
                     >
                       {item.name}
                     </Link>

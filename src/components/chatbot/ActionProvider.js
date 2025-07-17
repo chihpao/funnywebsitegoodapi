@@ -99,9 +99,7 @@ class ActionProvider {
       );
       this.updateChatbotState(jokeMessage);
     } catch (error) {
-      const errorMsg = "無法獲取笑話，請稍後再試。";
-      const errorMessage = this.createChatBotMessage(errorMsg);
-      this.updateChatbotState(errorMessage);
+      this.handleApiError(error, "無法獲取笑話，請稍後再試。");
     }
   }
   
@@ -125,9 +123,7 @@ class ActionProvider {
         throw new Error("找不到貓咪圖片");
       }
     } catch (error) {
-      const errorMsg = "無法獲取貓咪圖片，請稍後再試。";
-      const errorMessage = this.createChatBotMessage(errorMsg);
-      this.updateChatbotState(errorMessage);
+      this.handleApiError(error, "無法獲取貓咪圖片，請稍後再試。");
     }
   }
   
@@ -151,9 +147,7 @@ class ActionProvider {
         throw new Error("找不到狗狗圖片");
       }
     } catch (error) {
-      const errorMsg = "無法獲取狗狗圖片，請稍後再試。";
-      const errorMessage = this.createChatBotMessage(errorMsg);
-      this.updateChatbotState(errorMessage);
+      this.handleApiError(error, "無法獲取狗狗圖片，請稍後再試。");
     }
   }
   
@@ -186,6 +180,17 @@ class ActionProvider {
     const errorMessage = this.createChatBotMessage(errorMsg);
     console.log("建立錯誤訊息:", errorMessage);
     
+    this.updateChatbotState(errorMessage);
+  }
+
+  /**
+   * API 錯誤處理輔助函數
+   * @param {Error} error - 錯誤對象
+   * @param {string} defaultMessage - 預設錯誤訊息
+   */
+  handleApiError(error, defaultMessage) {
+    console.error('API 錯誤:', error);
+    const errorMessage = this.createChatBotMessage(defaultMessage);
     this.updateChatbotState(errorMessage);
   }
 

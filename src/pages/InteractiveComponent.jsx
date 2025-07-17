@@ -1,62 +1,80 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { moveAnimation01 } from '../components/IntComText.jsx';
 import InteractiveBallsWithMarquee from '../components/InteractiveBallsWithMarquee.jsx';
 
-const InteractiveComponent = () => {
-  // 名字動畫State
-  const names = ['小保', '智強', 'Bill'];
-  const [currentNameIndex, setCurrentNameIndex] = useState(0);
+// 動畫配置常數
+const ANIMATION_CONFIG = {
+  nameInterval: 2850,
+  yearInterval: 3000,
+  transitionDuration: 500
+};
+
+// 自定義 Hook：循環動畫
+const useLoopAnimation = (interval, transitionDuration = 500) => {
   const [animatingOut, setAnimatingOut] = useState(false);
   const [animatingIn, setAnimatingIn] = useState(false);
 
-  // 年份動畫的State（獨立狀態）
-  const [animatingOutYear, setAnimatingOutYear] = useState(false);
-  const [animatingInYear, setAnimatingInYear] = useState(false);
-
-  // 名字切換，每 2850 毫秒
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAnimatingOut(true); // 觸發舊文字往上淡出
+  const triggerAnimation = useCallback(() => {
+    setAnimatingOut(true);
+    setTimeout(() => {
+      setAnimatingOut(false);
+      setAnimatingIn(true);
       setTimeout(() => {
-        setCurrentNameIndex((prevIndex) => (prevIndex + 1) % names.length);
-        setAnimatingOut(false);
-        setAnimatingIn(true); // 新文字從下進入
-        setTimeout(() => {
-          setAnimatingIn(false);
-        }, 500); // 與 CSS 動畫時間一致
-      }, 500);
-    }, 2850);
-    return () => clearInterval(interval);
-  }, []);
+        setAnimatingIn(false);
+      }, transitionDuration);
+    }, transitionDuration);
+  }, [transitionDuration]);
 
-  // 年份 (2022) 切換，每 3000 毫秒
   useEffect(() => {
-    const intervalYear = setInterval(() => {
-      setAnimatingOutYear(true);
-      setTimeout(() => {
-        setAnimatingOutYear(false);
-        setAnimatingInYear(true);
-        setTimeout(() => {
-          setAnimatingInYear(false);
-        }, 500);
-      }, 500);
-    }, 3000);
-    return () => clearInterval(intervalYear);
-  }, []);
+    const intervalId = setInterval(triggerAnimation, interval);
+    return () => clearInterval(intervalId);
+  }, [interval, triggerAnimation]);
 
-  // 載入 lottie-player script
+  return { animatingOut, animatingIn };
+};
+
+// 自定義 Hook：載入外部腳本
+const useExternalScript = (src, elementName) => {
   useEffect(() => {
-    if (!customElements.get('lottie-player')) {
+    if (!customElements.get(elementName)) {
       const script = document.createElement('script');
-      script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
+      script.src = src;
       script.async = true;
       document.body.appendChild(script);
 
       return () => {
-        document.body.removeChild(script);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
       };
     }
-  }, []);
+  }, [src, elementName]);
+};
+
+const InteractiveComponent = () => {
+  // 名字動畫配置
+  const names = ['小保', '智強', 'Bill'];
+  const [currentNameIndex, setCurrentNameIndex] = useState(0);
+
+  // 使用自定義 Hook 處理動畫
+  const nameAnimation = useLoopAnimation(ANIMATION_CONFIG.nameInterval, ANIMATION_CONFIG.transitionDuration);
+  const yearAnimation = useLoopAnimation(ANIMATION_CONFIG.yearInterval, ANIMATION_CONFIG.transitionDuration);
+
+  // 載入外部腳本
+  useExternalScript(
+    'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js',
+    'lottie-player'
+  );
+
+  // 名字切換邏輯
+  useEffect(() => {
+    if (nameAnimation.animatingOut) {
+      const timer = setTimeout(() => {
+        setCurrentNameIndex((prevIndex) => (prevIndex + 1) % names.length);
+      }, ANIMATION_CONFIG.transitionDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [nameAnimation.animatingOut, names.length]);
 
   return (
     <>
@@ -75,7 +93,10 @@ const InteractiveComponent = () => {
               嗨，我是
               <div className="highlight-blackbg mt-4">
                 <div
-                  className={`highlight-content ${animatingOut ? 'animate-out' : animatingIn ? 'animate-in' : ''} text-white`}
+                  className={`highlight-content ${
+                    nameAnimation.animatingOut ? 'animate-out' : 
+                    nameAnimation.animatingIn ? 'animate-in' : ''
+                  } text-white`}
                 >
                   {names[currentNameIndex]}
                 </div>
@@ -88,7 +109,10 @@ const InteractiveComponent = () => {
             <div className="text-lg mt-4">
               <div className="highlight-whitebg mt-4">
                 <div
-                  className={`highlight-content ${animatingOutYear ? 'animate-out' : animatingInYear ? 'animate-in' : ''}`}
+                  className={`highlight-content ${
+                    yearAnimation.animatingOut ? 'animate-out' : 
+                    yearAnimation.animatingIn ? 'animate-in' : ''
+                  }`}
                 >
                   2022
                 </div>

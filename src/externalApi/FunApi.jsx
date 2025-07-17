@@ -1,78 +1,92 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
+
+// API 配置常數
+const API_CONFIG = {
+  timeout: 10000, // 10秒超時
+  headers: {
+    'Content-Type': 'application/json',
+  }
+};
+
+// API 端點
+const API_ENDPOINTS = {
+  joke: 'https://official-joke-api.appspot.com/random_joke',
+  memes: 'https://memes.tw/wtf/api',
+  cats: 'https://api.thecatapi.com/v1/images/search?limit=10',
+  dogs: 'https://dog.ceo/api/breeds/image/random/10'
+};
+
+// 統一的 fetch 函數，包含超時和錯誤處理
+const fetchWithTimeout = async (url, options = {}) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.timeout);
+  
+  try {
+    const response = await fetch(url, {
+      ...API_CONFIG,
+      ...options,
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log(`API response from ${url}:`, data);
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error('請求超時，請稍後再試');
+    }
+    console.error(`Error fetching from ${url}:`, error);
+    throw error;
+  }
+};
 
 //
 // API 請求函式
 //
-export const fetchJoke = async () => {
-  try {
-    const response = await axios.get('https://official-joke-api.appspot.com/random_joke');
-    console.log('API response:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching joke:', error);
-    throw error;
-  }
-};
+export const fetchJoke = () => fetchWithTimeout(API_ENDPOINTS.joke);
 
-export const fetchMemes = async () => {
-  try {
-    const response = await axios.get('https://memes.tw/wtf/api');
-    console.log('API response:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching memes:', error);
-    throw error;
-  }
-};
+export const fetchMemes = () => fetchWithTimeout(API_ENDPOINTS.memes);
 
-export const fetchCatImages = async () => {
-  try {
-    const response = await axios.get('https://api.thecatapi.com/v1/images/search?limit=10');
-    console.log('API response:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching cat images:', error);
-    throw error;
-  }
-};
+export const fetchCatImages = () => fetchWithTimeout(API_ENDPOINTS.cats);
 
-export const fetchDogImages = async () => {
-  try {
-    const response = await axios.get('https://dog.ceo/api/breeds/image/random/10');
-    console.log('API response:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching dog images:', error);
-    throw error;
-  }
-};
+export const fetchDogImages = () => fetchWithTimeout(API_ENDPOINTS.dogs);
 
 //
 // 通用資料載入 Hook
 //
 const useDataFetching = (fetchFn, initialState = null) => {
   const [data, setData] = useState(initialState);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 初始不載入
   const [error, setError] = useState(null);
 
   const loadData = async () => {
+    if (loading) return; // 防止重複請求
+    
     setLoading(true);
     setError(null);
     try {
       const result = await fetchFn();
       setData(result);
     } catch (err) {
-      setError(err);
+      const errorMessage = err.message || '載入資料時發生錯誤';
+      setError(errorMessage);
       console.error('Error loading data:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  // 移除自動載入，改為手動觸發
+  // useEffect(() => {
+  //   loadData();
+  // }, []);
 
   return { data, loading, error, reload: loadData };
 };
@@ -86,24 +100,41 @@ export const useJoke = () => {
 };
 
 export const useMemes = () => {
-  const { data: memes, loading: memeLoading, error } = useDataFetching(fetchMemes, []);
+  const { data: memes, loading: memeLoading, error, reload: loadMemes } = useDataFetching(fetchMemes, []);
   const [displayedMemes, setDisplayedMemes] = useState([]);
   const [currentMemeIndex, setCurrentMemeIndex] = useState(-1);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const getAnotherMeme = () => {
-    if (!memes?.length || displayedMemes.length >= memes.length) {
-      alert('已經抓完目前的梗圖');
+  // 初次載入 memes
+  useEffect(() => {
+    if (!memes?.length && !memeLoading && !error) {
+      loadMemes();
+    }
+  }, []);
+
+  const getAnotherMeme = async () => {
+    // 如果還沒載入 memes，先載入
+    if (!memes?.length && !memeLoading) {
+      await loadMemes();
       return;
     }
+    
+    if (!memes?.length || displayedMemes.length >= memes.length) {
+      console.warn('已經抓完目前的梗圖');
+      return;
+    }
+    
     setIsGenerating(true);
-    const availableIndices = Array.from({ length: memes.length }, (_, i) => i)
-      .filter(i => !displayedMemes.includes(i));
-    const newMemeIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    try {
+      const availableIndices = Array.from({ length: memes.length }, (_, i) => i)
+        .filter(i => !displayedMemes.includes(i));
+      const newMemeIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
 
-    setDisplayedMemes([...displayedMemes, newMemeIndex]);
-    setCurrentMemeIndex(displayedMemes.length);
-    setIsGenerating(false);
+      setDisplayedMemes(prev => [...prev, newMemeIndex]);
+      setCurrentMemeIndex(displayedMemes.length);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const memeNavigation = {

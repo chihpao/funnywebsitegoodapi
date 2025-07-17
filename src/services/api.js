@@ -16,6 +16,41 @@ export class ApiService {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://backend-chatbot-psi.vercel.app';
       return `${baseUrl}${endpoint}`;
     }
+
+    /**
+     * 統一的 fetch 請求處理函數
+     * 包含超時處理和錯誤處理
+     * @param {string} url - 請求 URL
+     * @param {Object} options - fetch 選項
+     * @param {number} timeout - 超時時間（毫秒）
+     * @returns {Promise<Object>} - API 回應資料
+     */
+    static async fetchWithTimeout(url, options = {}, timeout = 10000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      try {
+        const response = await fetch(url, {
+          ...options,
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+      } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+          throw new Error('請求超時，請稍後再試');
+        }
+        throw this.handleApiError(error);
+      }
+    }
   
     /**
      * 發送訊息到聊天機器人 API
@@ -25,35 +60,24 @@ export class ApiService {
      * @throws {Error} - 如果 API 調用失敗會拋出經過處理的錯誤
      */
     static async sendChatMessage(message) {
+      console.log("準備發送請求到 Gemini 聊天機器人 API");
+      
       try {
-        console.log("準備發送請求到 Gemini 聊天機器人 API");
+        const data = await this.fetchWithTimeout(
+          this.getApiUrl('/api/chatbot'),
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          },
+          15000 // 聊天機器人需要較長時間處理
+        );
         
-        // 發送 POST 請求到聊天機器人 API
-        const response = await fetch(this.getApiUrl('/api/chatbot'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message }),
-        });
-  
-        console.log("API 回應狀態碼:", response.status);
-  
-        // 檢查回應是否成功
-        if (!response.ok) {
-          // 嘗試解析錯誤回應中的詳細資訊
-          const errorData = await response.json().catch(() => ({}));
-          console.error("API 返回錯誤:", errorData);
-          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-        }
-  
-        // 解析成功的回應
-        console.log("API 回應成功，正在解析資料");
-        const data = await response.json();
-        console.log("收到的回應資料:", data);
+        console.log("收到 Gemini API 回應:", data);
         return data;
       } catch (error) {
-        // 記錄錯誤並轉換為友善的錯誤訊息
         console.error("Gemini API 調用失敗:", error);
-        throw this.handleApiError(error);
+        throw error; // fetchWithTimeout 已經處理過錯誤
       }
     }
   
@@ -62,13 +86,7 @@ export class ApiService {
      * @returns {Promise<Object>} - 笑話資料
      */
     static async getRandomJoke() {
-      const response = await fetch(this.getApiUrl('/api/joke'));
-      
-      if (!response.ok) {
-        throw this.handleApiError(new Error(`HTTP error! status: ${response.status}`));
-      }
-      
-      return await response.json();
+      return await this.fetchWithTimeout(this.getApiUrl('/api/joke'));
     }
   
     /**
@@ -76,13 +94,7 @@ export class ApiService {
      * @returns {Promise<Object>} - 迷因資料
      */
     static async getRandomMeme() {
-      const response = await fetch(this.getApiUrl('/api/memes'));
-      
-      if (!response.ok) {
-        throw this.handleApiError(new Error(`HTTP error! status: ${response.status}`));
-      }
-      
-      return await response.json();
+      return await this.fetchWithTimeout(this.getApiUrl('/api/memes'));
     }
   
     /**
@@ -90,13 +102,7 @@ export class ApiService {
      * @returns {Promise<Array>} - 貓咪圖片資料
      */
     static async getRandomCats() {
-      const response = await fetch(this.getApiUrl('/api/cats'));
-      
-      if (!response.ok) {
-        throw this.handleApiError(new Error(`HTTP error! status: ${response.status}`));
-      }
-      
-      return await response.json();
+      return await this.fetchWithTimeout(this.getApiUrl('/api/cats'));
     }
   
     /**
@@ -104,13 +110,7 @@ export class ApiService {
      * @returns {Promise<Object>} - 狗狗圖片資料
      */
     static async getRandomDogs() {
-      const response = await fetch(this.getApiUrl('/api/dogs'));
-      
-      if (!response.ok) {
-        throw this.handleApiError(new Error(`HTTP error! status: ${response.status}`));
-      }
-      
-      return await response.json();
+      return await this.fetchWithTimeout(this.getApiUrl('/api/dogs'));
     }
   
     /**

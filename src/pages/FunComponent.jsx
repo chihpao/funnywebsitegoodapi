@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useFunLogic } from '../externalApi/FunApi';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// 共用樣式常數
+const STYLES = {
+  pageContainer: 'w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white',
+  cardContainer: 'w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden',
+  cardHeader: 'flex justify-between items-center p-6 border-b',
+  cardTitle: 'text-3xl font-bold text-gray-800',
+  cardContent: 'p-6 bg-gray-50',
+  imageGrid: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',
+  imageCard: 'aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300'
+};
+
+// 自定義 Hook：頁面滾動到頂部
+const useScrollToTop = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+};
 
 const LoadingSpinner = () => (
   <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900 mx-auto"></div>
@@ -27,10 +45,10 @@ const MemeSection = ({
   currentMemeIndex,
   displayedMemes,
 }) => (
-  <div className="w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white">
-    <div className="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-      <div className="flex justify-between items-center p-6 border-b">
-        <h2 className="text-3xl font-bold text-gray-800">隨機迴因</h2>
+  <div className={STYLES.pageContainer}>
+    <div className={STYLES.cardContainer}>
+      <div className={STYLES.cardHeader}>
+        <h2 className={STYLES.cardTitle}>隨機迴因</h2>
         <div className="flex space-x-4">
           <Button
             onClick={getPreviousMeme}
@@ -77,23 +95,23 @@ const MemeSection = ({
 );
 
 const CatSection = ({ catImages, catLoading, loadCatImages }) => (
-  <div className="w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white">
-    <div className="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-      <div className="flex justify-between items-center p-6 border-b">
-        <h2 className="text-3xl font-bold text-gray-800">隨機貓圖</h2>
+  <div className={STYLES.pageContainer}>
+    <div className={STYLES.cardContainer}>
+      <div className={STYLES.cardHeader}>
+        <h2 className={STYLES.cardTitle}>隨機貓圖</h2>
         <Button onClick={loadCatImages} className="bg-pink-500 hover:bg-pink-700">
           更多貓貓
         </Button>
       </div>
-      <div className="p-6 bg-gray-50">
+      <div className={STYLES.cardContent}>
         {catLoading ? (
           <div className="flex justify-center items-center h-[60vh]">
             <LoadingSpinner />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className={STYLES.imageGrid}>
             {catImages.map((cat, index) => (
-              <div key={index} className="aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+              <div key={index} className={STYLES.imageCard}>
                 <img src={cat.url} alt="貓貓" className="w-full h-full object-cover" />
               </div>
             ))}
@@ -105,23 +123,23 @@ const CatSection = ({ catImages, catLoading, loadCatImages }) => (
 );
 
 const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
-  <div className="w-full min-h-[calc(100vh-60px)] flex flex-col items-center justify-center py-8 px-4 bg-white">
-    <div className="w-full max-w-7xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-      <div className="flex justify-between items-center p-6 border-b">
-        <h2 className="text-3xl font-bold text-gray-800">隨機狗圖</h2>
+  <div className={STYLES.pageContainer}>
+    <div className={STYLES.cardContainer}>
+      <div className={STYLES.cardHeader}>
+        <h2 className={STYLES.cardTitle}>隨機狗圖</h2>
         <Button onClick={loadDogImages} className="bg-green-500 hover:bg-green-700">
           更多狗狗
         </Button>
       </div>
-      <div className="p-6 bg-gray-50">
+      <div className={STYLES.cardContent}>
         {dogLoading ? (
           <div className="flex justify-center items-center h-[60vh]">
             <LoadingSpinner />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className={STYLES.imageGrid}>
             {dogImages.map((dog, index) => (
-              <div key={index} className="aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+              <div key={index} className={STYLES.imageCard}>
                 <img src={dog} alt="狗狗" className="w-full h-full object-cover" />
               </div>
             ))}
@@ -145,9 +163,7 @@ export function MemesPage() {
   } = useFunLogic();
 
   // 頁面加載時自動滾動到頂部
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   return (
     <MemeSection
@@ -167,9 +183,7 @@ export function CatsPage() {
   const { catImages, catLoading, loadCatImages } = useFunLogic();
 
   // 頁面加載時自動滾動到頂部
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   return <CatSection catImages={catImages} catLoading={catLoading} loadCatImages={loadCatImages} />;
 }
@@ -178,9 +192,7 @@ export function DogsPage() {
   const { dogImages, dogLoading, loadDogImages } = useFunLogic();
 
   // 頁面加載時自動滾動到頂部
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollToTop();
 
   return <DogSection dogImages={dogImages} dogLoading={dogLoading} loadDogImages={loadDogImages} />;
 }
@@ -189,10 +201,8 @@ export function DogsPage() {
 export function FunMainPage() {
   const navigate = useNavigate();
 
-  // 導航到各個子頁面的函數
-  const navigateToMemes = () => navigate('/fun/memes');
-  const navigateToCats = () => navigate('/fun/cats');
-  const navigateToDogs = () => navigate('/fun/dogs');
+  // 統一的導航處理函數
+  const handleNavigation = (path) => () => navigate(path);
 
   return (
     <div className="min-h-[calc(100vh-100px)] w-screen flex flex-col items-center justify-center bg-white">
@@ -202,7 +212,7 @@ export function FunMainPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl px-6 mx-auto">
         {/* 隨機迴因按鈕 */}
         <div 
-          onClick={navigateToMemes} 
+          onClick={handleNavigation('/fun/memes')} 
           className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
         >
           <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
@@ -214,7 +224,7 @@ export function FunMainPage() {
 
         {/* 隨機貓圖按鈕 */}
         <div 
-          onClick={navigateToCats} 
+          onClick={handleNavigation('/fun/cats')} 
           className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
         >
           <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
@@ -226,7 +236,7 @@ export function FunMainPage() {
 
         {/* 隨機狗圖按鈕 */}
         <div 
-          onClick={navigateToDogs} 
+          onClick={handleNavigation('/fun/dogs')} 
           className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
         >
           <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">

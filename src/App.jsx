@@ -18,10 +18,10 @@ import LoadingPage from './pages/LoadingPage';
 // import API from './pages/apiPage';
 
 /**
- * 主應用內容組件
- * 處理加載狀態和路由配置
+ * 根應用組件
+ * 作為應用程序的入口點，處理加載狀態和路由配置
  */
-function AppContent() {
+function App() {
   // 狀態管理
   const [isLoading, setIsLoading] = useState(true);
   const isNonTouchDevice = window.matchMedia('(pointer: fine)').matches;
@@ -64,14 +64,6 @@ function AppContent() {
       </div>
     </Router>
   );
-}
-
-/**
- * 根應用組件
- * 作為應用程序的入口點
- */
-function App() {
-  return <AppContent />;
 }
 
 export default App;

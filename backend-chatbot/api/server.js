@@ -14,6 +14,13 @@ const axios = require('axios'); // HTTP 請求工具
 const app = express();
 const port = process.env.PORT || 10000;
 
+// 環境變數驗證
+if (!process.env.GEMINI_API_KEY) {
+  console.error('錯誤: 缺少 GEMINI_API_KEY 環境變數');
+  console.error('請在 .env 檔案中設置 GEMINI_API_KEY');
+  process.exit(1);
+}
+
 /**
  * 中間件配置
  */
@@ -67,72 +74,88 @@ async function generateGeminiResponse(userMessage) {
 
 // ===== API 端點 =====
 
+// 統一的 API 錯誤處理函數
+const handleApiError = (res, error, defaultMessage, statusCode = 500) => {
+  console.error('API 錯誤:', error);
+  res.status(statusCode).json({ 
+    error: defaultMessage, 
+    details: error.message,
+    timestamp: new Date().toISOString()
+  });
+};
+
 // 1. 聊天機器人 API
 app.post('/api/chatbot', async (req, res) => {
   const userMessage = req.body.message;
   console.log("收到前端聊天訊息:", userMessage);
   
-  if (!userMessage) {
-    return res.status(400).json({ reply: "請提供訊息內容" });
+  if (!userMessage || typeof userMessage !== 'string' || userMessage.trim().length === 0) {
+    return res.status(400).json({ 
+      reply: "請提供有效的訊息內容",
+      timestamp: new Date().toISOString()
+    });
   }
 
   try {
-    const aiResponse = await generateGeminiResponse(userMessage);
-    res.json({ reply: aiResponse });
-  } catch (error) {
-    console.error("AI 回應生成錯誤:", error);
-    res.status(500).json({ 
-      reply: "與 AI 服務通訊時發生錯誤，請稍後再試。",
-      error: error.message
+    const aiResponse = await generateGeminiResponse(userMessage.trim());
+    res.json({ 
+      reply: aiResponse,
+      timestamp: new Date().toISOString()
     });
+  } catch (error) {
+    handleApiError(res, error, "與 AI 服務通訊時發生錯誤，請稍後再試。");
   }
 });
 
 // 2. 笑話 API
 app.get('/api/joke', async (req, res) => {
   try {
-    const response = await axios.get('https://official-joke-api.appspot.com/random_joke');
-    console.log('笑話 API 回應:', response.data);
+    const response = await axios.get('https://official-joke-api.appspot.com/random_joke', {
+      timeout: 5000 // 5秒超時
+    });
+    console.log('笑話 API 回應成功');
     res.json(response.data);
   } catch (error) {
-    console.error('取得笑話時發生錯誤:', error);
-    res.status(500).json({ error: '無法取得笑話', details: error.message });
+    handleApiError(res, error, '無法取得笑話');
   }
 });
 
 // 3. 迷因 API
 app.get('/api/memes', async (req, res) => {
   try {
-    const response = await axios.get('https://memes.tw/wtf/api');
-    console.log('迷因 API 回應收到');
+    const response = await axios.get('https://memes.tw/wtf/api', {
+      timeout: 5000 // 5秒超時
+    });
+    console.log('迷因 API 回應成功');
     res.json(response.data);
   } catch (error) {
-    console.error('取得迷因時發生錯誤:', error);
-    res.status(500).json({ error: '無法取得迷因', details: error.message });
+    handleApiError(res, error, '無法取得迷因');
   }
 });
 
 // 4. 貓咪 API
 app.get('/api/cats', async (req, res) => {
   try {
-    const response = await axios.get('https://api.thecatapi.com/v1/images/search?limit=10');
-    console.log('貓咪 API 回應收到');
+    const response = await axios.get('https://api.thecatapi.com/v1/images/search?limit=10', {
+      timeout: 5000 // 5秒超時
+    });
+    console.log('貓咪 API 回應成功');
     res.json(response.data);
   } catch (error) {
-    console.error('取得貓咪圖片時發生錯誤:', error);
-    res.status(500).json({ error: '無法取得貓咪圖片', details: error.message });
+    handleApiError(res, error, '無法取得貓咪圖片');
   }
 });
 
 // 5. 狗狗 API
 app.get('/api/dogs', async (req, res) => {
   try {
-    const response = await axios.get('https://dog.ceo/api/breeds/image/random/10');
-    console.log('狗狗 API 回應收到');
+    const response = await axios.get('https://dog.ceo/api/breeds/image/random/10', {
+      timeout: 5000 // 5秒超時
+    });
+    console.log('狗狗 API 回應成功');
     res.json(response.data);
   } catch (error) {
-    console.error('取得狗狗圖片時發生錯誤:', error);
-    res.status(500).json({ error: '無法取得狗狗圖片', details: error.message });
+    handleApiError(res, error, '無法取得狗狗圖片');
   }
 });
 

@@ -4,19 +4,23 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"cd backend-chatbot && node api/server.js\" \"vite\"",
-    "dev:all": "concurrently \"cd server && pnpm run dev\" \"cd backend-chatbot && node api/server.js\" \"vite\"",
+    "dev": "concurrently \"pnpm run dev:chatbot\" \"pnpm run dev:frontend\"",
+    "dev:all": "concurrently \"cd server && pnpm run dev\" \"pnpm run dev:chatbot\" \"pnpm run dev:frontend\"",
     "dev:api": "cd server && pnpm run dev",
     "dev:chatbot": "cd backend-chatbot && node api/server.js",
     "dev:frontend": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "build:check": "vite build && echo 'Build completed successfully'",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "preview": "vite preview",
     "start:dev": "pnpm run dev",
-    "start": "vite preview"
+    "start": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite",
+    "type-check": "echo 'Type checking not configured for JS project'"
   },
   "dependencies": {
-    "@google/generative-ai": "latest",
+    "@google/generative-ai": "^0.21.0",
     "@botpress/webchat": "^2.3.8",
     "@botpress/webchat-generator": "^0.2.15",
     "@emotion/react": "^11.14.0",

@@ -25,6 +25,27 @@ const ChatbotPage = () => {
   const chatInputRef = useRef(null); // 添加聊天輸入框的引用
   
   /**
+   * 滾動聊天區域到底部
+   * 用於新訊息出現和窗口大小變化時
+   */
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      const chatContainer = document.querySelector('.react-chatbot-kit-chat-message-container');
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }
+  };
+
+  /**
+   * 處理窗口大小變化時滾動到底部
+   * 確保聊天內容在調整窗口大小後仍然可見
+   */
+  const handleResize = () => {
+    scrollToBottom();
+  };
+
+  /**
    * 檢查聊天機器人所需要的 API 服務是否可用
    */
   useEffect(() => {
@@ -71,44 +92,30 @@ const ChatbotPage = () => {
     };
     
     checkApiAvailability();
-    
-    /**
-   * 處理窗口大小變化時滾動到底部
-   * 確保聊天內容在調整窗口大小後仍然可見
-   */
-  const handleResize = () => {
-    scrollToBottom();
-  };
-  
+  }, []);
+
   /**
-   * 滾動聊天區域到底部
-   * 用於新訊息出現和窗口大小變化時
+   * 處理窗口大小變化和聊天內容變化的副作用
    */
-  const scrollToBottom = () => {
-    if (chatContainerRef.current) {
+  useEffect(() => {
+    // 添加窗口大小變化監聽器
+    window.addEventListener('resize', handleResize);
+    
+    // 添加訊息變化監聽器，當有新訊息時自動滾動到底部
+    const observer = new MutationObserver(scrollToBottom);
+    const timeoutId = setTimeout(() => {
       const chatContainer = document.querySelector('.react-chatbot-kit-chat-message-container');
       if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        observer.observe(chatContainer, { childList: true, subtree: true });
       }
-    }
-  };
-  
-  // 添加和清除事件監聽器
-  window.addEventListener('resize', handleResize);
-  
-  // 添加訊息變化監聽器，當有新訊息時自動滾動到底部
-  const observer = new MutationObserver(scrollToBottom);
-  setTimeout(() => {
-    const chatContainer = document.querySelector('.react-chatbot-kit-chat-message-container');
-    if (chatContainer) {
-      observer.observe(chatContainer, { childList: true, subtree: true });
-    }
-  }, 2000); // 等待聊天容器完全加載
-  
-  return () => {
-    window.removeEventListener('resize', handleResize);
-    observer.disconnect();
-  };
+    }, 2000); // 等待聊天容器完全加載
+    
+    // 清理函數
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      observer.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   /**
