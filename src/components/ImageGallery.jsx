@@ -21,16 +21,16 @@ const ImageGallery = ({ images, initialIndex = 0, isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(initialIndex);
-      // 禁止背景滾動
-      document.body.style.overflow = 'hidden';
+      // 禁止背景滾動 - 使用class而不是直接修改style
+      document.body.classList.add('gallery-open');
     } else {
       // 恢復背景滾動
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('gallery-open');
     }
     
     // 組件卸載時恢復背景滾動
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('gallery-open');
     };
   }, [isOpen, initialIndex]);
 

@@ -130,7 +130,7 @@ export default function NavBar() {
     <Disclosure as="nav" className="bg-white border-b border-gray-200 fixed top-0 w-full z-50">
       {({ open, close }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8" style={{maxWidth: '100vw'}}>
             <div className="relative flex h-16 items-center">
               {/* 移動版選單按鈕 */}
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">

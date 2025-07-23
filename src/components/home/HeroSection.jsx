@@ -62,7 +62,7 @@ function HeroSection() {
   }), [index]);
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <section className="relative h-screen w-full max-w-full overflow-hidden">
       <motion.div
         className="absolute inset-0 transition-all duration-1000 ease-in-out"
         style={backgroundStyle}
@@ -73,32 +73,8 @@ function HeroSection() {
         animate={{ scale: 1 }}
         transition={{ duration: 1 }}
       >
-        {/* 遮罩層 */}
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-        
-        {/* 內容區域 */}
-        <div className="relative z-10 flex items-center justify-center h-full text-white text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
-              歡迎來到我的世界
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 drop-shadow-md">
-              這裡有我和 TaTa 的故事
-            </p>
-            <motion.button
-              className="bg-white text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors shadow-lg"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-            >
-              開始探索
-            </motion.button>
-          </motion.div>
-        </div>
+        {/* 輕微的遮罩層，保持導航按鈕可見性 */}
+        <div className="absolute inset-0 bg-black bg-opacity-10"></div>
 
         {/* 導航按鈕 */}
         <button

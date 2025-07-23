@@ -40,7 +40,7 @@ function App() {
       {/* 僅在非觸控設備上顯示自定義游標 */}
       {isNonTouchDevice && <CustomCursor />}
       
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white" style={{width: '100%', maxWidth: '100vw'}}>
         {/* 頁面頂部導航欄 */}
         <NavBar />
         

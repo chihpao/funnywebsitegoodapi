@@ -13,7 +13,8 @@ const API_ENDPOINTS = {
   joke: 'https://official-joke-api.appspot.com/random_joke',
   memes: 'https://memes.tw/wtf/api',
   cats: 'https://api.thecatapi.com/v1/images/search?limit=10',
-  dogs: 'https://dog.ceo/api/breeds/image/random/10'
+  dogs: 'https://dog.ceo/api/breeds/image/random/10',
+  dogsBackup: 'https://api.thedogapi.com/v1/images/search?limit=10' // 備用 API
 };
 
 // 統一的 fetch 函數，包含超時和錯誤處理
@@ -22,11 +23,12 @@ const fetchWithTimeout = async (url, options = {}) => {
   const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.timeout);
   
   try {
-    const response = await fetch(url, {
-      ...API_CONFIG,
-      ...options,
-      signal: controller.signal
-    });
+    // 對於 Dog API，使用簡單的 GET 請求避免 CORS preflight
+    const fetchOptions = url.includes('dog.ceo') 
+      ? { signal: controller.signal }
+      : { ...API_CONFIG, ...options, signal: controller.signal };
+    
+    const response = await fetch(url, fetchOptions);
     
     clearTimeout(timeoutId);
     
@@ -56,7 +58,26 @@ export const fetchMemes = () => fetchWithTimeout(API_ENDPOINTS.memes);
 
 export const fetchCatImages = () => fetchWithTimeout(API_ENDPOINTS.cats);
 
-export const fetchDogImages = () => fetchWithTimeout(API_ENDPOINTS.dogs);
+export const fetchDogImages = async () => {
+  try {
+    // 先嘗試原來的 Dog CEO API
+    return await fetchWithTimeout(API_ENDPOINTS.dogs);
+  } catch (error) {
+    console.warn('Dog CEO API 失敗，嘗試備用 API:', error.message);
+    try {
+      // 如果失敗，嘗試備用 API
+      const backupData = await fetchWithTimeout(API_ENDPOINTS.dogsBackup);
+      // 轉換為 Dog CEO API 的格式
+      return {
+        message: backupData.map(dog => dog.url),
+        status: 'success'
+      };
+    } catch (backupError) {
+      console.error('所有 Dog API 都失敗:', backupError.message);
+      throw backupError;
+    }
+  }
+};
 
 //
 // 通用資料載入 Hook
@@ -156,13 +177,29 @@ export const useMemes = () => {
 };
 
 export const useCats = () => {
-  const { data: catImages, loading, reload: loadCatImages } = useDataFetching(fetchCatImages, []);
+  const { data: catImages, loading, error, reload: loadCatImages } = useDataFetching(fetchCatImages, []);
+
+  // 初次載入貓圖
+  useEffect(() => {
+    if (!catImages?.length && !loading && !error) {
+      loadCatImages();
+    }
+  }, []);
+
   return { catImages, loading, loadCatImages };
 };
 
 export const useDogs = () => {
-  const { data, loading, reload: loadDogImages } = useDataFetching(fetchDogImages, []);
+  const { data, loading, error, reload: loadDogImages } = useDataFetching(fetchDogImages, []);
   const dogImages = data?.message || [];
+
+  // 初次載入狗圖
+  useEffect(() => {
+    if (!dogImages?.length && !loading && !error) {
+      loadDogImages();
+    }
+  }, []);
+
   return { dogImages, loading, loadDogImages };
 };
 

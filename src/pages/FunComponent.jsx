@@ -137,12 +137,23 @@ const DogSection = ({ dogImages, dogLoading, loadDogImages }) => (
             <LoadingSpinner />
           </div>
         ) : (
-          <div className={STYLES.imageGrid}>
-            {dogImages.map((dog, index) => (
-              <div key={index} className={STYLES.imageCard}>
-                <img src={dog} alt="狗狗" className="w-full h-full object-cover" />
+          <div className={STYLES.cardContent}>
+            {dogImages.length === 0 ? (
+              <div className="flex justify-center items-center h-[60vh] text-gray-500">
+                <div className="text-center">
+                  <p className="text-xl mb-4">還沒有狗狗圖片</p>
+                  <p className="text-sm">點擊上方「更多狗狗」按鈕載入圖片</p>
+                </div>
               </div>
-            ))}
+            ) : (
+              <div className={STYLES.imageGrid}>
+                {dogImages.map((dog, index) => (
+                  <div key={index} className={STYLES.imageCard}>
+                    <img src={dog} alt="狗狗" className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -205,15 +216,15 @@ export function FunMainPage() {
   const handleNavigation = (path) => () => navigate(path);
 
   return (
-    <div className="min-h-[calc(100vh-100px)] w-screen flex flex-col items-center justify-center bg-white">
+    <div className="min-h-[calc(100vh-100px)] w-full flex flex-col items-center justify-center bg-white px-4">
       <h1 className="text-5xl font-bold text-center text-gray-800 mb-8">隨機樂趣</h1>
       <p className="text-xl text-gray-600 text-center mb-12">選擇一個類別，探索有趣的內容！</p>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl px-6 mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mx-auto">
         {/* 隨機迴因按鈕 */}
         <div 
           onClick={handleNavigation('/fun/memes')} 
-          className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
+          className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-[1.02]"
         >
           <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
             <i className="fas fa-laugh-squint text-white text-4xl"></i>
@@ -225,7 +236,7 @@ export function FunMainPage() {
         {/* 隨機貓圖按鈕 */}
         <div 
           onClick={handleNavigation('/fun/cats')} 
-          className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
+          className="bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-[1.02]"
         >
           <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
             <i className="fas fa-cat text-white text-4xl"></i>
@@ -237,7 +248,7 @@ export function FunMainPage() {
         {/* 隨機狗圖按鈕 */}
         <div 
           onClick={handleNavigation('/fun/dogs')} 
-          className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-105"
+          className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer text-center transform hover:scale-[1.02]"
         >
           <div className="bg-white/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
             <i className="fas fa-dog text-white text-4xl"></i>
@@ -252,7 +263,7 @@ export function FunMainPage() {
 
 export default function FunComponent() {
   return (
-    <div className="w-screen overflow-hidden">
+    <div className="w-full">
       <Routes>
         <Route index element={<FunMainPage />} />
         <Route path="memes" element={<MemesPage />} />

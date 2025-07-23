@@ -28,13 +28,13 @@ const projects = [
 
 function Homepage() {
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 w-full overflow-hidden" style={{maxWidth: '100vw'}}>
       <HeroSection />
       <TransitionSection />
       
       {/* 專案展示區域 */}
       <section className="py-8 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {projects.map((project) => (
               <ProjectCard key={project.id} project={project} />
@@ -45,7 +45,7 @@ function Homepage() {
 
       {/* TaTa 成長時間軸 */}
       <section className="px-4 md:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">
             TaTa成長時間軸
           </h2>

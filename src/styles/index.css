@@ -3,6 +3,134 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 只禁止水平滾動，允許垂直滾動 */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-y: visible;
+}
+
+/* 確保所有元素不超出視窗寬度 */
+* {
+  box-sizing: border-box;
+}
+
+/* 防止主要容器造成水平滾動 */
+.max-w-7xl, .max-w-6xl, .container {
+  max-width: 100vw;
+}
+
+/* 防止頁面元素造成水平滾動 */
+section, div.relative, div.absolute {
+  max-width: 100vw;
+}
+
+/* 確保React根元素不會產生額外滾動條 */
+#root {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* 超級強制防止任何元素產生額外的滾動條 */
+*, *::before, *::after {
+  overflow-y: visible;
+}
+
+/* 只允許html有垂直滾動條 */
+/* html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+} */
+
+/* 強制所有可能的容器元素不產生滾動條 */
+body, #root, .App, main, section, div, article, 
+.react-chatbot-kit-chat-container,
+.react-chatbot-kit-chat-input,
+.react-chatbot-kit-chat-message-container,
+.chatbot-wrapper,
+.react-chatbot-kit-chat-bot-message-container {
+  overflow-y: visible;
+}
+
+/* 覆蓋所有chatbot相關的滾動設定 */
+[class*="react-chatbot-kit"], 
+[class*="chatbot"] {
+  overflow-y: visible;
+}
+
+/* 圖片庫開啟時的特殊狀態 */
+body.gallery-open {
+  overflow: hidden;
+}
+
+/* 終極規則：強制除了html以外的所有元素都不能產生滾動條 */
+:not(html) {
+  overflow-y: visible;
+}
+
+/* 特別針對可能的問題元素 */
+.react-chatbot-kit-chat-container,
+.react-chatbot-kit-chat-message-container,
+.chatbot-wrapper,
+body:not(.gallery-open) {
+  overflow-y: visible;
+}
+
+/* 修復Grid佈局和響應式設計 */
+.grid {
+  display: grid;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
+/* 確保Timeline容器不會破壞佈局 */
+.max-w-7xl {
+  max-width: min(80rem, 100vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 響應式間距 */
+@media (min-width: 768px) {
+  .px-4 { padding-left: 1rem; padding-right: 1rem; }
+  .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+}
+
+/* 確保圖片不會造成水平滾動 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 防止文字溢出 */
+.text-wrap {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+
+
+
+
 
 /* 瀏覽器翻譯工具兼容 */
 
@@ -83,4 +211,4 @@
     }
   }
   
-  /* 已移除強制隱藏鼠標的樣式 */
+/* 已移除強制隱藏鼠標的樣式 */
